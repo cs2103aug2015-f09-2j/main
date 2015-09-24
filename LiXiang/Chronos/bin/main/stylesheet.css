@@ -1,9 +1,0 @@
-#root { 
-	-fx-padding: 10px; 
-	} 
-	
-.list-cell 
-{
-  -fx-font: 10pt "Arial";
-  -fx-alignment: center ;
-}	
