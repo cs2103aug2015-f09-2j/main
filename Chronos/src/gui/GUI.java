@@ -2,6 +2,8 @@ package gui;
 
 //@import url("stylesheet.css");
 import java.io.IOException;
+
+import application.Logic;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,11 +19,13 @@ public class GUI extends Application {
 	private static final String WINDOW_TITLE = "Chronos V0.1";
 	//private StackPane rootLayout;
 	private BorderPane rootLayout;
-	//private Logic logic;
+	private Logic logic;
 	private static final String ROOT_LAYOUT_FXML = "RootLayout.fxml";
 	private static CommandBarController commandBarController = null;
 	private static Summary summary = null;
 	private static DetailedView detailView = null;
+	
+	private ObservableList<String> events = FXCollections.observableArrayList();
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -31,7 +35,7 @@ public class GUI extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		initRootLayout();
 		initPrimaryStage(primaryStage);
-		//initLogic();
+		initLogic();
 		
 		addCommandBar(this);
 		addSummary(this);
@@ -45,10 +49,10 @@ public class GUI extends Application {
 		detailView.display("cook dinner","cook fried rice with chicken and vegetable");
 	}
 
-	/*private void initLogic() {
-		logic = new Logic;
+	private void initLogic() {
+		logic = new Logic();
 		
-	}*/
+	}
 
 	private void addSummary(GUI gui) throws IOException{
 		summary = new Summary(this);
@@ -58,7 +62,7 @@ public class GUI extends Application {
 	}
 
 	private ObservableList<String> getEvents() {
-		ObservableList<String> events = FXCollections.observableArrayList();
+		//ObservableList<String> events = FXCollections.observableArrayList();
 		events.add("Birthday Preparation");
 		events.add("Meeting with Boss");
 		return events;
@@ -67,7 +71,7 @@ public class GUI extends Application {
 	private void addCommandBar(GUI gui) throws IOException {
 		commandBarController = new CommandBarController(gui);
 		rootLayout.setTop(commandBarController);
-		updateFeedback("Welcome");
+		updateFeedback("welcome");
 		
 	}
 
@@ -90,7 +94,7 @@ public class GUI extends Application {
 	}
 
 	public void handleCommand(String text) throws IOException {
-		System.out.println(text);
+		//System.out.println(text);
 		
 		if(text.contains("detail")) {
 			//summary.clear();
@@ -101,19 +105,30 @@ public class GUI extends Application {
 		if(text.contains("summary")) {
 			addSummary(this);
 		}
-		// TODO call logic
-		//logic(text);
-		updateSummary();
+		
+		updateFeedback(logic.executeUserCommand(text));
+		updateSummary(logic.executeUserCommand(text));
+		if(logic.isProgramExiting()){
+			System.exit(0);
+		}
+	}
+	
+	private void updateSummary(String event) {
+		events.add(event);
+		summary.display(events);
+		
 	}
 
 	private void updateSummary() {
+		/*
 		ObservableList<String> events = FXCollections.observableArrayList();
 		events.add("Birthday Preparation and buy cake");
 		events.add("Meeting with Boss and discuss project");
+		*/
 		summary.display(events);
 	}
 	
 	private void updateFeedback (String feedback) {
-		commandBarController.displayFeedback("Welcome");
+		commandBarController.displayFeedback(feedback);
 	}
 }

@@ -20,6 +20,8 @@ public class Parser {
 	
 	COMMAND_TYPE command;
 	
+	public Parser() {}
+	
 	public Parser(String commandString) {
 		command = determineCommandType(commandString);
 	}

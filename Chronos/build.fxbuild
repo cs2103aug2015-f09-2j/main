@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ASCII"?>
 <anttasks:AntTask xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:anttasks="http://org.eclipse.fx.ide.jdt/1.0" buildDirectory="${project}/build">
   <deploy>
-    <application name="TextBuddyFX" mainclass="application.GUI" version="0.0.0"/>
+    <application name="TextBuddyFX" mainclass="gui.GUI" version="0.0.0"/>
     <info title="Chronos" vendor="f09-2j"/>
   </deploy>
   <signjar/>
