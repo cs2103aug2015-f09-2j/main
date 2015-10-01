@@ -7,7 +7,6 @@ public class Logic {
 	private boolean _isExiting = false;	
 	
 	public String executeUserCommand(String userInput) {
-		Parser parse = new Parser();
 		Command aCommand = new Command(userInput);
 		String feedback = aCommand.execute();
 		if(aCommand.isExiting()){
