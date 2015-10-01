@@ -1,3 +1,4 @@
+package application;
 
 public class Parser {
 	
@@ -11,9 +12,10 @@ public class Parser {
 	private static final String UNDO_COMMAND="undo";
 	private static final String REDO_COMMAND="redo";
 	private static final String CD_COMMAND="cd";
+	private static final String EXIT_COMMAND="exit";
 	
 	enum COMMAND_TYPE {
-		DISPLAY, ADD, NOTE, UPDATE, DELETE, UNDO, REDO, SEARCH, CD, EXIT
+		DISPLAY, ADD, NOTE, UPDATE, DELETE, UNDO, REDO, SEARCH, CD, EXIT, UNKNOWN
 	};
 	
 	COMMAND_TYPE command;
@@ -43,8 +45,10 @@ public class Parser {
 			return COMMAND_TYPE.REDO;
 		} else if (commandTypeString.equalsIgnoreCase(CD_COMMAND)) {
 			return COMMAND_TYPE.CD;
-		} else {
+		} else if (commandTypeString.equalsIgnoreCase(EXIT_COMMAND)) {
 			return COMMAND_TYPE.EXIT;
+		} else {
+			return COMMAND_TYPE.UNKNOWN;
 		}
 	}
 }
