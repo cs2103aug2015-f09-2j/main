@@ -13,32 +13,30 @@ public class DetailedView extends BorderPane {
 
 	private static final String DETAIL_LAYOUT_FXML = "DetailedViewLayout.fxml";
 
-	//private GUI gui;
+	// private GUI gui;
 
 	@FXML
 	private TextFlow eventTitle;
-	
+
 	@FXML
 	private TextFlow description;
-	
+
 	public DetailedView(GUI gui) throws IOException {
-		//this.gui = gui;
+		// this.gui = gui;
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(DETAIL_LAYOUT_FXML));
 		loader.setController(this);
 		loader.setRoot(this);
 		loader.load();
 
 	}
-	
-	public void display(String title, String notes){
-		Text text1 =  new Text(title);
-		Text text2 =  new Text(notes);
-		text1.setFont(Font.font ("Verdana", 30));
-		text2.setFont(Font.font ("Verdana", 15));
+
+	public void display(String title, String notes) {
+		Text text1 = new Text(title);
+		Text text2 = new Text(notes);
+		text1.setFont(Font.font("Verdana", 30));
+		text2.setFont(Font.font("Verdana", 15));
 		eventTitle.getChildren().addAll(text1);
 		description.getChildren().addAll(text2);
 	}
 
-
 }
-
