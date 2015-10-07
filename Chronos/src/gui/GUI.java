@@ -1,6 +1,7 @@
 package gui;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import application.Logic;
 import javafx.application.Application;
@@ -92,7 +93,7 @@ public class GUI extends Application {
 		}
 
 		updateFeedback(logic.executeUserCommand(text));
-		// updateSummary(logic.executeUserCommand(text));
+		// updateSummary(logic.getAllEvents());
 		// logic may return a collection of item
 		//TODO: add items individually to events
 		if (logic.isProgramExiting()) {
@@ -100,8 +101,9 @@ public class GUI extends Application {
 		}
 	}
 
-	private void updateSummary(Item newItem) {
-		events.add(newItem);
+	//get items arrayList from Logic and print them out
+	private void updateSummary(ArrayList<Item> eventList) {
+		events = FXCollections.observableArrayList(eventList);
 		summary.display(events);
 
 	}
