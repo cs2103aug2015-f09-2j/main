@@ -48,14 +48,12 @@ public class GUI extends Application {
 		//check if savefile exists
 		if(logic.isSavePresent()) {
 			_isNewUser = false;
+			updateFeedback(logic.executeUserCommand("d")); 
 			commandBarController.displayFeedback(MESSAGE_LOADED);
-			//load from file
-			//updateFeedback(logic.executeUserCommand("d")); //gets NullPointerExp
 		} else {
 			_isNewUser = true;
 			initNewUser();
 		}
-
 	}
 
 	private void initNewUser() {
