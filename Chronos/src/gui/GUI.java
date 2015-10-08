@@ -19,6 +19,7 @@ public class GUI extends Application {
 
 	private static final String WINDOW_TITLE = "Chronos V0.1";
 	private static final String MESSAGE_WELCOME = "Welcome to Chronos V0.1! Where would you like Chronos to store your tasks and events?";
+	private static final String MESSAGE_LOADED = "Welcome to Chronos V0.1! Add a task to get started.";
 	
 	private BorderPane rootLayout;
 	private Logic logic;
@@ -47,6 +48,7 @@ public class GUI extends Application {
 		//check if savefile exists
 		if(logic.isSavePresent()) {
 			_isNewUser = false;
+			commandBarController.displayFeedback(MESSAGE_LOADED);
 			//go ahead and load
 			//updateFeedback(...)
 		} else {
@@ -108,6 +110,7 @@ public class GUI extends Application {
 		if(_isNewUser){
 			updateFeedback(logic.setSavePath(text));
 			summary.setVisible(true);
+			_isNewUser = false;
 		} else {
 			//move this
 			if (text.contains("detail")) {
