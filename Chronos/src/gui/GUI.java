@@ -110,28 +110,16 @@ public class GUI extends Application {
 	}
 
 	public void handleCommand(String text) throws IOException {
-		
 		if(_isNewUser){
 			updateFeedback(logic.setSavePath(text));
 			summary.setVisible(true);
 			_isNewUser = false;
 		} else {
-			//move this
-			if (text.contains("detail")) {
-				addDetailView(this);
-			}
-			if (text.contains("summary")) {
-				addSummary(this);
-				summary.display(getEvents());
-			}
-
-			updateFeedback(logic.executeUserCommand(text));
-			// updateSummary(logic.getAllEvents());
-			// logic may return a collection of item
-			//TODO: add items individually to events
+			Feedback commandFeedback = logic.executeUserCommand(text);
 			if (logic.isProgramExiting()) {
 				System.exit(0);
 			}
+			updateFeedback(commandFeedback);
 		}
 		
 	}
@@ -140,12 +128,16 @@ public class GUI extends Application {
 	private void updateSummary(ArrayList<Task> eventList) {
 		events = FXCollections.observableArrayList(eventList);
 		summary.display(events);
-
 	}
 
-	private void updateFeedback(Feedback feedback) {
+	private void updateFeedback(Feedback feedback) throws IOException {
 		commandBarController.displayFeedback(feedback.getMessage());
-		//summary or detail view
+		//choose between summary or detail view
+		if (logic.isInSummaryView()) {
+			addSummary(this);
+		} else {
+			addDetailView(this);
+		}
 		if(feedback.hasData()){
 			updateSummary(feedback.getData());
 		}

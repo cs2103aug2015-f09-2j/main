@@ -1,6 +1,7 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.prefs.Preferences;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -11,17 +12,19 @@ public class Parser {
 
 	private Task item;
 	private Integer id;
-	private String taskID;
+	private String taskID = "t";
+	private static Preferences _userPrefs;
 	
-	public Parser() {
-		id = 0;
-		taskID = "t";
+	public Parser(Preferences userPrefs) {
+		_userPrefs = userPrefs;
+		id = _userPrefs.getInt("count", 0);
 	}
 	
 	public JSONObject createItem(String content) {
+		_userPrefs.putInt("count", ++id);
 		String[] contents = content.split(", ");
 		JSONObject entry = new JSONObject();
-		entry.put("id", taskID + ++id);
+		entry.put("id", taskID + id);
 		entry.put("description", contents[0]);
 		for(int i = 1; i<contents.length; i++){
 			if(contents[i].charAt(1) == ':'){ // p: or c:
@@ -58,7 +61,6 @@ public class Parser {
 	public ArrayList<Task> convertToTaskArray (JSONArray contents) {
 		ArrayList<Task> tasks = new ArrayList<Task>();
 		if(contents != null){
-			//String id, String description, String endDate, String priority, String category
 			for(int i=0; i<contents.size(); i++){
 				JSONObject anItem = (JSONObject)contents.get(i);
 				String taskId = anItem.get("id").toString();
@@ -67,8 +69,8 @@ public class Parser {
 				String priority = anItem.get("priority").toString();
 				String category = anItem.get("category").toString();
 				Task aTask = new Task(taskId, description, endDate, priority, category);
+				tasks.add(aTask);
 			}
-			System.out.println(contents.toString());
 		} 
 		return tasks;
 	}

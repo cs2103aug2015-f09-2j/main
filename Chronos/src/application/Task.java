@@ -4,58 +4,65 @@ import java.util.ArrayList;
 
 public class Task {
 	
-	private String _id;
-	private String _description;
-	private String _endDate;
-	private String _priority;
-	private String _category;
-	private ArrayList<Note> _notes;
+	private String id;
+	private String description;
+	private String endDate;
+	private String priority;
+	private String category;
+	private ArrayList<Note> notes;
 	
 	
 	public Task(String id, String description, String endDate, String priority, String category) {
-		_id = id;
-		_description = description;
-		_endDate = endDate;
-		_priority = priority;
-		_category = category;
+		this.id = id;
+		this.description = description;
+		this.endDate = endDate;
+		this.priority = priority;
+		this.category = category;
 	}
 
+	public String getId() {
+		return id;
+	}
+	
 	public String getDescription() {
-		return _description;
+		return description;
 	}
 
 	void setDescription(String _description) {
-		this._description = _description;
+		this.description = _description;
 	}
 
 	public String getEndDate() {
-		return _endDate;
+		return endDate;
 	}
 
 	void setEndDate(String _endDate) {
-		this._endDate = _endDate;
+		this.endDate = _endDate;
 	}
 
 	public String getPriority() {
-		return _priority;
+		return priority;
 	}
 
 	void setPriority(String _priority) {
-		this._priority = _priority;
+		this.priority = _priority;
 	}
 
 	public String getCategory() {
-		return _category;
+		return category;
 	}
 
 	void setCategory(String _category) {
-		this._category = _category;
+		this.category = _category;
 	}
 
 	public ArrayList<Note> getNotes() {
-		return _notes;
+		return notes;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return id + " " + description + " " + endDate + " " + priority + " " + category;
+	}
 	
 }

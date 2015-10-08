@@ -40,17 +40,17 @@ public class Command {
 	private static Stack<String> _savedDirectories = new Stack<String>();
 	//private static Stack<Item> _deletedItems = new Stack<Item>();
 	private static Storage _store;
-	private static Parser _parser = new Parser();
+	private static Parser _parser;
 	
 	private COMMAND_TYPE _type;
 	private String _content;
 	private boolean _isExiting = false;
-	private boolean _isInDetailView = false;
 	private boolean _isInSummaryView = true;
 	
-	public Command (String inputString, Storage store) {
+	public Command (String inputString, Storage store, Parser parse) {
 		try {
 			_store = store;
+			_parser = parse;
 			String[] inputs = inputString.split(" ", 2);
 			determineCommandType(inputs[0]);
 			_content = inputs[1];
@@ -211,7 +211,7 @@ public class Command {
 
 
 	private Feedback retrieveTask(String taskID) {
-		// TODO Auto-generated method stub
+		_isInSummaryView = false;
 		String feedbackString = "Retrieving Task: " + taskID;
 		return new Feedback(feedbackString, null);
 	}
@@ -246,6 +246,7 @@ public class Command {
 	}
 	
 	private Feedback display(String criteria) {
+		_isInSummaryView = true;
 		ArrayList<Task> filteredTasks = new ArrayList<Task>();
 		String feedbackString = "";
 		if (criteria.equals("")) {
@@ -307,6 +308,10 @@ public class Command {
 	
 	public boolean isExiting() {
 		return _isExiting;
+	}
+	
+	public boolean isInSummaryView() {
+		return _isInSummaryView;
 	}
 	
 }

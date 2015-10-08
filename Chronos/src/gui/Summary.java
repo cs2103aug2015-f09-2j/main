@@ -47,11 +47,13 @@ public class Summary extends StackPane {
 	}
 
 	public void display(ObservableList<Task> events) {
+		//Printing
+		System.out.println(events.toString());
 		summaryTable.setItems(events);
-		IDCol.setCellValueFactory(new PropertyValueFactory<Task, String>("_id"));
-		timeCol.setCellValueFactory(new PropertyValueFactory<Task, String>("_endDate"));
-		titleCol.setCellValueFactory(new PropertyValueFactory<Task, String>("_description"));
-		categoryCol.setCellValueFactory(new PropertyValueFactory<Task, String>("_category"));
+		IDCol.setCellValueFactory(new PropertyValueFactory<Task, String>("id"));
+		timeCol.setCellValueFactory(new PropertyValueFactory<Task, String>("endDate"));
+		titleCol.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
+		categoryCol.setCellValueFactory(new PropertyValueFactory<Task, String>("category"));
 	}
 
 }
