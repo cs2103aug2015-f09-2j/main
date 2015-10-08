@@ -129,7 +129,6 @@ public class GUI extends Application {
 	}
 
 	private void updateFeedback(Feedback feedback) throws IOException {
-		commandBarController.displayFeedback(feedback.getMessage());
 		//choose between summary or detail view
 		if (logic.isInSummaryView()) {
 			addSummary(this);
@@ -138,6 +137,9 @@ public class GUI extends Application {
 		}
 		if(feedback.hasData()){
 			updateSummary(feedback.getData());
+		} else {
+			updateFeedback(logic.executeUserCommand("d"));
 		}
+		commandBarController.displayFeedback(feedback.getMessage());
 	}
 }
