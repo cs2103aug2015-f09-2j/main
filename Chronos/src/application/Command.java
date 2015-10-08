@@ -226,7 +226,7 @@ public class Command {
 		_store.storeTemp();
 		JSONObject newEntry = _parser.createItem(content);
 		_store.entries_.add(newEntry);
-		_store.storeChanges();;
+		_store.storeChanges();
 		String feedbackString = "Adding: " + content;
 		return new Feedback(feedbackString);
 	}
@@ -285,17 +285,17 @@ public class Command {
 	private Feedback search(String searchTerm) {
 		//This method should probably return something else
 		//ArrayList<Items> filteredItems = _store.filterItems(criteria);
-		/*
+		
 		for (int i = 0; i < _store.entries_.size(); i++){
 			String entry = _store.entries_.get(i).toString();
 			if(entry.contains(searchTerm)) {
-			    return entry;
+			    return new Feedback(entry);
 			  }
 		}
-		return "Cannot find "+searchTerm;
-		*/
-		String feedbackString = "Searching for: " + searchTerm;
-		return new Feedback(feedbackString, null); //searchREsults
+		return new Feedback("Cannot find "+searchTerm);
+		
+		//String feedbackString = "Searching for: " + searchTerm;
+		//return new Feedback(feedbackString, null); //searchREsults
 	}
 
 	private Feedback update(String updateString) {
