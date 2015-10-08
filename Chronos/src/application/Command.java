@@ -285,9 +285,8 @@ public class Command {
 	public Feedback undo(){
 		//Command commandToUndo = _pastCommands.pop();
 		//switch(type) to undo commands depending on type
-		//return feedbackString
 		String feedbackString = "Undoing latest command.";
-		return new Feedback(feedbackString, null);
+		return new Feedback(feedbackString);
 	}
 	
 	public Feedback redo () {
@@ -313,10 +312,21 @@ public class Command {
 	}
 
 	private Feedback update(String updateString) {
-		//String itemID = _parser.getID(updateString);
-		//_store.addNote(itemID, updateString)
+		_store.storeTemp();
+		JSONObject entry;
+		ArrayList<String> updateDetails = _parser.parseUpdateString(updateString);
+		for(int i =0; i<_store.entries_.size(); i++){
+			entry = (JSONObject) _store.entries_.get(i);
+			String id = updateDetails.get(0);
+			if (entry.get("id").equals(id)){
+				entry.replace(updateDetails.get(1), updateDetails.get(2));
+				_store.entries_.set(i, entry);
+				break;
+			}
+		}
+		_store.storeChanges();
 		String feedbackString = "Updating: " + updateString;
-		return new Feedback(feedbackString, null);
+		return new Feedback(feedbackString);
 	}
 	
 	public boolean isExiting() {

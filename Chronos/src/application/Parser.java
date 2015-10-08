@@ -27,8 +27,8 @@ public class Parser {
 		entry.put("id", taskID + id);
 		entry.put("description", contents[0]);
 		entry.put("priority", "low");
-		entry.put("category", "");
-		entry.put("due date", "");
+		entry.put("category", "none");
+		entry.put("due date", "someday");
 		for(int i = 1; i<contents.length; i++){
 			if(contents[i].charAt(1) == ':'){ // p: or c:
 				switch(contents[i].charAt(0)){
@@ -39,7 +39,7 @@ public class Parser {
 						entry.put("category", contents[i].substring(2));
 				}
 			} else {
-				entry.put("due date",contents[i]); // DateFormat.getInstance().format(
+				entry.put("due date",contents[i]); // format date
 			}
 		}
 		return entry;
@@ -102,7 +102,34 @@ public class Parser {
 		String endDate = anEntry.get("due date").toString();
 		String priority = anEntry.get("priority").toString();
 		String category = anEntry.get("category").toString();
+		//notes
 		return new Task(id, description, endDate, priority, category);
 	}
+
+	public ArrayList<String> parseUpdateString(String updateString) {
+		String[] details = updateString.split(", ");
+		ArrayList<String> updateDetails = new ArrayList<String>();
+		updateDetails.add(details[0]);
+		for(int i=1;i<details.length; i++){
+			String aDetail = details[i];
+			switch(details[i].charAt(0)){
+				case 'p':
+					updateDetails.add("priority"); 
+					updateDetails.add(details[i].substring(2));
+					break;
+				case 'c':
+					updateDetails.add("category"); 
+					updateDetails.add(details[i].substring(2));
+					break;
+				case 'd':
+					updateDetails.add("due date"); 
+					updateDetails.add(details[i].substring(2));
+					break;
+			}
+		}
+		return updateDetails;
+	}
+	
+	
 }
 
