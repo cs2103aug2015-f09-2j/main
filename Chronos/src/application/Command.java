@@ -241,8 +241,18 @@ public class Command {
 	private Feedback delete(String idToDelete) {
 		//Item deletedItem = _store.deleteItemFromFile(idToDelete);
 		//_deletedItems.push(deletedItem);
+		_store.storeTemp();
+		JSONObject entry;
+		for(int i =0; i<_store.entries_.size(); i++){
+			entry = (JSONObject) _store.entries_.get(i);
+			if (entry.get("id").equals(idToDelete)){
+				_store.entries_.remove(i);
+				break;
+			}
+		}
 		String feedbackString = "Deleting item with id: " + idToDelete;
-		return new Feedback(feedbackString, null); // replace null with deletedItem
+		_store.storeChanges();
+		return new Feedback(feedbackString, _parser.convertToTaskArray(_store.entries_)); // replace null with deletedItem
 	}
 	
 	private Feedback display(String criteria) {
