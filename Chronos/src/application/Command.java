@@ -41,6 +41,7 @@ public class Command {
 	//private static Stack<Item> _deletedItems = new Stack<Item>();
 	private static Storage _store;
 	private static Parser _parser;
+	private static boolean _isRedoable = false;
 	
 	private COMMAND_TYPE _type;
 	private String _content;
@@ -155,7 +156,6 @@ public class Command {
 			
 			case DISPLAY : 
 				feedback = display(_content);
-				_pastCommands.add(this);
 				break;
 				
 			case DONE :
@@ -180,7 +180,6 @@ public class Command {
 			
 			case VIEW :
 				feedback = retrieveTask(_content);
-				_pastCommands.add(this);
 				break;
 				
 			case UNDO :
@@ -243,8 +242,6 @@ public class Command {
 	}
 	
 	private Feedback delete(String idToDelete) {
-		//Item deletedItem = _store.deleteItemFromFile(idToDelete);
-		//_deletedItems.push(deletedItem);
 		_store.storeTemp();
 		JSONObject entry;
 		for(int i =0; i<_store.entries_.size(); i++){
@@ -283,17 +280,29 @@ public class Command {
 	}
 	
 	public Feedback undo(){
-		//Command commandToUndo = _pastCommands.pop();
-		//switch(type) to undo commands depending on type
+		_isRedoable = true;
+		Command latestCommand = _pastCommands.peek();
+		System.out.println(latestCommand._type);
+		if(latestCommand._type == COMMAND_TYPE.CD){
+			_store.swapFile();
+		} else {
+			_store.swapTemp();
+		}
 		String feedbackString = "Undoing latest command.";
 		return new Feedback(feedbackString);
 	}
 	
 	public Feedback redo () {
-		//Command commandToRedo = _undoneCommands.pop();
-		//switch(type)... and return feedbackString
-		String feedbackString = "Redoing latest command.";
-		return new Feedback(feedbackString, null);
+		String feedbackString;
+		if(isRedoable()){
+			undo();
+			_isRedoable = false;
+			feedbackString = "Redoing latest command.";
+			return new Feedback(feedbackString);
+		} else {
+			feedbackString = "Nothing to redo.";
+			return new Feedback(feedbackString);
+		}
 	}
 	
 	private Feedback search(String searchTerm) {
@@ -335,6 +344,10 @@ public class Command {
 	
 	public boolean isInSummaryView() {
 		return _isInSummaryView;
+	}
+	
+	public boolean isRedoable(){
+		return _isRedoable;
 	}
 	
 }

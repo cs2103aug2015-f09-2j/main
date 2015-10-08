@@ -30,12 +30,12 @@ public class Storage {
 	}
 	
 	private void getFile(String filePath){
-		fileDirectory_ = filePath + "\\chronos_storage.txt";
+		fileDirectory_ = filePath;
 		readFile();	
 	}
 	
 	private void readFile(){
-		File file = new File(fileDirectory_);
+		File file = new File(fileDirectory_ + "\\chronos_storage.txt");
 		try {
 			if(!file.createNewFile()){ //Read in the content of an existing file
 				getContent();
@@ -55,7 +55,7 @@ public class Storage {
 	private void getContent(){
 		JSONParser jsonParser = new JSONParser();
 		try {
-			entries_ = (JSONArray)jsonParser.parse(new FileReader(fileDirectory_));
+			entries_ = (JSONArray)jsonParser.parse(new FileReader(fileDirectory_+"\\chronos_storage.txt"));
 		} catch (IOException | ParseException e) {
 			//System.out.println(MESSAGE_INVALID_FILE);
 			//getFile();
@@ -65,8 +65,9 @@ public class Storage {
 	//to be called before an add, delete, update i.e. commands that will
 	//change the content of the file
 	public void storeTemp(){
-		temp_entries_ = entries_;
+		temp_entries_ = (JSONArray) entries_.clone();
 		isStoredTemp = true;
+		
 	}
 	
 	//to be called after changes to the content of the file
@@ -88,9 +89,9 @@ public class Storage {
 	
 	public void changeDirectory(String newDirectory){
 		temp_fileDirectory_ = fileDirectory_;
-		fileDirectory_ = newDirectory + "\\chronos_storage.txt";
+		fileDirectory_ = newDirectory;
 		writeToFile();
-		File oldFile = new File(temp_fileDirectory_);
+		File oldFile = new File(temp_fileDirectory_+"\\chronos_storage.txt");
 		if(!oldFile.delete()){
 			log.warning(String.format("old file %1$s not deleted", temp_fileDirectory_));
 		}
@@ -104,7 +105,7 @@ public class Storage {
 	
 	private void writeToFile(){
 		try{
-			FileWriter file = new FileWriter(fileDirectory_);
+			FileWriter file = new FileWriter(fileDirectory_+"\\chronos_storage.txt");
 			file.write(entries_.toJSONString());
 			file.flush();
 			file.close();
