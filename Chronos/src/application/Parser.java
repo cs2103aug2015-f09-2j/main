@@ -3,6 +3,7 @@ package application;
 import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 
 
@@ -17,11 +18,12 @@ public class Parser {
 		taskID = "t";
 	}
 	
-	public Task createItem(String content) {
+	public JSONObject createItem(String content) {
 		//int numContents;
-		id++;
-		String[] contents = content.split(", ");
-		
+		//id++;
+		//String[] contents = content.split(", ");
+		JSONObject entry = new JSONObject();
+		entry.put("content", content);
 		/*for(numContents=0; numContents<contents.length; numContents++) {
 			convertToJsonArray(contents[numContents]);
 			if((contents[numContents].startsWith("p"))) {
@@ -37,7 +39,7 @@ public class Parser {
 			item = new Item(taskID.concat(id.toString()), contents[2].toString(), contents[0].toString(), "");
 		}
 		*/
-		return item;
+		return entry;
 	}
 	
 	public String getID(String contentString) {

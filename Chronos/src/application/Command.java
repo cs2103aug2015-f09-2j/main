@@ -3,6 +3,9 @@ package application;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 public class Command {
 	 
 	private static final String MESSAGE_INVALID = "Invalid Command";
@@ -220,8 +223,10 @@ public class Command {
 	}
 
 	private Feedback add(String content) {
-		Task newTask = _parser.createItem(content);
-		//_store.writeToFile(newItem);
+		_store.storeTemp();
+		JSONObject newEntry = _parser.createItem(content);
+		_store.entries_.add(newEntry);
+		_store.storeChanges();;
 		String feedbackString = "Adding: " + content;
 		return new Feedback(feedbackString);
 	}
