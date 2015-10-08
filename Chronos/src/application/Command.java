@@ -212,8 +212,11 @@ public class Command {
 
 	private Feedback retrieveTask(String taskID) {
 		_isInSummaryView = false;
-		String feedbackString = "Retrieving Task: " + taskID;
-		return new Feedback(feedbackString, null);
+		ArrayList<Task> data = new ArrayList<Task>();
+		Task selectedTask = _parser.retrieveTask(taskID, _store.entries_);
+		data.add(selectedTask);
+ 		String feedbackString = "Retrieving Task: " + taskID;
+		return new Feedback(feedbackString, data);
 	}
 
 	private Feedback markAsDone(String taskID) {

@@ -61,10 +61,11 @@ public class GUI extends Application {
 		summary.setVisible(false);
 	}
 
-	private void addDetailView(GUI gui) throws IOException {
+	private void addDetailView(GUI gui, ArrayList<Task> data) throws IOException {
 		detailView = new DetailedView(this);
 		rootLayout.setCenter(detailView);
-		detailView.display("cook dinner", "cook fried rice with chicken and vegetable");
+		Task taskToView = data.get(0);
+		detailView.display(taskToView.getDescription(), taskToView.getNoteString());
 	}
 
 	private void initLogic() {
@@ -133,7 +134,7 @@ public class GUI extends Application {
 		if (logic.isInSummaryView()) {
 			addSummary(this);
 		} else {
-			addDetailView(this);
+			addDetailView(this, feedback.getData());
 		}
 		if(feedback.hasData()){
 			updateSummary(feedback.getData());

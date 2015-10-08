@@ -6,4 +6,8 @@ public class Note {
 	public Note(String content) {
 		_content = content;
 	} 
+	
+	public String toString(){
+		return _content;
+	}
 }

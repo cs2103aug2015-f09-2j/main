@@ -13,11 +13,12 @@ public class Task {
 	
 	
 	public Task(String id, String description, String endDate, String priority, String category) {
-		this.id = id;
-		this.description = description;
-		this.endDate = endDate;
-		this.priority = priority;
-		this.category = category;
+		this.id = id.trim();
+		this.description = description.trim();
+		this.endDate = endDate.trim();
+		this.priority = priority.trim();
+		this.category = category.trim();
+		notes = new ArrayList<Note>();
 	}
 
 	public String getId() {
@@ -63,6 +64,21 @@ public class Task {
 	@Override
 	public String toString() {
 		return id + " " + description + " " + endDate + " " + priority + " " + category;
+	}
+	
+	public String getNoteString(){
+		String noteString = "";
+		
+		if(notes.size() == 0) {
+			return "No notes available.";
+		} 
+		
+		for(int i=0; i<notes.size(); i++){
+			String oneNote = i + ". " + notes.get(i).toString() + "\n";
+			noteString += oneNote;
+		}
+		
+		return noteString;
 	}
 	
 }
