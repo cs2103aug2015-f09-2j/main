@@ -88,7 +88,7 @@ public class Storage {
 	
 	public void changeDirectory(String newDirectory){
 		temp_fileDirectory_ = fileDirectory_;
-		fileDirectory_ = newDirectory;
+		fileDirectory_ = newDirectory + "\\chronos_storage.txt";
 		writeToFile();
 		File oldFile = new File(temp_fileDirectory_);
 		if(!oldFile.delete()){
