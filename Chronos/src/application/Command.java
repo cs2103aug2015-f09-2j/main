@@ -202,7 +202,7 @@ public class Command {
 				break;
 				
 			case UNKNOWN : 
-				feedback = new Feedback(String.format(MESSAGE_INVALID), null);
+				feedback = new Feedback(String.format(MESSAGE_INVALID));
 				break;
 		}
 		
@@ -256,7 +256,7 @@ public class Command {
 		}
 		String feedbackString = "Deleting item with id: " + idToDelete;
 		_store.storeChanges();
-		return new Feedback(feedbackString, _parser.convertToTaskArray(_store.entries_)); // replace null with deletedItem
+		return new Feedback(feedbackString, _parser.convertToTaskArray(_store.entries_)); 
 	}
 	
 	private Feedback display(String criteria) {
@@ -298,19 +298,18 @@ public class Command {
 	}
 	
 	private Feedback search(String searchTerm) {
-		//This method should probably return something else
-		//ArrayList<Items> filteredItems = _store.filterItems(criteria);
+		ArrayList<Task> filteredTasks = new ArrayList<Task>();
 		
 		for (int i = 0; i < _store.entries_.size(); i++){
 			String entry = _store.entries_.get(i).toString();
+			JSONObject entryObject = (JSONObject) _store.entries_.get(i);
 			if(entry.contains(searchTerm)) {
-			    return new Feedback(entry);
-			  }
+			    filteredTasks.add(_parser.retrieveTask(entryObject.get("id").toString(),_store.entries_));
+			}
 		}
-		return new Feedback("Cannot find "+searchTerm);
 		
-		//String feedbackString = "Searching for: " + searchTerm;
-		//return new Feedback(feedbackString, null); //searchREsults
+		String feedbackString = "Searching for: " + searchTerm;
+		return new Feedback(feedbackString, filteredTasks); 
 	}
 
 	private Feedback update(String updateString) {
