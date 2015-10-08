@@ -26,6 +26,9 @@ public class Parser {
 		JSONObject entry = new JSONObject();
 		entry.put("id", taskID + id);
 		entry.put("description", contents[0]);
+		entry.put("priority", "");
+		entry.put("category", "");
+		entry.put("due date", "");
 		for(int i = 1; i<contents.length; i++){
 			if(contents[i].charAt(1) == ':'){ // p: or c:
 				switch(contents[i].charAt(0)){
