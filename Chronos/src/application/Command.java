@@ -238,8 +238,7 @@ class Command {
 	}
 	
 	private String search(String searchTerm) {
-		//This method should probably return something else
-		//ArrayList<Items> filteredItems = _store.filterItems(criteria);
+		//better to have parser to parse the object into more readable form
 		for (int i = 0; i < _store.entries_.size(); i++){
 			String entry = _store.entries_.get(i).toString();
 			if(entry.contains(searchTerm)) {
