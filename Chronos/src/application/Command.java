@@ -240,7 +240,13 @@ class Command {
 	private String search(String searchTerm) {
 		//This method should probably return something else
 		//ArrayList<Items> filteredItems = _store.filterItems(criteria);
-		return "Searching for: " + searchTerm;
+		for (int i = 0; i < _store.entries_.size(); i++){
+			String entry = _store.entries_.get(i).toString();
+			if(entry.contains(searchTerm)) {
+			    return entry;
+			  }
+		}
+		return "Cannot find "+searchTerm;
 	}
 
 	private String update(String updateString) {

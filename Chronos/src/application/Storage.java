@@ -2,8 +2,10 @@ package application;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
@@ -14,13 +16,16 @@ public class Storage {
 	private final String MESSAGE_INVALID_FILE = "Invalid File. Please try again";
 	private final String MESSAGE_FILE_CREATED = "Your agenda will be stored in \"%1$s\"";
 	private final String MESSAGE_FILE_OPENED = "Your agenda stored in \"%1$s\" is loaded";
-
-	protected JSONArray entries_;
-	protected JSONArray temp_entries_;
-	protected String fileDirectory_;
-	protected String temp_fileDirectory_;
 	
-	protected  Storage() {
+	private static Logger log = Logger.getLogger("StorageLog");
+	
+	public JSONArray entries_;
+	private JSONArray temp_entries_;
+	private String temp_fileDirectory_;
+	private String fileDirectory_;
+	private boolean isStoredTemp = false;
+	
+	public  Storage() {
 		entries_ = new JSONArray();
 		getFile();
 	}
@@ -39,11 +44,14 @@ public class Storage {
 			if(!file.createNewFile()){
 				//Read in the content of an existing file
 				getContent();
+				log.info(String.format("read file %1$s", fileDirectory_));
 				System.out.println(String.format(MESSAGE_FILE_OPENED, fileDirectory_));
 			}else{
-			System.out.println(String.format(MESSAGE_FILE_CREATED, fileDirectory_));
+				log.info(String.format("created file %1$s", fileDirectory_));
+				System.out.println(String.format(MESSAGE_FILE_CREATED, fileDirectory_));
 			}
 		} catch (IOException e) {
+			log.warning("cannot get file");
 			System.out.println(MESSAGE_INVALID_FILE);
 			getFile();
 		}
@@ -59,5 +67,55 @@ public class Storage {
 		}
 	}
 	
+	//to be called before an add, delete, update i.e. commands that will
+	//change the content of the file
+	public void storeTemp(){
+		temp_entries_ = entries_;
+		isStoredTemp = true;
+	}
+	
+	//to be called after changes to the content of the file
+	public void storeChanges(){
+		//the entries have to be stored before making changes
+		assert isStoredTemp == true;
+		isStoredTemp = false;
+		writeToFile();
+	}
+	
+	//to be called by undo/redo commands that undo/redo add/delete/update commands
+	public void swapTemp(){
+		JSONArray placeHolder = entries_;
+		entries_ = temp_entries_;
+		temp_entries_ = placeHolder;
+		writeToFile();	
+		log.info("swapped entries_ with temp_entries");
+	}
+	
+	public void changeDirectory(String newDirectory){
+		temp_fileDirectory_ = fileDirectory_;
+		fileDirectory_ = newDirectory;
+		writeToFile();
+		File oldFile = new File(temp_fileDirectory_);
+		if(!oldFile.delete()){
+			log.warning(String.format("old file %1$s not deleted", temp_fileDirectory_));
+		}
+		log.info(String.format("content of %1$s moved to %2$s", temp_fileDirectory_,fileDirectory_));
+	}
+	
+	//to be called by undo/redo commands that undo/redo cd commands
+	public void swapFile(){
+		changeDirectory(temp_fileDirectory_);
+	}
+	
+	private void writeToFile(){
+		try{
+			FileWriter file = new FileWriter(fileDirectory_);
+			file.write(entries_.toJSONString());
+			file.flush();
+			file.close();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+	}
 	
 }
