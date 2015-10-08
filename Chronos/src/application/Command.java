@@ -50,10 +50,10 @@ public class Command {
 	
 	public Command (String inputString, Storage store) {
 		try {
+			_store = store;
 			String[] inputs = inputString.split(" ", 2);
 			determineCommandType(inputs[0]);
 			_content = inputs[1];
-			_store = store;
 		} catch (ArrayIndexOutOfBoundsException e) {
 			_content = "";
 		}

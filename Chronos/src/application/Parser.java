@@ -21,17 +21,16 @@ public class Parser {
 	public JSONObject createItem(String content) {
 		String[] contents = content.split(", ");
 		JSONObject entry = new JSONObject();
-
 		entry.put("id", taskID + ++id);
 		entry.put("description", contents[0]);
 		for(int i = 1; i<contents.length; i++){
 			if(contents[i].charAt(1) == ':'){ // p: or c:
 				switch(contents[i].charAt(0)){
 					case 'p':
-						entry.put("priority", contents[i]);
+						entry.put("priority", contents[i].substring(2));
 						break;
 					case 'c':
-						entry.put("category", contents[i]);
+						entry.put("category", contents[i].substring(2));
 				}
 			} else {
 				entry.put("due date",contents[i]); // DateFormat.getInstance().format(
@@ -56,26 +55,22 @@ public class Parser {
 		return taskArr;
 	}
 	
-	public ArrayList<Task> convertToTaskArray (JSONArray content) {
+	public ArrayList<Task> convertToTaskArray (JSONArray contents) {
 		ArrayList<Task> tasks = new ArrayList<Task>();
-		if(content != null){
-			//convert to tasks
+		if(contents != null){
+			//String id, String description, String endDate, String priority, String category
+			for(int i=0; i<contents.size(); i++){
+				JSONObject anItem = (JSONObject)contents.get(i);
+				String taskId = anItem.get("id").toString();
+				String description = anItem.get("description").toString();
+				String endDate = anItem.get("due date").toString();
+				String priority = anItem.get("priority").toString();
+				String category = anItem.get("category").toString();
+				Task aTask = new Task(taskId, description, endDate, priority, category);
+			}
+			System.out.println(contents.toString());
 		} 
 		return tasks;
-	}
-
-	public Task createTask(String content) {
-		String[] contents = content.split(", ");
-		String taskID = "t" + ++id;
-		String dueDate;
-		String dueTime;
-		String priority;
-		String category;
-		for(int i = 1; i<contents.length; i++){
-			//date due
-		}
-		//Task createdTask = new Task(taskID, contents[0] ,enddate,priority, category);
-		return null;
 	}
 }
 

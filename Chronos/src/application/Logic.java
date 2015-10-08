@@ -20,6 +20,7 @@ public class Logic {
 	}
 	
 	public Feedback executeUserCommand(String userInput) {
+			
 		Command aCommand = new Command(userInput, _store);
 		Feedback feedback = aCommand.execute();
 		
