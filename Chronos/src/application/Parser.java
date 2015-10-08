@@ -19,26 +19,24 @@ public class Parser {
 	}
 	
 	public JSONObject createItem(String content) {
-		//int numContents;
-		//id++;
-		//String[] contents = content.split(", ");
+		String[] contents = content.split(", ");
 		JSONObject entry = new JSONObject();
-		entry.put("content", content);
-		/*for(numContents=0; numContents<contents.length; numContents++) {
-			convertToJsonArray(contents[numContents]);
-			if((contents[numContents].startsWith("p"))) {
-				contents[numContents] = contents[numContents].replaceFirst("p:", "");
-			}
-			else if((contents[numContents].startsWith("c"))) {
-				contents[numContents] = contents[numContents].replaceFirst("c:", "");
+
+		entry.put("id", taskID + ++id);
+		entry.put("description", contents[0]);
+		for(int i = 1; i<contents.length; i++){
+			if(contents[i].charAt(1) == ':'){ // p: or c:
+				switch(contents[i].charAt(0)){
+					case 'p':
+						entry.put("priority", contents[i]);
+						break;
+					case 'c':
+						entry.put("category", contents[i]);
+				}
+			} else {
+				entry.put("due date",contents[i]); // DateFormat.getInstance().format(
 			}
 		}
-		if(!contents[4].isEmpty()) {
-			item = new Item(taskID.concat(id.toString()), contents[2].toString(), contents[0].toString(), contents[4].toString());
-		} else {
-			item = new Item(taskID.concat(id.toString()), contents[2].toString(), contents[0].toString(), "");
-		}
-		*/
 		return entry;
 	}
 	
