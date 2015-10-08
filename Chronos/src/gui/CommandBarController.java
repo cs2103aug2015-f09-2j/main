@@ -41,7 +41,6 @@ public class CommandBarController extends BorderPane {
 			//System.out.println(commandBar.getText());
 			commandBar.clear();
 		}
-
 	}
 	
 	public void displayFeedback(String helpingText){

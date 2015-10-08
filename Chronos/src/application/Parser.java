@@ -1,7 +1,5 @@
 package application;
 
-import gui.Item;
-
 import java.lang.String;
 
 import org.json.simple.JSONArray;
@@ -9,9 +7,9 @@ import org.json.simple.JSONArray;
 
 
 public class Parser {
-	
+
 	private JSONArray taskArr;
-	private Item item;
+	private Task item;
 	private Integer id;
 	private String taskID;
 	
@@ -21,7 +19,7 @@ public class Parser {
 		taskID = "t";
 	}
 	
-	public Item createItem(String content) {
+	public Task createItem(String content) {
 		//int numContents;
 		id++;
 		String[] contents = content.split(", ");
@@ -34,13 +32,13 @@ public class Parser {
 			else if((contents[numContents].startsWith("c"))) {
 				contents[numContents] = contents[numContents].replaceFirst("c:", "");
 			}
-		}*/
+		}
 		if(!contents[4].isEmpty()) {
 			item = new Item(taskID.concat(id.toString()), contents[2].toString(), contents[0].toString(), contents[4].toString());
 		} else {
 			item = new Item(taskID.concat(id.toString()), contents[2].toString(), contents[0].toString(), "");
 		}
-		
+		*/
 		return item;
 	}
 	
@@ -58,6 +56,5 @@ public class Parser {
 		}
 		return taskArr;
 	}
-	
 }
 

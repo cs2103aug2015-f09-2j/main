@@ -11,7 +11,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 public class Storage {
-	
+
 	private final String MESSAGE_REQUEST_FILENAME = "Enter the absolute path of where the agenda will be stored: ";
 	private final String MESSAGE_INVALID_FILE = "Invalid File. Please try again";
 	private final String MESSAGE_FILE_CREATED = "Your agenda will be stored in \"%1$s\"";
@@ -25,35 +25,31 @@ public class Storage {
 	private String fileDirectory_;
 	private boolean isStoredTemp = false;
 	
-	public  Storage() {
+	public  Storage(String filePath) {
 		entries_ = new JSONArray();
-		getFile();
+		getFile(filePath);
 	}
 	
-	private void getFile(){
-		System.out.println(MESSAGE_REQUEST_FILENAME);
-		Scanner sc = new Scanner(System.in);
-		sc.close();
-		fileDirectory_ = sc.nextLine();
+	private void getFile(String filePath){
+		fileDirectory_ = filePath;
 		readFile();	
 	}
 	
 	private void readFile(){
 		File file = new File(fileDirectory_);
 		try {
-			if(!file.createNewFile()){
-				//Read in the content of an existing file
+			if(!file.createNewFile()){ //Read in the content of an existing file
 				getContent();
 				log.info(String.format("read file %1$s", fileDirectory_));
-				System.out.println(String.format(MESSAGE_FILE_OPENED, fileDirectory_));
+				//System.out.println(String.format(MESSAGE_FILE_OPENED, fileDirectory_));
 			}else{
 				log.info(String.format("created file %1$s", fileDirectory_));
-				System.out.println(String.format(MESSAGE_FILE_CREATED, fileDirectory_));
+				//System.out.println(String.format(MESSAGE_FILE_CREATED, fileDirectory_));
 			}
 		} catch (IOException e) {
 			log.warning("cannot get file");
-			System.out.println(MESSAGE_INVALID_FILE);
-			getFile();
+			//System.out.println(MESSAGE_INVALID_FILE);
+			//getFile();
 		}
 	}
 	
@@ -62,8 +58,8 @@ public class Storage {
 		try {
 			entries_ = (JSONArray)jsonParser.parse(new FileReader(fileDirectory_));
 		} catch (IOException | ParseException e) {
-			System.out.println(MESSAGE_INVALID_FILE);
-			getFile();
+			//System.out.println(MESSAGE_INVALID_FILE);
+			//getFile();
 		}
 	}
 	
@@ -117,5 +113,4 @@ public class Storage {
 			e.printStackTrace();
 		}
 	}
-	
 }

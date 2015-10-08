@@ -3,7 +3,7 @@ package application;
 import java.util.ArrayList;
 import java.util.Stack;
 
-class Command {
+public class Command {
 	 
 	private static final String MESSAGE_INVALID = "Invalid Command";
 	
@@ -13,9 +13,9 @@ class Command {
 	private static final String COMMAND_CD = "cd";
 	private static final String COMMAND_DELETE = "delete";
 	private static final String COMMAND_DELETE_MINUS = "-";
-	private static final String COMMAND_DISPLAY = "view";
 	private static final String COMMAND_DISPLAY_D = "d";
 	private static final String COMMAND_DISPLAY_ALL = "da";
+	private static final String COMMAND_DONE = "done";
 	private static final String COMMAND_EXIT = "exit";
 	private static final String COMMAND_NOTE = "note";
 	private static final String COMMAND_REDO = "redo";
@@ -26,22 +26,27 @@ class Command {
 	private static final String COMMAND_UNDO_ARROW = "<";
 	private static final String COMMAND_UPDATE = "update";
 	private static final String COMMAND_UPDATE_U = "u";
+	private static final String COMMAND_VIEW = "view";
+	public static final String COMMAND_START = "startup";
+	
 	
 	
 	enum COMMAND_TYPE {
-		ADD, CD, DELETE, DISPLAY, EXIT, NOTE, REDO, SEARCH, UNDO, UNKNOWN, UPDATE  
+		ADD, CD, DELETE, DISPLAY, DONE, EXIT, NOTE, REDO, SEARCH, START, UNDO, UNKNOWN, UPDATE, VIEW  
 	};
 	
 	private static Stack<Command> _pastCommands = new Stack<Command>();
 	private static Stack<Command> _undoneCommands = new Stack<Command>();
 	private static Stack<String> _savedDirectories = new Stack<String>();
 	//private static Stack<Item> _deletedItems = new Stack<Item>();
-	private static Storage _store = new Storage();
+	//private static Storage _store = new Storage();
 	private static Parser _parser = new Parser();
 	
 	private COMMAND_TYPE _type;
 	private String _content;
 	private boolean _isExiting = false;
+	private boolean _isInDetailView = false;
+	private boolean _isInSummaryView = true;
 	
 	public Command (String inputString) {
 		try {
@@ -78,12 +83,13 @@ class Command {
 				//Fallthrough
 				
 			case COMMAND_DISPLAY_ALL :
-				//Fallthrough
-				
-			case COMMAND_DISPLAY : 
 				_type = COMMAND_TYPE.DISPLAY;
 				break;
 			
+			case COMMAND_DONE : 
+				_type = COMMAND_TYPE.DONE;
+				break;
+				
 			case COMMAND_EXIT : 
 				_type = COMMAND_TYPE.EXIT;
 				break;
@@ -106,6 +112,10 @@ class Command {
 				_type = COMMAND_TYPE.SEARCH;
 				break;
 			
+			case COMMAND_START : 
+				_type = COMMAND_TYPE.START;
+				break;
+				
 			case COMMAND_UNDO_ARROW :
 				//Fallthrough		
 				
@@ -119,6 +129,10 @@ class Command {
 			case COMMAND_UPDATE : 
 				_type = COMMAND_TYPE.UPDATE;
 				break;
+			
+			case COMMAND_VIEW : 
+				_type = COMMAND_TYPE.VIEW;
+				break;
 				
 			default : 
 				_type = COMMAND_TYPE.UNKNOWN;
@@ -127,85 +141,120 @@ class Command {
 		}
 	}
 
-	public String execute () {
-		String feedbackString = "";
+	public Feedback execute () {
+		Feedback feedback = null;
 		
 		switch(_type) {
 		
 			case ADD :
-				feedbackString = add(_content); 
+				feedback = add(_content); 
 				_pastCommands.add(this);
 				break;
 			
 			case DELETE :  
-				feedbackString = delete(_content);
+				feedback = delete(_content);
 				_pastCommands.add(this);
 				break;
 			
 			case DISPLAY : 
-				feedbackString = display(_content);
+				feedback = display(_content);
+				_pastCommands.add(this);
+				break;
+				
+			case DONE :
+				feedback = markAsDone(_content);
 				_pastCommands.add(this);
 				break;
 				
 			case NOTE : 
-				feedbackString = note(_content);
+				feedback = note(_content);
 				_pastCommands.add(this);
 				break;
 			
 			case UPDATE :
-				feedbackString = update(_content);
+				feedback = update(_content);
 				_pastCommands.add(this);
 				break;
 			
 			case SEARCH :
-				feedbackString = search(_content);
+				feedback = search(_content);
 				_pastCommands.add(this);
 				break;
 			
+			case START :
+				feedback = startup();
+				break;
+			
+			case VIEW :
+				feedback = retrieveTask(_content);
+				_pastCommands.add(this);
+				break;
+				
 			case UNDO :
-				feedbackString = undo();
+				feedback = undo();
 				break;
 				
 			case REDO :
-				feedbackString = redo();
+				feedback = redo();
 				break;
 				
 			case CD :
-				feedbackString = changeDirectory(_content);
+				feedback = changeDirectory(_content);
 				_pastCommands.add(this);
 				break;
 				
 			case EXIT : 
+				feedback = null;
 				_isExiting = true;
 				break;
 				
 			case UNKNOWN : 
-				feedbackString = String.format(MESSAGE_INVALID);
+				feedback = new Feedback(String.format(MESSAGE_INVALID), null);
 				break;
 		}
 		
-		return feedbackString;
+		return feedback;
 	}
 
-	private String add(String content) {
-		//Item newItem = _parser.createItem(content);
+	private Feedback startup() {
+		String feedbackString = "Welcome to Chronos V0.1";
+		return new Feedback(feedbackString, null);
+	}
+
+	private Feedback retrieveTask(String taskID) {
+		// TODO Auto-generated method stub
+		String feedbackString = "Retrieving Task: " + taskID;
+		return new Feedback(feedbackString, null);
+	}
+
+	private Feedback markAsDone(String taskID) {
+		// TODO Auto-generated method stub
+		String feedbackString = "Marking as Done: " + taskID;
+		return new Feedback(feedbackString, null);
+	}
+
+	private Feedback add(String content) {
+		//Task newTask = _parser.createTask(content);
 		//_store.writeToFile(newItem);
-		return "Adding: " + content;
+		String feedbackString = "Adding: " + content;
+		return new Feedback(feedbackString, null);
 	}
 	
-	private String changeDirectory(String newDirectory) {
+	private Feedback changeDirectory(String newDirectory) {
 		//String oldPath = _store.changeDirectory(newDirectory);
 		//_savedDirectories.push(oldPath);
-		return "Changing Directory to: " + newDirectory;
+		String feedbackString = "Changing Directory to: " + newDirectory;
+		return new Feedback(feedbackString, null);
 	}
 	
-	private String delete(String idToDelete) {
+	private Feedback delete(String idToDelete) {
 		//Item deletedItem = _store.deleteItemFromFile(idToDelete);
 		//_deletedItems.push(deletedItem);
-		return "Deleting item with id: " + idToDelete;
+		String feedbackString = "Deleting item with id: " + idToDelete;
+		return new Feedback(feedbackString, null); // replace null with deletedItem
 	}
 	
-	private String display(String criteria) {
+	private Feedback display(String criteria) {
 		//This method should probably return something else
 		//ArrayList<Items> filteredItems = _store.filterItems(criteria);
 		String feedbackString = "";
@@ -214,31 +263,36 @@ class Command {
 		} else {
 			feedbackString = "Displaying: " + criteria;
 		}
-		return feedbackString;
+		return new Feedback(feedbackString, null); // filteredItems
 	}
 
-	private String note(String noteString) {
+	private Feedback note(String noteString) {
 		//String itemID = _parser.getID(noteString);
 		//Note aNote = new Note(noteString);
 		//_store.addNote(itemID, aNote)
-		return "Adding note: " + noteString;
+		String feedbackString = "Adding note: " + noteString;
+		return new Feedback(feedbackString, null);
 	}
 	
-	public String undo(){
+	public Feedback undo(){
 		//Command commandToUndo = _pastCommands.pop();
 		//switch(type) to undo commands depending on type
 		//return feedbackString
-		return "Undoing latest command.";
+		String feedbackString = "Undoing latest command.";
+		return new Feedback(feedbackString, null);
 	}
 	
-	public String redo () {
+	public Feedback redo () {
 		//Command commandToRedo = _undoneCommands.pop();
 		//switch(type)... and return feedbackString
-		return "Redoing latest command.";
+		String feedbackString = "Redoing latest command.";
+		return new Feedback(feedbackString, null);
 	}
 	
-	private String search(String searchTerm) {
-		//better to have parser to parse the object into more readable form
+	private Feedback search(String searchTerm) {
+		//This method should probably return something else
+		//ArrayList<Items> filteredItems = _store.filterItems(criteria);
+		/*
 		for (int i = 0; i < _store.entries_.size(); i++){
 			String entry = _store.entries_.get(i).toString();
 			if(entry.contains(searchTerm)) {
@@ -246,12 +300,16 @@ class Command {
 			  }
 		}
 		return "Cannot find "+searchTerm;
+		*/
+		String feedbackString = "Searching for: " + searchTerm;
+		return new Feedback(feedbackString, null); //searchREsults
 	}
 
-	private String update(String updateString) {
+	private Feedback update(String updateString) {
 		//String itemID = _parser.getID(updateString);
 		//_store.addNote(itemID, updateString)
-		return "Updating: " + updateString;
+		String feedbackString = "Updating: " + updateString;
+		return new Feedback(feedbackString, null);
 	}
 	
 	public boolean isExiting() {
