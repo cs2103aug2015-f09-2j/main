@@ -1,7 +1,10 @@
 package application;
 
+import java.util.ArrayList;
 import java.util.prefs.Preferences;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 public class Logic {
 
 	private boolean _isExiting = false;
@@ -47,5 +50,15 @@ public class Logic {
 		_store = new Storage(path);
 		String feedbackString = "Setting save path to: " + _userPrefs.get("path", "none");
 		return new Feedback(feedbackString);
+	}
+	
+	public ArrayList<Task> getTasks(){
+		ArrayList<Task> entries = new ArrayList<Task>();
+		JSONObject entry;
+		for (int i = 0; i<_store.entries_.size(); i++){
+			entry = (JSONObject)_store.entries_.get(i);
+			entries.add(new Task("",(String)entry.get("content"), "", "", ""));
+		}
+		return entries;
 	}
 }

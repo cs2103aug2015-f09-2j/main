@@ -79,14 +79,17 @@ public class GUI extends Application {
 		//summary.display(getEvents());
 	}
 
-	//private ObservableList<Task> getEvents(ArrayList<Task> tasks) {
+	private ObservableList<Task> getEvents() {
 		/*
 		events.add(new Task("e1", "4:00-6:00", "Birthday Celebration", "Personal"));
 		events.add(new Task("e2", "1:00-2:00", "Meeting with boss", "Work"));
 		*/
-	
-		//return events;
-	//}
+		ArrayList<Task> entries = logic.getTasks();
+		for (int i = 0; i<entries.size(); i++){
+			events.add(entries.get(i));
+		}
+		return events;
+	}
 
 	private void addCommandBar(GUI gui) throws IOException {
 		commandBarController = new CommandBarController(gui);
@@ -119,6 +122,7 @@ public class GUI extends Application {
 			}
 			if (text.contains("summary")) {
 				addSummary(this);
+				summary.display(getEvents());
 			}
 
 			updateFeedback(logic.executeUserCommand(text));
