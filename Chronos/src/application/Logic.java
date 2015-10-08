@@ -3,18 +3,24 @@ package application;
 import java.util.ArrayList;
 import java.util.prefs.Preferences;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-public class Logic {
 
+public class Logic {
+	
+	private static final String MESSAGE_SET_PATH = "Setting save path to: %1$s";
+
+	//contants
+	private static final String PREFS_PATH = "path";
+	private static final String PREFS_COUNT = "count";
+	
+	private static final String DEFAULT_VALUE = "none";
+	private static final int  DEFAULT_COUNT = 0;
+	
 	private boolean _isExiting = false;
 	private boolean _isInSummaryView = true;
 	private static Storage _store;
 	private static Parser _parse;
 	private static Preferences _userPrefs;
-	
-	//TODO: tell GUI to have an extra column for notes
-	//TODO: Prefs: store latest ID's from tasks and events
 	
 	public Logic(){
 		_userPrefs = Preferences.userNodeForPackage(this.getClass());
@@ -29,7 +35,6 @@ public class Logic {
 		if (aCommand.isExiting()) {
 			_isExiting = true;
 		}
-		
 		return feedback;
 	}
 
@@ -38,9 +43,8 @@ public class Logic {
 	}
 	
 	public boolean isSavePresent() {
-		String savedPath = _userPrefs.get("path", "none");
-		int savedCount = _userPrefs.getInt("count", 0);
-		if (savedPath.equals("none")){
+		String savedPath = _userPrefs.get(PREFS_PATH, DEFAULT_VALUE);
+		if (savedPath.equals(DEFAULT_VALUE)) {
 			return false;
 		} else { //there is a saved path
 			_store = new Storage(savedPath);
@@ -50,24 +54,26 @@ public class Logic {
 	}
 
 	public Feedback setSavePath(String path) {
-		_userPrefs.put("path", path);
-		_userPrefs.putInt("count", 0);
+		_userPrefs.put(PREFS_PATH, path);
+		_userPrefs.putInt(PREFS_COUNT, DEFAULT_COUNT);
 		_store = new Storage(path);
 		_parse = new Parser(_userPrefs);
-		String feedbackString = "Setting save path to: " + _userPrefs.get("path", "none");
+		String feedbackString = String.format(MESSAGE_SET_PATH, _userPrefs.get(PREFS_PATH, DEFAULT_VALUE));
 		return new Feedback(feedbackString);
 	}
 	
+	/*
 	public ArrayList<Task> getTasks(){
 		ArrayList<Task> entries = new ArrayList<Task>();
 		JSONObject entry;
 		for (int i = 0; i<_store.entries_.size(); i++){
 			entry = (JSONObject)_store.entries_.get(i);
-			entries.add(new Task("",(String)entry.get("content"), "", "", ""));
+			entries.add(new Task(EMPTY_STRING,(String)entry.get("content"), "", "", ""));
 		}
 		return entries;
 	}
-
+	*/
+	
 	public boolean isInSummaryView() {
 		return _isInSummaryView;
 	}

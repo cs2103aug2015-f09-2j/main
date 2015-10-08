@@ -16,7 +16,7 @@ public class Command {
 	private static final String COMMAND_CD = "cd";
 	private static final String COMMAND_DELETE = "delete";
 	private static final String COMMAND_DELETE_MINUS = "-";
-	private static final String COMMAND_DISPLAY_D = "d";
+	public static final String COMMAND_DISPLAY_D = "d";
 	private static final String COMMAND_DISPLAY_ALL = "da";
 	private static final String COMMAND_DONE = "done";
 	private static final String COMMAND_EXIT = "exit";
@@ -35,8 +35,29 @@ public class Command {
 		ADD, CD, DELETE, DISPLAY, DONE, EXIT, NOTE, REDO, SEARCH, UNDO, UNKNOWN, UPDATE, VIEW  
 	};
 	
+	//Messages
+	private static final String MESSAGE_RETRIEVING = "Retrieving Task: %1$s";
+	private static final String MESSAGE_MARKING = "Marking as Done: %1$s";
+	private static final String MESSAGE_ADDING = "Adding: %1$s";
+	private static final String MESSAGE_CHANGEDIR = "Changing Directory to: %1$s";
+	private static final String MESSAGE_DELETING = "Deleting item with id: %1$s";
+	private static final String MESSAGE_DISPLAY_ALL = "Displaying All";
+	private static final String MESSAGE_ADDING_NOTE = "Adding note: %1$s";
+	private static final String MESSAGE_UNDO = "Undoing latest command.";
+	private static final String MESSAGE_REDO = "Redoing latest command.";
+	private static final String MESSAGE_CANT_REDO = "Nothing to redo.";
+	private static final String MESSAGE_SEARCHING = "Searching for: %1$s";
+	private static final String MESSAGE_UPDATING = "Updating: %1$s";
+	
+	//Constants
+	private static final String COMMAND_SEPARATOR = " ";
+	private static final int COMMAND_ARG_COUNT = 2;
+	private static final int COMMAND_INDEX_COMMAND = 0;
+	private static final int COMMAND_INDEX_CONTENT = 1;
+	private static final String CONTENT_EMPTY = "";
+	
 	private static Stack<Command> _pastCommands = new Stack<Command>();
-	private static Stack<Command> _undoneCommands = new Stack<Command>();
+	//private static Stack<Command> _undoneCommands = new Stack<Command>();
 	private static Stack<String> _savedDirectories = new Stack<String>();
 	//private static Stack<Item> _deletedItems = new Stack<Item>();
 	private static Storage _store;
@@ -52,15 +73,16 @@ public class Command {
 		try {
 			_store = store;
 			_parser = parse;
-			String[] inputs = inputString.split(" ", 2);
-			determineCommandType(inputs[0]);
-			_content = inputs[1];
+			String[] inputs = inputString.split(COMMAND_SEPARATOR, COMMAND_ARG_COUNT);
+			determineCommandType(inputs[COMMAND_INDEX_COMMAND ]);
+			_content = inputs[COMMAND_INDEX_CONTENT];
 		} catch (ArrayIndexOutOfBoundsException e) {
-			_content = "";
+			_content = CONTENT_EMPTY;
 		}
 	}
 	
 	private void determineCommandType(String typeString) {
+		
 		switch(typeString.toLowerCase()) {
 			
 			case COMMAND_ADD_PLUS :
@@ -208,19 +230,18 @@ public class Command {
 		return feedback;
 	}
 
-
 	private Feedback retrieveTask(String taskID) {
 		_isInSummaryView = false;
 		ArrayList<Task> data = new ArrayList<Task>();
 		Task selectedTask = _parser.retrieveTask(taskID, _store.entries_);
 		data.add(selectedTask);
- 		String feedbackString = "Retrieving Task: " + taskID;
+ 		String feedbackString = String.format(MESSAGE_RETRIEVING, taskID);
 		return new Feedback(feedbackString, data);
 	}
 
 	private Feedback markAsDone(String taskID) {
 		// TODO Auto-generated method stub
-		String feedbackString = "Marking as Done: " + taskID;
+		String feedbackString = String.format(MESSAGE_MARKING, taskID);
 		return new Feedback(feedbackString, null);
 	}
 
@@ -229,7 +250,7 @@ public class Command {
 		JSONObject newEntry = _parser.createItem(content);
 		_store.entries_.add(newEntry);
 		_store.storeChanges();
-		String feedbackString = "Adding: " + content;
+		String feedbackString = String.format(MESSAGE_ADDING, content);
 		return new Feedback(feedbackString);
 	}
 	
@@ -237,21 +258,21 @@ public class Command {
 		String oldPath = _parser.changeDirectory(newDirectory);
 		_savedDirectories.push(oldPath);
 		_store.changeDirectory(newDirectory);
-		String feedbackString = "Changing Directory to: " + newDirectory;
+		String feedbackString = String.format(MESSAGE_CHANGEDIR, newDirectory); 
 		return new Feedback(feedbackString);
 	}
 	
 	private Feedback delete(String idToDelete) {
 		_store.storeTemp();
 		JSONObject entry;
-		for(int i =0; i<_store.entries_.size(); i++){
+		for (int i = 0; i < _store.entries_.size(); i++) {
 			entry = (JSONObject) _store.entries_.get(i);
-			if (entry.get("id").equals(idToDelete)){
+			if (entry.get("id").equals(idToDelete)) {
 				_store.entries_.remove(i);
 				break;
 			}
 		}
-		String feedbackString = "Deleting item with id: " + idToDelete;
+		String feedbackString = String.format(MESSAGE_DELETING, idToDelete);
 		_store.storeChanges();
 		return new Feedback(feedbackString, _parser.convertToTaskArray(_store.entries_)); 
 	}
@@ -259,48 +280,48 @@ public class Command {
 	private Feedback display(String criteria) {
 		_isInSummaryView = true;
 		ArrayList<Task> filteredTasks = new ArrayList<Task>();
-		String feedbackString = "";
-		if (criteria.equals("")) {
-			feedbackString = "Displaying All";
+		String feedbackString = CONTENT_EMPTY;
+		if (criteria.equals(CONTENT_EMPTY)) {
+			feedbackString = MESSAGE_DISPLAY_ALL;
 			filteredTasks = _parser.convertToTaskArray(_store.entries_);
-		} else {
+		} 
+		/*else {
 			feedbackString = "Displaying: " + criteria;
 			//search for thing, then entries -> Array<Task>
 			filteredTasks = new ArrayList<Task>();
-		}
-		return new Feedback(feedbackString, filteredTasks); // filteredItems
+		}*/
+		return new Feedback(feedbackString, filteredTasks); 
 	}
 
 	private Feedback note(String noteString) {
 		//String itemID = _parser.getID(noteString);
 		//Note aNote = new Note(noteString);
 		//_store.addNote(itemID, aNote)
-		String feedbackString = "Adding note: " + noteString;
-		return new Feedback(feedbackString, null);
+		String feedbackString =  String.format(MESSAGE_ADDING_NOTE, noteString);
+		return new Feedback(feedbackString);
 	}
 	
 	public Feedback undo(){
 		_isRedoable = true;
 		Command latestCommand = _pastCommands.peek();
-		System.out.println(latestCommand._type);
-		if(latestCommand._type == COMMAND_TYPE.CD){
+		if (latestCommand._type == COMMAND_TYPE.CD) {
 			_store.swapFile();
 		} else {
 			_store.swapTemp();
 		}
-		String feedbackString = "Undoing latest command.";
+		String feedbackString = MESSAGE_UNDO;
 		return new Feedback(feedbackString);
 	}
 	
 	public Feedback redo () {
 		String feedbackString;
-		if(isRedoable()){
+		if (isRedoable()) {
 			undo();
 			_isRedoable = false;
-			feedbackString = "Redoing latest command.";
+			feedbackString = MESSAGE_REDO;
 			return new Feedback(feedbackString);
 		} else {
-			feedbackString = "Nothing to redo.";
+			feedbackString = MESSAGE_CANT_REDO;
 			return new Feedback(feedbackString);
 		}
 	}
@@ -308,15 +329,15 @@ public class Command {
 	private Feedback search(String searchTerm) {
 		ArrayList<Task> filteredTasks = new ArrayList<Task>();
 		
-		for (int i = 0; i < _store.entries_.size(); i++){
+		for (int i = 0; i < _store.entries_.size(); i++) {
 			String entry = _store.entries_.get(i).toString();
 			JSONObject entryObject = (JSONObject) _store.entries_.get(i);
-			if(entry.contains(searchTerm)) {
+			if (entry.contains(searchTerm)) {
 			    filteredTasks.add(_parser.retrieveTask(entryObject.get("id").toString(),_store.entries_));
 			}
 		}
 		
-		String feedbackString = "Searching for: " + searchTerm;
+		String feedbackString = String.format(MESSAGE_SEARCHING, searchTerm);
 		return new Feedback(feedbackString, filteredTasks); 
 	}
 
@@ -324,17 +345,17 @@ public class Command {
 		_store.storeTemp();
 		JSONObject entry;
 		ArrayList<String> updateDetails = _parser.parseUpdateString(updateString);
-		for(int i =0; i<_store.entries_.size(); i++){
+		for (int i = 0; i < _store.entries_.size(); i++) {
 			entry = (JSONObject) _store.entries_.get(i);
 			String id = updateDetails.get(0);
-			if (entry.get("id").equals(id)){
+			if (entry.get("id").equals(id)) {
 				entry.replace(updateDetails.get(1), updateDetails.get(2));
 				_store.entries_.set(i, entry);
 				break;
 			}
 		}
 		_store.storeChanges();
-		String feedbackString = "Updating: " + updateString;
+		String feedbackString = String.format(MESSAGE_UPDATING, updateString);
 		return new Feedback(feedbackString);
 	}
 	

@@ -9,10 +9,11 @@ import org.json.simple.JSONObject;
 
 
 public class Parser {
+	
+	private static final String TASK_HEADER = "t";
 
-	private Task item;
 	private Integer id;
-	private String taskID = "t";
+	private String taskID = TASK_HEADER;
 	private static Preferences _userPrefs;
 	
 	public Parser(Preferences userPrefs) {
