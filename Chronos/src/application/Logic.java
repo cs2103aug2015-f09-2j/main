@@ -7,19 +7,17 @@ public class Logic {
 	private boolean _isExiting = false;
 	private boolean _isInSummaryView = true;
 	private Storage _store;
-	private Parser _parser;
 	private Preferences _userPrefs;
 	
 	//TODO: tell GUI to have an extra column for notes
-	//TODO: have Storage retrieve latest ID from file and load into Task/Event
+	//TODO: Prefs: store latest ID's from tasks and events
 	
 	public Logic(){
-		_parser = new Parser();
 		_userPrefs = Preferences.userNodeForPackage(this.getClass());
 	}
 	
 	public Feedback executeUserCommand(String userInput) {
-		Command aCommand = new Command(userInput);
+		Command aCommand = new Command(userInput, _store);
 		Feedback feedback = aCommand.execute();
 		
 		//Check for boolean values
@@ -46,9 +44,8 @@ public class Logic {
 
 	public Feedback setSavePath(String path) {
 		_userPrefs.put("path", path);
-		//_store.setSavePath(path); //should create the file at path
 		_store = new Storage(path);
 		String feedbackString = "Setting save path to: " + _userPrefs.get("path", "none");
-		return new Feedback(feedbackString, null);
+		return new Feedback(feedbackString);
 	}
 }

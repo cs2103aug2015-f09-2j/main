@@ -49,8 +49,8 @@ public class GUI extends Application {
 		if(logic.isSavePresent()) {
 			_isNewUser = false;
 			commandBarController.displayFeedback(MESSAGE_LOADED);
-			//go ahead and load
-			//updateFeedback(...)
+			//load from file
+			//updateFeedback(logic.executeUserCommand("d")); //gets NullPointerExp
 		} else {
 			_isNewUser = true;
 			initNewUser();
@@ -141,6 +141,8 @@ public class GUI extends Application {
 	private void updateFeedback(Feedback feedback) {
 		commandBarController.displayFeedback(feedback.getMessage());
 		//summary or detail view
-		//updateSummary(feedback.getData());
+		if(feedback.hasData()){
+			updateSummary(feedback.getData());
+		}
 	}
 }

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 public class Task {
 	
-	private static int _totalTaskCount = 0; // get from Storage or prefs
-	
 	private String _id;
 	private String _description;
 	private String _endDate;
@@ -13,8 +11,9 @@ public class Task {
 	private String _category;
 	private ArrayList<Note> _notes;
 	
-	public Task(String description, String endDate, String priority, String category) {
-		_id = "t" + Integer.toString(++_totalTaskCount);
+	
+	public Task(String id, String description, String endDate, String priority, String category) {
+		_id = id;
 		_description = description;
 		_endDate = endDate;
 		_priority = priority;

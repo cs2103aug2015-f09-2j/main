@@ -27,19 +27,16 @@ public class Command {
 	private static final String COMMAND_UPDATE = "update";
 	private static final String COMMAND_UPDATE_U = "u";
 	private static final String COMMAND_VIEW = "view";
-	public static final String COMMAND_START = "startup";
-	
-	
 	
 	enum COMMAND_TYPE {
-		ADD, CD, DELETE, DISPLAY, DONE, EXIT, NOTE, REDO, SEARCH, START, UNDO, UNKNOWN, UPDATE, VIEW  
+		ADD, CD, DELETE, DISPLAY, DONE, EXIT, NOTE, REDO, SEARCH, UNDO, UNKNOWN, UPDATE, VIEW  
 	};
 	
 	private static Stack<Command> _pastCommands = new Stack<Command>();
 	private static Stack<Command> _undoneCommands = new Stack<Command>();
 	private static Stack<String> _savedDirectories = new Stack<String>();
 	//private static Stack<Item> _deletedItems = new Stack<Item>();
-	//private static Storage _store = new Storage();
+	private static Storage _store;
 	private static Parser _parser = new Parser();
 	
 	private COMMAND_TYPE _type;
@@ -48,11 +45,12 @@ public class Command {
 	private boolean _isInDetailView = false;
 	private boolean _isInSummaryView = true;
 	
-	public Command (String inputString) {
+	public Command (String inputString, Storage store) {
 		try {
 			String[] inputs = inputString.split(" ", 2);
 			determineCommandType(inputs[0]);
 			_content = inputs[1];
+			_store = store;
 		} catch (ArrayIndexOutOfBoundsException e) {
 			_content = "";
 		}
@@ -110,10 +108,6 @@ public class Command {
 				
 			case COMMAND_SEARCH : 
 				_type = COMMAND_TYPE.SEARCH;
-				break;
-			
-			case COMMAND_START : 
-				_type = COMMAND_TYPE.START;
 				break;
 				
 			case COMMAND_UNDO_ARROW :
@@ -181,10 +175,6 @@ public class Command {
 				_pastCommands.add(this);
 				break;
 			
-			case START :
-				feedback = startup();
-				break;
-			
 			case VIEW :
 				feedback = retrieveTask(_content);
 				_pastCommands.add(this);
@@ -216,10 +206,6 @@ public class Command {
 		return feedback;
 	}
 
-	private Feedback startup() {
-		String feedbackString = "Welcome to Chronos V0.1";
-		return new Feedback(feedbackString, null);
-	}
 
 	private Feedback retrieveTask(String taskID) {
 		// TODO Auto-generated method stub
@@ -234,10 +220,10 @@ public class Command {
 	}
 
 	private Feedback add(String content) {
-		//Task newTask = _parser.createTask(content);
+		Task newTask = _parser.createItem(content);
 		//_store.writeToFile(newItem);
 		String feedbackString = "Adding: " + content;
-		return new Feedback(feedbackString, null);
+		return new Feedback(feedbackString);
 	}
 	
 	private Feedback changeDirectory(String newDirectory) {
@@ -255,15 +241,17 @@ public class Command {
 	}
 	
 	private Feedback display(String criteria) {
-		//This method should probably return something else
-		//ArrayList<Items> filteredItems = _store.filterItems(criteria);
+		ArrayList<Task> filteredTasks = new ArrayList<Task>();
 		String feedbackString = "";
 		if (criteria.equals("")) {
 			feedbackString = "Displaying All";
+			filteredTasks = _parser.convertToTaskArray(_store.entries_);
 		} else {
 			feedbackString = "Displaying: " + criteria;
+			//search for thing, then entries -> Array<Task>
+			filteredTasks = new ArrayList<Task>();
 		}
-		return new Feedback(feedbackString, null); // filteredItems
+		return new Feedback(feedbackString, filteredTasks); // filteredItems
 	}
 
 	private Feedback note(String noteString) {

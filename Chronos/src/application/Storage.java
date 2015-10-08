@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
 import java.util.logging.Logger;
 
 import org.json.simple.JSONArray;
@@ -31,7 +30,7 @@ public class Storage {
 	}
 	
 	private void getFile(String filePath){
-		fileDirectory_ = filePath;
+		fileDirectory_ = filePath + "\\chronos_storage.txt";
 		readFile();	
 	}
 	

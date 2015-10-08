@@ -1,6 +1,6 @@
 package application;
 
-import java.lang.String;
+import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 
@@ -8,13 +8,11 @@ import org.json.simple.JSONArray;
 
 public class Parser {
 
-	private JSONArray taskArr;
 	private Task item;
 	private Integer id;
 	private String taskID;
 	
 	public Parser() {
-		taskArr = new JSONArray();
 		id = 0;
 		taskID = "t";
 	}
@@ -49,12 +47,35 @@ public class Parser {
 	}
 	
 	public JSONArray convertToJsonArray(String[] content) {
+		JSONArray taskArr = new JSONArray();
 		int numContents;
 		
 		for(numContents=0; numContents<content.length; numContents++) {
 			taskArr.add(content[numContents]);
 		}
 		return taskArr;
+	}
+	
+	public ArrayList<Task> convertToTaskArray (JSONArray content) {
+		ArrayList<Task> tasks = new ArrayList<Task>();
+		if(content != null){
+			//convert to tasks
+		} 
+		return tasks;
+	}
+
+	public Task createTask(String content) {
+		String[] contents = content.split(", ");
+		String taskID = "t" + ++id;
+		String dueDate;
+		String dueTime;
+		String priority;
+		String category;
+		for(int i = 1; i<contents.length; i++){
+			//date due
+		}
+		//Task createdTask = new Task(taskID, contents[0] ,enddate,priority, category);
+		return null;
 	}
 }
 
