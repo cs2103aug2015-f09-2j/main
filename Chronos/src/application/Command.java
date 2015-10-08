@@ -232,10 +232,11 @@ public class Command {
 	}
 	
 	private Feedback changeDirectory(String newDirectory) {
-		//String oldPath = _store.changeDirectory(newDirectory);
-		//_savedDirectories.push(oldPath);
+		String oldPath = _parser.changeDirectory(newDirectory);
+		_savedDirectories.push(oldPath);
+		_store.changeDirectory(newDirectory);
 		String feedbackString = "Changing Directory to: " + newDirectory;
-		return new Feedback(feedbackString, null);
+		return new Feedback(feedbackString);
 	}
 	
 	private Feedback delete(String idToDelete) {

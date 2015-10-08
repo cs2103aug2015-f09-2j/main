@@ -26,7 +26,7 @@ public class Parser {
 		JSONObject entry = new JSONObject();
 		entry.put("id", taskID + id);
 		entry.put("description", contents[0]);
-		entry.put("priority", "");
+		entry.put("priority", "low");
 		entry.put("category", "");
 		entry.put("due date", "");
 		for(int i = 1; i<contents.length; i++){
@@ -76,6 +76,12 @@ public class Parser {
 			}
 		} 
 		return tasks;
+	}
+
+	public String changeDirectory(String newDirectory) {
+		String oldDirectory = _userPrefs.get("path", "none");
+		_userPrefs.put("path", newDirectory);
+		return oldDirectory;
 	}
 }
 
