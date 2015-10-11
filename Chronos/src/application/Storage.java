@@ -11,8 +11,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 public class Storage {
 
-	private final String MESSAGE_REQUEST_FILENAME = "Enter the absolute path of where the agenda will be stored: ";
-	private final String MESSAGE_INVALID_FILE = "Invalid File. Please try again";
+	private final String MESSAGE_INVALID_FILE = "Invalid File.";
 	private final String MESSAGE_FILE_CREATED = "Your agenda will be stored in \"%1$s\"";
 	private final String MESSAGE_FILE_OPENED = "Your agenda stored in \"%1$s\" is loaded";
 	
@@ -24,7 +23,7 @@ public class Storage {
 	private String fileDirectory_;
 	private boolean isStoredTemp = false;
 	
-	public  Storage(String filePath) {
+	public Storage(String filePath) {
 		entries_ = new JSONArray();
 		getFile(filePath);
 	}
@@ -37,18 +36,16 @@ public class Storage {
 	private void readFile(){
 		File file = new File(fileDirectory_ + "\\chronos_storage.txt");
 		try {
-			if(!file.createNewFile()){ //Read in the content of an existing file
+			if(!file.createNewFile()){ 
+				//Read in the content of an existing file
 				getContent();
-				log.info(String.format("read file %1$s", fileDirectory_));
-				//System.out.println(String.format(MESSAGE_FILE_OPENED, fileDirectory_));
+				log.info(String.format(MESSAGE_FILE_OPENED, fileDirectory_));
+
 			}else{
-				log.info(String.format("created file %1$s", fileDirectory_));
-				//System.out.println(String.format(MESSAGE_FILE_CREATED, fileDirectory_));
+				log.info(String.format(MESSAGE_FILE_CREATED, fileDirectory_));
 			}
 		} catch (IOException e) {
-			log.warning("cannot get file");
-			//System.out.println(MESSAGE_INVALID_FILE);
-			//getFile();
+			log.warning(MESSAGE_INVALID_FILE);
 		}
 	}
 	
@@ -57,8 +54,7 @@ public class Storage {
 		try {
 			entries_ = (JSONArray)jsonParser.parse(new FileReader(fileDirectory_+"\\chronos_storage.txt"));
 		} catch (IOException | ParseException e) {
-			//System.out.println(MESSAGE_INVALID_FILE);
-			//getFile();
+			log.warning(MESSAGE_INVALID_FILE);
 		}
 	}
 	
@@ -94,8 +90,9 @@ public class Storage {
 		File oldFile = new File(temp_fileDirectory_+"\\chronos_storage.txt");
 		if(!oldFile.delete()){
 			log.warning(String.format("old file %1$s not deleted", temp_fileDirectory_));
-		}
+		}else{
 		log.info(String.format("content of %1$s moved to %2$s", temp_fileDirectory_,fileDirectory_));
+		}
 	}
 	
 	//to be called by undo/redo commands that undo/redo cd commands
