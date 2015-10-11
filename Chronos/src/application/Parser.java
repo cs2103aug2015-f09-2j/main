@@ -46,22 +46,6 @@ public class Parser {
 		return entry;
 	}
 	
-	public String getID(String contentString) {
-		String[] contents = contentString.split(", ");
-		String itemID = contents[0];
-		return itemID;
-	}
-	
-	public JSONArray convertToJsonArray(String[] content) {
-		JSONArray taskArr = new JSONArray();
-		int numContents;
-		
-		for(numContents=0; numContents<content.length; numContents++) {
-			taskArr.add(content[numContents]);
-		}
-		return taskArr;
-	}
-	
 	public ArrayList<Task> convertToTaskArray (JSONArray contents) {
 		ArrayList<Task> tasks = new ArrayList<Task>();
 		if(contents != null){
