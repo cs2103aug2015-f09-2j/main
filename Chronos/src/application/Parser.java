@@ -112,9 +112,21 @@ public class Parser {
 					updateDetails.add("due date"); 
 					updateDetails.add(details[i].substring(2));
 					break;
+<<<<<<< Updated upstream
 				default:
 					updateDetails.add("description"); 
 					updateDetails.add(details[i]);
+=======
+<<<<<<< HEAD
+				case 't':
+					updateDetails.add("description"); 
+					updateDetails.add(details[i].substring(2));
+=======
+				default:
+					updateDetails.add("description"); 
+					updateDetails.add(details[i]);
+>>>>>>> origin/master
+>>>>>>> Stashed changes
 					break;
 			}
 		}
