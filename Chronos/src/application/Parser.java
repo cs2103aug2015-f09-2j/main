@@ -112,19 +112,22 @@ public class Parser {
 		ArrayList<String> updateDetails = new ArrayList<String>();
 		updateDetails.add(details[0]);
 		for(int i=1;i<details.length; i++){
-			String aDetail = details[i];
-			switch(details[i].charAt(0)){
-				case 'p':
+			switch(details[i].substring(0, 2)){
+				case "p:":
 					updateDetails.add("priority"); 
 					updateDetails.add(details[i].substring(2));
 					break;
-				case 'c':
+				case "c:":
 					updateDetails.add("category"); 
 					updateDetails.add(details[i].substring(2));
 					break;
-				case 'd':
+				case "d:":
 					updateDetails.add("due date"); 
 					updateDetails.add(details[i].substring(2));
+					break;
+				default:
+					updateDetails.add("description"); 
+					updateDetails.add(details[i]);
 					break;
 			}
 		}

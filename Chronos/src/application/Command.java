@@ -349,7 +349,9 @@ public class Command {
 			entry = (JSONObject) _store.entries_.get(i);
 			String id = updateDetails.get(0);
 			if (entry.get("id").equals(id)) {
-				entry.replace(updateDetails.get(1), updateDetails.get(2));
+				for (int j=1; j<updateDetails.size();j++){
+				entry.replace(updateDetails.get(j), updateDetails.get(++j));
+				}
 				_store.entries_.set(i, entry);
 				break;
 			}
