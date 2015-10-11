@@ -9,16 +9,16 @@ public class Task {
 	private String endDate;
 	private String priority;
 	private String category;
-	private ArrayList<Note> notes;
+	private String note;
 	
 	
-	public Task(String id, String description, String endDate, String priority, String category) {
+	public Task(String id, String description, String endDate, String priority, String category, String note) {
 		this.id = id.trim();
 		this.description = description.trim();
 		this.endDate = endDate.trim();
 		this.priority = priority.trim();
 		this.category = category.trim();
-		notes = new ArrayList<Note>();
+		this.note = note.trim();
 	}
 
 	public String getId() {
@@ -57,16 +57,16 @@ public class Task {
 		this.category = _category;
 	}
 
-	public ArrayList<Note> getNotes() {
-		return notes;
+	public String getNote() {
+		return note;
 	}
 	
 	@Override
 	public String toString() {
-		return id + " " + description + " " + endDate + " " + priority + " " + category;
+		return id + " " + description + " " + endDate + " " + priority + " " + category + " "+note;
 	}
 	
-	public String getNoteString(){
+	/*public String getNoteString(){
 		String noteString = "";
 		
 		if(notes.size() == 0) {
@@ -79,6 +79,6 @@ public class Task {
 		}
 		
 		return noteString;
-	}
+	}*/
 	
 }

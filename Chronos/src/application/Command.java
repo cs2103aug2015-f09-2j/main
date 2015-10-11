@@ -294,9 +294,6 @@ public class Command {
 	}
 
 	private Feedback note(String noteString) {
-		//String itemID = _parser.getID(noteString);
-		//Note aNote = new Note(noteString);
-		//_store.addNote(itemID, aNote)
 		_store.storeTemp();
 		JSONObject entry;
 		String[] noteDetails = noteString.split(", ");

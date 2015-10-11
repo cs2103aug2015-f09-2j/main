@@ -69,7 +69,7 @@ public class GUI extends Application {
 		detailView = new DetailedView(this);
 		rootLayout.setCenter(detailView);
 		Task taskToView = data.get(DATA_FIRST);
-		detailView.display(taskToView.getDescription(), taskToView.getNoteString());
+		detailView.display(taskToView.getDescription(), taskToView.getNote());
 	}
 
 	private void initLogic() {

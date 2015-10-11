@@ -13,7 +13,7 @@
           <TableColumn fx:id="timeCol" prefWidth="100.0" text="time" />
           <TableColumn fx:id="titleCol" prefWidth="340.0" text="title" />
           <TableColumn fx:id="categoryCol" prefWidth="70.0" text="category" />
-          <TableColumn fx:id="notesCol" prefWidth="45.0" text="notes" />
+          <TableColumn fx:id="noteCol" prefWidth="45.0" text="note" />
         </columns>
       </TableView>
    </children>

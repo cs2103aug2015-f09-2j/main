@@ -30,6 +30,7 @@ public class Parser {
 		entry.put("priority", "low");
 		entry.put("category", "none");
 		entry.put("due date", "someday");
+		entry.put("note", "none");
 		for(int i = 1; i<contents.length; i++){
 			if(contents[i].charAt(1) == ':'){ // p: or c:
 				switch(contents[i].charAt(0)){
@@ -56,7 +57,8 @@ public class Parser {
 				String endDate = anItem.get("due date").toString();
 				String priority = anItem.get("priority").toString();
 				String category = anItem.get("category").toString();
-				Task aTask = new Task(taskId, description, endDate, priority, category);
+				String note = anItem.get("note").toString();
+				Task aTask = new Task(taskId, description, endDate, priority, category, note);
 				tasks.add(aTask);
 			}
 		} 
@@ -87,8 +89,9 @@ public class Parser {
 		String endDate = anEntry.get("due date").toString();
 		String priority = anEntry.get("priority").toString();
 		String category = anEntry.get("category").toString();
+		String note = anEntry.get("note").toString();
 		//notes
-		return new Task(id, description, endDate, priority, category);
+		return new Task(id, description, endDate, priority, category,note);
 	}
 
 	public ArrayList<String> parseUpdateString(String updateString) {

@@ -2,6 +2,8 @@ package gui;
 
 import java.io.IOException;
 
+import javax.media.jai.remote.NegotiableCollection;
+
 import application.Task;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -35,6 +37,9 @@ public class Summary extends StackPane {
 
 	@FXML
 	private TableColumn<Task, String> categoryCol;
+	
+	@FXML
+	private TableColumn<Task, String> noteCol;
 
 	public Summary(GUI gui) throws IOException {
 		// this.gui = gui;
@@ -55,6 +60,7 @@ public class Summary extends StackPane {
 		timeCol.setCellValueFactory(new PropertyValueFactory<Task, String>("endDate"));
 		titleCol.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
 		categoryCol.setCellValueFactory(new PropertyValueFactory<Task, String>("category"));
+		noteCol.setCellValueFactory(new PropertyValueFactory<Task, String>("note"));
 		IDCol.setCellFactory(new Callback<TableColumn<Task, String>, TableCell<Task, String>>() {
 			public TableCell<Task, String> call(TableColumn<Task, String> param) {
 				return new TableCell<Task, String>() {
