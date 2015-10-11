@@ -1,9 +1,9 @@
 #root { 
-	-fx-padding: 10px; 
+	-fx-padding: 10.0px; 
 	} 
 	
 .list-cell {
-  -fx-font: 10pt "Arial";
+  -fx-font: 10.0pt "Arial";
   -fx-alignment: center ;
 }	
 
@@ -15,11 +15,14 @@
 }*/
 .priorityHigh { 
   -fx-control-inner-background: palevioletred;
-  -fx-accent: derive(-fx-control-inner-background, -40%);
-  -fx-cell-hover-color: derive(-fx-control-inner-background, -20%);
+  -fx-accent: derive(-fx-control-inner-background, -40.0%);
+  -fx-cell-hover-color: derive(-fx-control-inner-background, -20.0%);
+}
+.done .text {
+	-fx-strikethrough: true;	
 }
 .priorityLow { 
   -fx-control-inner-background: palegreen;
-  -fx-accent: derive(-fx-control-inner-background, -40%);
-  -fx-cell-hover-color: derive(-fx-control-inner-background, -20%);
+  -fx-accent: derive(-fx-control-inner-background, -40.0%);
+  -fx-cell-hover-color: derive(-fx-control-inner-background, -20.0%);
 }
