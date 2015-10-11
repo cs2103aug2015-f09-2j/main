@@ -6,3 +6,20 @@
   -fx-font: 10pt "Arial";
   -fx-alignment: center ;
 }	
+
+ /* .priorityHigh {
+    -fx-background-color: brown;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background: -fx-accent;
+    -fx-text-fill: -fx-selection-bar-text;
+}*/
+.priorityHigh { 
+  -fx-control-inner-background: palevioletred;
+  -fx-accent: derive(-fx-control-inner-background, -40%);
+  -fx-cell-hover-color: derive(-fx-control-inner-background, -20%);
+}
+.priorityLow { 
+  -fx-control-inner-background: palegreen;
+  -fx-accent: derive(-fx-control-inner-background, -40%);
+  -fx-cell-hover-color: derive(-fx-control-inner-background, -20%);
+}
