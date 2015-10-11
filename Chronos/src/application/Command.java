@@ -297,6 +297,18 @@ public class Command {
 		//String itemID = _parser.getID(noteString);
 		//Note aNote = new Note(noteString);
 		//_store.addNote(itemID, aNote)
+		_store.storeTemp();
+		JSONObject entry;
+		String[] noteDetails = noteString.split(", ");
+		for (int i = 0; i<_store.entries_.size(); i++){
+			entry = (JSONObject) _store.entries_.get(i);
+			String id = noteDetails[0];
+			if (entry.get("id").equals(id)) {	
+				entry.put("note", noteDetails[1]);
+				break;
+			}
+		}
+		_store.storeChanges();
 		String feedbackString =  String.format(MESSAGE_ADDING_NOTE, noteString);
 		return new Feedback(feedbackString);
 	}
