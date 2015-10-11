@@ -285,11 +285,21 @@ public class Command {
 			feedbackString = MESSAGE_DISPLAY_ALL;
 			filteredTasks = _parser.convertToTaskArray(_store.entries_);
 		} 
-		/*else {
+		else {
 			feedbackString = "Displaying: " + criteria;
-			//search for thing, then entries -> Array<Task>
-			filteredTasks = new ArrayList<Task>();
-		}*/
+			String condition = null;
+			String[] criterias = criteria.split(", ");
+			for(int index=0; index<criterias.length; index++) {
+				condition = criterias[index].substring(2);
+			}
+			for(int index=0; index<_store.entries_.size(); index++) {
+				String entry = _store.entries_.get(index).toString();
+				JSONObject entryObject = (JSONObject) _store.entries_.get(index);
+				if(entry.contains(condition)) {
+					filteredTasks.add(_parser.retrieveTask(entryObject.get("id").toString(),_store.entries_));
+				}
+			}
+		}
 		return new Feedback(feedbackString, filteredTasks); 
 	}
 

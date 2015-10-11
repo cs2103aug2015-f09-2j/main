@@ -25,6 +25,10 @@ public class Parser {
 		_userPrefs.putInt("count", ++id);
 		String[] contents = content.split(", ");
 		JSONObject entry = new JSONObject();
+		return putEntryJSONObj(entry, contents);
+	}
+	
+	public JSONObject putEntryJSONObj(JSONObject entry, String[] contents) {
 		entry.put("id", taskID + id);
 		entry.put("description", contents[0]);
 		entry.put("priority", "low");
@@ -52,13 +56,7 @@ public class Parser {
 		if(contents != null){
 			for(int i=0; i<contents.size(); i++){
 				JSONObject anItem = (JSONObject)contents.get(i);
-				String taskId = anItem.get("id").toString();
-				String description = anItem.get("description").toString();
-				String endDate = anItem.get("due date").toString();
-				String priority = anItem.get("priority").toString();
-				String category = anItem.get("category").toString();
-				String note = anItem.get("note").toString();
-				Task aTask = new Task(taskId, description, endDate, priority, category, note);
+				Task aTask = convertToTask(anItem);
 				tasks.add(aTask);
 			}
 		} 
@@ -91,12 +89,16 @@ public class Parser {
 		String category = anEntry.get("category").toString();
 		String note = anEntry.get("note").toString();
 		//notes
-		return new Task(id, description, endDate, priority, category,note);
+		return new Task(id, description, endDate, priority, category, note);
 	}
 
 	public ArrayList<String> parseUpdateString(String updateString) {
 		String[] details = updateString.split(", ");
 		ArrayList<String> updateDetails = new ArrayList<String>();
+		return updateDetailsArray(details, updateDetails);
+	}
+	
+	public ArrayList<String> updateDetailsArray(String[] details, ArrayList<String> updateDetails) {
 		updateDetails.add(details[0]);
 		for(int i=1;i<details.length; i++){
 			switch(details[i].substring(0, 2)){
@@ -120,7 +122,4 @@ public class Parser {
 		}
 		return updateDetails;
 	}
-	
-	
 }
-
