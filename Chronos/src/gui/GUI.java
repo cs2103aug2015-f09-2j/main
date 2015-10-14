@@ -86,7 +86,7 @@ public class GUI extends Application {
 			detailView = new DetailedView(this);
 			rootLayout.setCenter(detailView);
 			Task taskToView = data.get(DATA_FIRST);
-			detailView.display(taskToView.getDescription(), taskToView.getNote());
+			detailView.display(taskToView);
 		} catch (IOException e) {
 			log.warning(MESSAGE_DETAILED_VIEW_FAIL);
 		}

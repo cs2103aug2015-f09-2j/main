@@ -2,17 +2,15 @@
 	-fx-padding: 10.0px; 
 	} 
 	
+.labeled {
+	-fx-text-alignment: center; 
+}	
+
 .list-cell {
   -fx-font: 10.0pt "Arial";
   -fx-alignment: center ;
 }	
 
- /* .priorityHigh {
-    -fx-background-color: brown;
-    -fx-background-insets: 0, 1, 2;
-    -fx-background: -fx-accent;
-    -fx-text-fill: -fx-selection-bar-text;
-}*/
 .priorityHigh { 
   -fx-control-inner-background: palevioletred;
   -fx-accent: derive(-fx-control-inner-background, -40.0%);
@@ -28,7 +26,8 @@
 	-fx-strikethrough: true;
 	-fx-fill: grey;	
 }
-.priorityLow { 
+
+.priorityMiddle { 
   -fx-control-inner-background: palegreen;
   -fx-accent: derive(-fx-control-inner-background, -40.0%);
   -fx-cell-hover-color: derive(-fx-control-inner-background, -20.0%);

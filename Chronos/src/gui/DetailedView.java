@@ -2,11 +2,17 @@ package gui;
 
 import java.io.IOException;
 
+import application.Task;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 
 public class DetailedView extends BorderPane {
@@ -19,7 +25,7 @@ public class DetailedView extends BorderPane {
 	private TextFlow eventTitle;
 
 	@FXML
-	private TextFlow description;
+    private ListView<String> details;
 
 	public DetailedView(GUI gui) throws IOException {
 		// this.gui = gui;
@@ -30,13 +36,17 @@ public class DetailedView extends BorderPane {
 
 	}
 
-	public void display(String title, String notes) {
-		Text text1 = new Text(title);
-		Text text2 = new Text(notes);
-		text1.setFont(Font.font("Verdana", 30));
-		text2.setFont(Font.font("Verdana", 15));
+	public void display(Task taskToView) {
+		Text text1 = new Text(taskToView.getDescription());
+		ListView<String> list = new ListView<String>();
+		ObservableList<String> items =FXCollections.observableArrayList (
+				"ID: "+taskToView.getId(), "Category: "+taskToView.getCategory(), 
+				"Priority: "+taskToView.getPriority(), "Notes: "+taskToView.getDescription());
+		details.setItems(items);
+		text1.setFont(Font.font("",FontWeight.BOLD,30));
+
+		text1.setTextAlignment(TextAlignment.CENTER);
 		eventTitle.getChildren().addAll(text1);
-		description.getChildren().addAll(text2);
 	}
 
 }
