@@ -2,6 +2,7 @@ package gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import application.Command;
 import application.Feedback;
@@ -20,19 +21,26 @@ public class GUI extends Application {
 	private static final String WINDOW_TITLE = "Chronos V0.1";
 	private static final String MESSAGE_WELCOME = "Welcome to Chronos V0.1! Where would you like Chronos to store your tasks and events?";
 	private static final String MESSAGE_LOADED = "Welcome to Chronos V0.1! Add a task to get started.";
-	
+
 	private static final String ROOT_LAYOUT_FXML = "RootLayout.fxml";
-	
+
 	private static final int DATA_FIRST = 0;
-	
+
 	private static final int EXIT_NORMAL = 0;
+	private static final String MESSAGE_SET_UP = "Chrons is set up properly";
+	private static final String MESSAGE_SET_UP_FAIL = "Failed to set up Chrons";
+	private static final String MESSAGE_DETAILED_VIEW_FAIL = "Failed to set up DetailedView Pane";
+	private static final String MESSAGE_SUMMARY_FAIL = "Failed to set up Summary Pane";
+	private static final String MESSAGE_COMMAND_BAR_FAIL = "Failed to set up Command Bar Pane";
 	
 	private BorderPane rootLayout;
 	private Logic logic;
 	private static CommandBarController commandBarController = null;
 	private static Summary summary = null;
 	private static DetailedView detailView = null;
-	
+	private static Logger log = Logger.getLogger("GUILog");
+	private boolean setUp = false;
+
 	private boolean _isNewUser;
 	private ObservableList<Task> events = FXCollections.observableArrayList();
 
@@ -41,22 +49,30 @@ public class GUI extends Application {
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {
-		initRootLayout();
-		initPrimaryStage(primaryStage);
-		initLogic();
+	public void start(Stage primaryStage) {
 
-		addCommandBar(this);
-		addSummary(this);
-		
-		//check if savefile exists
-		if (logic.isSavePresent()) {
-			_isNewUser = false;
-			updateFeedback(logic.executeUserCommand(Command.COMMAND_DISPLAY_D)); 
-			commandBarController.displayFeedback(MESSAGE_LOADED);
-		} else {
-			_isNewUser = true;
-			initNewUser();
+		try {
+			initRootLayout();
+			initPrimaryStage(primaryStage);
+
+			initLogic();
+
+			addCommandBar(this);
+			addSummary(this);
+			log.info(String.format(MESSAGE_SET_UP));
+
+			// check if savefile exists
+			if (logic.isSavePresent()) {
+				_isNewUser = false;
+				updateFeedback(logic.executeUserCommand(Command.COMMAND_DISPLAY_D));
+				commandBarController.displayFeedback(MESSAGE_LOADED);
+			} else {
+				_isNewUser = true;
+				initNewUser();
+			}
+		} catch (IOException e) {
+			log.warning(MESSAGE_SET_UP_FAIL);
+			assert(setUp == false);
 		}
 	}
 
@@ -65,34 +81,42 @@ public class GUI extends Application {
 		summary.setVisible(false);
 	}
 
-	private void addDetailView(GUI gui, ArrayList<Task> data) throws IOException {
-		detailView = new DetailedView(this);
-		rootLayout.setCenter(detailView);
-		Task taskToView = data.get(DATA_FIRST);
-		detailView.display(taskToView.getDescription(), taskToView.getNote());
+	private void addDetailView(GUI gui, ArrayList<Task> data) {
+		try {
+			detailView = new DetailedView(this);
+			rootLayout.setCenter(detailView);
+			Task taskToView = data.get(DATA_FIRST);
+			detailView.display(taskToView.getDescription(), taskToView.getNote());
+		} catch (IOException e) {
+			log.warning(MESSAGE_DETAILED_VIEW_FAIL);
+		}
 	}
 
 	private void initLogic() {
 		logic = new Logic();
 	}
 
-	private void addSummary(GUI gui) throws IOException {
-		summary = new Summary(this);
-		rootLayout.setCenter(summary);
+	private void addSummary(GUI gui) {
+		try {
+			summary = new Summary(this);
+			rootLayout.setCenter(summary);
+		} catch (IOException e) {
+			log.warning(MESSAGE_SUMMARY_FAIL);
+		}
 	}
 
 	/*
-	private ObservableList<Task> getEvents() {
-		ArrayList<Task> entries = logic.getTasks();
-		for (int i = 0; i < entries.size(); i++){
-			events.add(entries.get(i));
+	 * private ObservableList<Task> getEvents() { ArrayList<Task> entries =
+	 * logic.getTasks(); for (int i = 0; i < entries.size(); i++){
+	 * events.add(entries.get(i)); } return events; }
+	 */
+	private void addCommandBar(GUI gui) {
+		try {
+			commandBarController = new CommandBarController(gui);
+			rootLayout.setTop(commandBarController);
+		} catch (IOException e) {
+			log.warning(MESSAGE_COMMAND_BAR_FAIL);
 		}
-		return events;
-	}
-	*/
-	private void addCommandBar(GUI gui) throws IOException {
-		commandBarController = new CommandBarController(gui);
-		rootLayout.setTop(commandBarController);
 	}
 
 	private void initRootLayout() throws IOException {
@@ -108,28 +132,29 @@ public class GUI extends Application {
 		primaryStage.show();
 	}
 
-	public void handleCommand(String text) throws IOException {
-		if (_isNewUser) {
-			updateFeedback(logic.setSavePath(text));
-			summary.setVisible(true);
-			_isNewUser = false;
-		} else {
-			Feedback commandFeedback = logic.executeUserCommand(text);
-			if (logic.isProgramExiting()) {
-				System.exit(EXIT_NORMAL);
+	public void handleCommand(String text) {
+			if (_isNewUser) {
+				updateFeedback(logic.setSavePath(text));
+				summary.setVisible(true);
+				_isNewUser = false;
+			} else {
+				Feedback commandFeedback = logic.executeUserCommand(text);
+				if (logic.isProgramExiting()) {
+					System.exit(EXIT_NORMAL);
+				}
+				updateFeedback(commandFeedback);
 			}
-			updateFeedback(commandFeedback);
-		}
+		
 	}
 
-	//get items arrayList from Logic and print them out
+	// get items arrayList from Logic and print them out
 	private void updateSummary(ArrayList<Task> eventList) {
 		events = FXCollections.observableArrayList(eventList);
 		summary.display(events);
 	}
 
-	private void updateFeedback(Feedback feedback) throws IOException {
-		//choose between summary or detail view
+	private void updateFeedback(Feedback feedback) {
+		// choose between summary or detail view
 		if (logic.isInSummaryView()) {
 			addSummary(this);
 		} else {
@@ -138,7 +163,7 @@ public class GUI extends Application {
 		if (feedback.hasData()) {
 			updateSummary(feedback.getData());
 		} else {
-			//update display
+			// update display
 			updateFeedback(logic.executeUserCommand(Command.COMMAND_DISPLAY_D));
 		}
 		commandBarController.displayFeedback(feedback.getMessage());
