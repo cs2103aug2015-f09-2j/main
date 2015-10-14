@@ -69,84 +69,37 @@ public class Summary extends StackPane {
 		noteCol.setCellValueFactory(new PropertyValueFactory<Task, String>("note"));
 		priorityCol.setCellValueFactory(new PropertyValueFactory<Task, String>("priority"));
 
-		/*summaryTable.setRowFactory(new Callback<TableView<Task>, TableRow<Task>>() {
-
+		//update the colour for high-priority task and done task
+		priorityCol.setCellFactory(new Callback<TableColumn<Task, String>, TableCell<Task, String>>() {
 			@Override
-			public TableRow<Task> call(TableView<Task> tableView) {
-				final TableRow<Task> row = new TableRow<Task>() {
-
+			public TableCell<Task, String> call(TableColumn<Task, String> priority) {
+				return new TableCell<Task, String>() {
 					@Override
-					protected void updateItem(Task event, boolean empty) {
-						super.updateItem(event, empty);
-						// TableRow currentRow = getTableRow();
-						// Task currentTask = currentRow == null ? null :(Task)currentRow.getItem();
-						if (true) {
-							// if (event.getPriority() =="high") {
+					public void updateItem(final String item, final boolean empty) {
+						super.updateItem(item, empty);
 
-							getStyleClass().add("priorityHigh");
-						} else
-							System.out.println("Empty");
+						// clear any custom styles
+						this.getTableRow().getStyleClass().remove("priorityHigh");
+						this.getTableRow().getStyleClass().remove("priorityLow");
+
+						// update the item and set a custom style if necessary
+						TableRow currentRow = getTableRow();
+						Task currentTask = currentRow == null ? null : (Task) currentRow.getItem();
+						if (item != null) {
+							if (currentTask.getPriority().contains("high")) {
+								this.getTableRow().getStyleClass().add("priorityHigh");
+							} 
+							//else if (currentTask.getPriority().contains("high")) {
+							//	this.getTableRow().getStyleClass().add("done");
+							//}  
+						}
+
 					}
 				};
-
-				return row;
 			}
-		});*/
-		//TableColumn<Task, Boolean> column = new TableColumn<>("priority");
-		priorityCol.setCellFactory(new Callback<TableColumn<Task, String>, TableCell<Task, String>>() {
-		      @Override 
-		      public TableCell<Task, String> call(TableColumn<Task, String> priority) {
-		        return new TableCell<Task, String>() {
-		          @Override 
-		          public void updateItem(final String item, final boolean empty) {
-		            super.updateItem(item, empty);
-		         // clear any custom styles
-		            this.getTableRow().getStyleClass().remove("priorityHigh");
-		            this.getTableRow().getStyleClass().remove("priorityLow");
-		           // update the item and set a custom style if necessary
-		            if (item != null) {
-		              setText(item.toString());
-		              if(item.toString().contains("high")) {
-		              this.getTableRow().getStyleClass().add(item.toString().contains("high") ? "priorityHigh" : "priorityLow");
-		              }
-		            }
-		          }
-		        };
-		      }
-		    });
+		});
 
-		  
-		/*
-		 * summaryTable.setRowFactory(new Callback<TableView<Task>,
-		 * TableRow<Task>>() {
-		 * 
-		 * @Override public TableRow<Task> call(TableView<Task> tableView) {
-		 * final TableRow<Task> row = new TableRow<Task>() {
-		 * 
-		 * @Override protected void updateItem(Task person, boolean empty) {
-		 * super.updateItem(person, empty); if (events.contains(getIndex())) {
-		 * // if (! getStyleClass().contains("highlightedRow")) // {
-		 * getStyleClass().add("priorityHigh"); // } } else { //
-		 * getStyleClass().removeAll(Collections.singleton("highlightedRow")); }
-		 * } }; return row; } });
-		 */
-
-		/*
-		 * priorityCol.setCellFactory(new Callback<TableColumn<Task, String>,
-		 * TableCell<Task, String>>() {
-		 * 
-		 * 
-		 * 
-		 * @Override public TableCell<Task, String> call(TableColumn<Task,
-		 * String> param) { return new TableCell<Task, String>() {
-		 * 
-		 * @Override protected void updateItem(String name, boolean empty) {
-		 * super.updateItem(name, empty); if (!empty) { if
-		 * (name.contains("high")) { System.out.println("yeah");
-		 * getStyleClass().add("priorityHigh");
-		 * this.setTextFill(Color.BLUEVIOLET); } setText(name); } else {
-		 * setText("empty"); // for debugging purposes } } }; } });
-		 */
+		//if highlighting of a particular cell is needed
 		/*
 		 * priorityCol.setCellFactory(new Callback<TableColumn<Task, String>,
 		 * TableCell<Task, String>>() { public TableCell<Task, String>

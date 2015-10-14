@@ -17,9 +17,16 @@
   -fx-control-inner-background: palevioletred;
   -fx-accent: derive(-fx-control-inner-background, -40.0%);
   -fx-cell-hover-color: derive(-fx-control-inner-background, -20.0%);
+  
 }
+
+.priorityHigh .text {
+  -fx-fill: black;
+}
+
 .done .text {
-	-fx-strikethrough: true;	
+	-fx-strikethrough: true;
+	-fx-fill: grey;	
 }
 .priorityLow { 
   -fx-control-inner-background: palegreen;
