@@ -94,9 +94,9 @@ public class Parser {
 		String endDate = anEntry.get("due date").toString();
 		String priority = anEntry.get("priority").toString();
 		String category = anEntry.get("category").toString();
-		String note = anEntry.get("note").toString();
+		//String note = anEntry.get("note").toString();
 		//notes
-		return new Task(id, description, endDate, priority, category, note);
+		return new Task(id, description, endDate, priority, category);
 	}
 
 	public ArrayList<String> parseUpdateString(String updateString) {

@@ -250,14 +250,17 @@ public class Command {
 	}
 
 	private Feedback markAsDone(String taskID) {
-		// TODO Auto-generated method stub
 		String feedbackString = null;
 		if(taskID!="") {
 			feedbackString = String.format(MESSAGE_MARKING, taskID);
+			Task completedTask = _parser.retrieveTask(taskID, _store.entries_);
+			completedTask.markTaskAsDone(true);
+			//update entries
+			log.info("Task " + taskID + " marked as Done");
 		} else {
 			log.warning("No taskID");
 		}
-		return new Feedback(feedbackString, null);
+		return new Feedback(feedbackString);
 	}
 
 	private Feedback add(String content) {

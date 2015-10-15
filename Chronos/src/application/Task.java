@@ -4,11 +4,15 @@ import java.util.ArrayList;
 
 public class Task {
 	
+	private String DEFAULT_END_DATE = "someday";
+	private String DEFAULT_PRIORITY = "med";
+	private String DEFAULT_CATEGORY = "none";
+	
 	private String _id;
 	private String _description;
-	private String _endDate;
-	private String _priority;
-	private String _category;
+	private String _endDate = DEFAULT_END_DATE;
+	private String _priority = DEFAULT_PRIORITY;
+	private String _category = DEFAULT_CATEGORY;
 	private boolean _isDone;
 	private ArrayList<Note> _notes;
 	
@@ -16,9 +20,15 @@ public class Task {
 	public Task(String id, String description, String endDate, String priority, String category) {
 		_id = id.trim();
 		_description = description.trim();
-		_endDate = endDate.trim();
-		_priority = priority.trim();
-		_category = category.trim();
+		if(!endDate.equals(null)){
+			setEndDate(endDate);
+		}
+		if(!priority.equals(null)){
+			setEndDate(priority);
+		}
+		if(!category.equals(null)){
+			setEndDate(category);
+		}
 		_isDone = false;
 	}
 
@@ -39,7 +49,7 @@ public class Task {
 	}
 
 	void setEndDate(String endDate) {
-		_endDate = endDate;
+		_endDate = endDate.trim();
 	}
 
 	public String getPriority() {
@@ -47,7 +57,7 @@ public class Task {
 	}
 
 	void setPriority(String priority) {
-		_priority = priority;
+		_priority = priority.trim();
 	}
 
 	public String getCategory() {
@@ -55,7 +65,7 @@ public class Task {
 	}
 
 	void setCategory(String category) {
-		_category = category;
+		_category = category.trim();
 	}
 	
 	@Override
@@ -71,19 +81,18 @@ public class Task {
 		_isDone = status;
 	}
 	
-	public String getNoteString(){
-		String noteString = "";
-		
-		if(_notes.size() == 0) {
-			return "No notes available.";
-		} 
-		
+	public void addNote(String noteString){
+			_notes.add(new Note(noteString));
+	}
+	
+	//for detailed view
+	public ArrayList<String> getNotes(){
+		ArrayList<String> notes = new ArrayList<String>();
+		assert !notes.isEmpty();
 		for(int i=0; i<_notes.size(); i++){
-			String oneNote = (i+1) + ". " + _notes.get(i).toString() + "\n";
-			noteString += oneNote;
-		}
-		
-		return noteString;
+			notes.add(_notes.get(i).toString());
+		}		
+		return notes;
 	}
 	
 }
