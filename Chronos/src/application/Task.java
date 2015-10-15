@@ -4,81 +4,86 @@ import java.util.ArrayList;
 
 public class Task {
 	
-	private String id;
-	private String description;
-	private String endDate;
-	private String priority;
-	private String category;
-	private String note;
+	private String _id;
+	private String _description;
+	private String _endDate;
+	private String _priority;
+	private String _category;
+	private boolean _isDone;
+	private ArrayList<Note> _notes;
 	
 	
-	public Task(String id, String description, String endDate, String priority, String category, String note) {
-		this.id = id.trim();
-		this.description = description.trim();
-		this.endDate = endDate.trim();
-		this.priority = priority.trim();
-		this.category = category.trim();
-		this.note = note.trim();
+	public Task(String id, String description, String endDate, String priority, String category) {
+		_id = id.trim();
+		_description = description.trim();
+		_endDate = endDate.trim();
+		_priority = priority.trim();
+		_category = category.trim();
+		_isDone = false;
 	}
 
 	public String getId() {
-		return id;
+		return _id;
 	}
 	
 	public String getDescription() {
-		return description;
+		return _description;
 	}
 
-	void setDescription(String _description) {
-		this.description = _description;
+	void setDescription(String description) {
+		_description = description;
 	}
 
 	public String getEndDate() {
-		return endDate;
+		return _endDate;
 	}
 
-	void setEndDate(String _endDate) {
-		this.endDate = _endDate;
+	void setEndDate(String endDate) {
+		_endDate = endDate;
 	}
 
 	public String getPriority() {
-		return priority;
+		return _priority;
 	}
 
-	void setPriority(String _priority) {
-		this.priority = _priority;
+	void setPriority(String priority) {
+		_priority = priority;
 	}
 
 	public String getCategory() {
-		return category;
+		return _category;
 	}
 
-	void setCategory(String _category) {
-		this.category = _category;
-	}
-
-	public String getNote() {
-		return note;
+	void setCategory(String category) {
+		_category = category;
 	}
 	
 	@Override
 	public String toString() {
-		return id + " " + description + " " + endDate + " " + priority + " " + category + " "+note;
+		return _id + ". " + _description + " " + _endDate + " " + _priority + " " + _category;
 	}
 	
-	/*public String getNoteString(){
+	public boolean isTaskComplete() {
+		return _isDone;
+	}
+	
+	public void markTaskAsDone(boolean status) {
+		_isDone = status;
+	}
+	
+	public String getNoteString(){
 		String noteString = "";
 		
-		if(notes.size() == 0) {
+		if(_notes.size() == 0) {
 			return "No notes available.";
 		} 
 		
-		for(int i=0; i<notes.size(); i++){
-			String oneNote = i + ". " + notes.get(i).toString() + "\n";
+		for(int i=0; i<_notes.size(); i++){
+			String oneNote = (i+1) + ". " + _notes.get(i).toString() + "\n";
 			noteString += oneNote;
 		}
 		
 		return noteString;
-	}*/
+	}
 	
 }
