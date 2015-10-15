@@ -54,25 +54,28 @@ public class GUI extends Application {
 		try {
 			initRootLayout();
 			initPrimaryStage(primaryStage);
-
 			initLogic();
 
 			addCommandBar(this);
 			addSummary(this);
 			log.info(String.format(MESSAGE_SET_UP));
-
-			// check if savefile exists
-			if (logic.isSavePresent()) {
-				_isNewUser = false;
-				updateFeedback(logic.executeUserCommand(Command.COMMAND_DISPLAY_D));
-				commandBarController.displayFeedback(MESSAGE_LOADED);
-			} else {
-				_isNewUser = true;
-				initNewUser();
-			}
+			
+			checkNewUser();
 		} catch (IOException e) {
 			log.warning(MESSAGE_SET_UP_FAIL);
 			assert(setUp == false);
+		}
+	}
+
+	// check if savefile exists
+	private void checkNewUser() {	
+		if (logic.isSavePresent()) {
+			_isNewUser = false;
+			updateFeedback(logic.executeUserCommand(Command.COMMAND_DISPLAY_D));
+			commandBarController.displayFeedback(MESSAGE_LOADED);
+		} else {
+			_isNewUser = true;
+			initNewUser();
 		}
 	}
 

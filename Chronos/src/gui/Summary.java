@@ -75,26 +75,23 @@ public class Summary extends StackPane {
 					public void updateItem(final String item, final boolean empty) {
 						super.updateItem(item, empty);
 
-						// clear any custom styles
-						this.getTableRow().getStyleClass().remove("priorityHigh");
-						this.getTableRow().getStyleClass().remove("priorityLow");
+						cleanCurrentStyle(this.getTableRow());
 
-						// update the item and set a custom style if necessary
+						addStyle(item);
+					}
+
+					// update the item and set a custom style if necessary
+					private void addStyle(final String item) {
 						TableRow currentRow = getTableRow();
 						Task currentTask = currentRow == null ? null : (Task) currentRow.getItem();
 						if (item != null) {
-							//System.out.println(currentTask.getPriority());
 							if (currentTask.getPriority().contains("high")) {
 								this.getTableRow().getStyleClass().add("priorityHigh");
 							} 
 							if(currentTask.isTaskComplete()==true) {
 								this.getTableRow().getStyleClass().add("done");
-							}
-							//else if (currentTask.getPriority().contains("high")) {
-							//	this.getTableRow().getStyleClass().add("done");
-							//}  
+							}  
 						}
-
 					}
 				};
 			}
@@ -115,6 +112,12 @@ public class Summary extends StackPane {
 		 */
 	}
 
+	// clear any custom styles
+	private void cleanCurrentStyle(TableRow tableRow) {
+		tableRow.getStyleClass().remove("priorityHigh");
+		tableRow.getStyleClass().remove("priorityLow");
+	}
+	
 	private void setColumns(ObservableList<Task> events) {
 		summaryTable.setItems(events);
 		IDCol.setCellValueFactory(new PropertyValueFactory<Task, String>("id"));

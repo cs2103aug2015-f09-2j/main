@@ -32,7 +32,6 @@ public class Task {
 			setCategory(category);
 		}
 		_isDone = false;
-		_notesNo = DEFAULT_NOTESNO;
 	}
 
 	public String getId() {
@@ -72,6 +71,7 @@ public class Task {
 	}
 	
 	public int getNotesNo() {
+		//_notesNo = _notes.size();
 		return _notesNo;
 	}
 	

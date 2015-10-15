@@ -1,6 +1,10 @@
 package gui;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import application.Task;
 import javafx.collections.FXCollections;
@@ -42,6 +46,10 @@ public class DetailedView extends BorderPane {
 		ObservableList<String> items =FXCollections.observableArrayList (
 				"ID: "+taskToView.getId(), "Category: "+taskToView.getCategory(), 
 				"Priority: "+taskToView.getPriority(), "Notes: "+taskToView.getDescription());
+		/*ArrayList<String> notes = taskToView.getNotes();
+		for (int i=0; i<notes.size(); i++) {
+			items.addAll(notes.get(i));
+		}*/
 		details.setItems(items);
 		text1.setFont(Font.font("",FontWeight.BOLD,30));
 
