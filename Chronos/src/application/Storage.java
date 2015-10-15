@@ -91,7 +91,7 @@ public class Storage {
 		if(!oldFile.delete()){
 			log.warning(String.format("old file %1$s not deleted", temp_fileDirectory_));
 		}else{
-		log.info(String.format("content of %1$s moved to %2$s", temp_fileDirectory_,fileDirectory_));
+			log.info(String.format("content of %1$s moved to %2$s", temp_fileDirectory_,fileDirectory_));
 		}
 	}
 	

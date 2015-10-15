@@ -6,6 +6,7 @@ import java.util.prefs.Preferences;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.util.logging.Logger;
 
 
 public class Parser {
@@ -16,6 +17,8 @@ public class Parser {
 	private String taskID = TASK_HEADER;
 	private static Preferences _userPrefs;
 	
+	private static Logger log = Logger.getLogger("ParserLog");
+	
 	public Parser(Preferences userPrefs) {
 		_userPrefs = userPrefs;
 		id = _userPrefs.getInt("count", 0);
@@ -25,6 +28,7 @@ public class Parser {
 		_userPrefs.putInt("count", ++id);
 		String[] contents = content.split(", ");
 		JSONObject entry = new JSONObject();
+		log.info("adding new item");
 		return putEntryJSONObj(entry, contents);
 	}
 	
@@ -48,6 +52,7 @@ public class Parser {
 				entry.put("due date",contents[i]); // format date
 			}
 		}
+		assert entry != null;
 		return entry;
 	}
 	
@@ -59,12 +64,14 @@ public class Parser {
 				Task aTask = convertToTask(anItem);
 				tasks.add(aTask);
 			}
-		} 
+		}
+		assert tasks != null;
 		return tasks;
 	}
 
 	public String changeDirectory(String newDirectory) {
-		String oldDirectory = _userPrefs.get("path", "none");
+		String oldDirectory = null;
+		oldDirectory = _userPrefs.get("path", "none");
 		_userPrefs.put("path", newDirectory);
 		return oldDirectory;
 	}
@@ -121,5 +128,15 @@ public class Parser {
 			}
 		}
 		return updateDetails;
+	}
+	
+	public boolean isExistingId(String taskID, JSONArray entries) {
+		Task checkTaskExist = null;
+		checkTaskExist = retrieveTask(taskID, entries);
+		if(checkTaskExist==null) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }

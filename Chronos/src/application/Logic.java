@@ -27,7 +27,6 @@ public class Logic {
 	}
 	
 	public Feedback executeUserCommand(String userInput) {
-			
 		Command aCommand = new Command(userInput, _store, _parse);
 		Feedback feedback = aCommand.execute();
 		_isInSummaryView = aCommand.isInSummaryView();

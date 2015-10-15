@@ -6,6 +6,8 @@ import java.util.Stack;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.util.logging.Logger;
+
 public class Command {
 	 
 	private static final String MESSAGE_INVALID = "Invalid Command";
@@ -68,6 +70,8 @@ public class Command {
 	private String _content;
 	private boolean _isExiting = false;
 	private boolean _isInSummaryView = true;
+	
+	private static Logger log = Logger.getLogger("CommandLog");
 	
 	public Command (String inputString, Storage store, Parser parse) {
 		try {
@@ -231,17 +235,28 @@ public class Command {
 	}
 
 	private Feedback retrieveTask(String taskID) {
-		_isInSummaryView = false;
-		ArrayList<Task> data = new ArrayList<Task>();
-		Task selectedTask = _parser.retrieveTask(taskID, _store.entries_);
-		data.add(selectedTask);
- 		String feedbackString = String.format(MESSAGE_RETRIEVING, taskID);
+		ArrayList<Task> data = null;
+		String feedbackString = null;
+		if(taskID!="") {
+			_isInSummaryView = false;
+			data = new ArrayList<Task>();
+			Task selectedTask = _parser.retrieveTask(taskID, _store.entries_);
+			data.add(selectedTask);
+			feedbackString = String.format(MESSAGE_RETRIEVING, taskID);
+		} else {
+			log.warning("No taskID");
+		}
 		return new Feedback(feedbackString, data);
 	}
 
 	private Feedback markAsDone(String taskID) {
 		// TODO Auto-generated method stub
-		String feedbackString = String.format(MESSAGE_MARKING, taskID);
+		String feedbackString = null;
+		if(taskID!="") {
+			feedbackString = String.format(MESSAGE_MARKING, taskID);
+		} else {
+			log.warning("No taskID");
+		}
 		return new Feedback(feedbackString, null);
 	}
 
@@ -255,25 +270,39 @@ public class Command {
 	}
 	
 	private Feedback changeDirectory(String newDirectory) {
-		String oldPath = _parser.changeDirectory(newDirectory);
-		_savedDirectories.push(oldPath);
-		_store.changeDirectory(newDirectory);
-		String feedbackString = String.format(MESSAGE_CHANGEDIR, newDirectory); 
+		String feedbackString = null;
+		if(newDirectory!="") {
+			String oldPath = _parser.changeDirectory(newDirectory);
+			_savedDirectories.push(oldPath);
+			_store.changeDirectory(newDirectory);
+			log.info("replacing old directory with new directory");
+			feedbackString = String.format(MESSAGE_CHANGEDIR, newDirectory); 
+		} else {
+			log.warning("No new directory");
+		}
 		return new Feedback(feedbackString);
 	}
 	
 	private Feedback delete(String idToDelete) {
-		_store.storeTemp();
-		JSONObject entry;
-		for (int i = 0; i < _store.entries_.size(); i++) {
-			entry = (JSONObject) _store.entries_.get(i);
-			if (entry.get("id").equals(idToDelete)) {
-				_store.entries_.remove(i);
-				break;
+		String feedbackString = null;
+		if(idToDelete!="") {
+			_store.storeTemp();
+			log.info("store temp file");
+			JSONObject entry;
+			for (int i = 0; i < _store.entries_.size(); i++) {
+				entry = (JSONObject) _store.entries_.get(i);
+				if (entry.get("id").equals(idToDelete)) {
+					_store.entries_.remove(i);
+					break;
+				}
 			}
+			log.info("deleted item");
+			feedbackString = String.format(MESSAGE_DELETING, idToDelete);
+			_store.storeChanges();
+		} else {
+			assert idToDelete == null;
+			log.warning("No id to delete");
 		}
-		String feedbackString = String.format(MESSAGE_DELETING, idToDelete);
-		_store.storeChanges();
 		return new Feedback(feedbackString, _parser.convertToTaskArray(_store.entries_)); 
 	}
 	
@@ -284,6 +313,7 @@ public class Command {
 		if (criteria.equals(CONTENT_EMPTY)) {
 			feedbackString = MESSAGE_DISPLAY_ALL;
 			filteredTasks = _parser.convertToTaskArray(_store.entries_);
+			log.info("Display all items");
 		} 
 		else {
 			feedbackString = "Displaying: " + criteria;
@@ -299,6 +329,7 @@ public class Command {
 					filteredTasks.add(_parser.retrieveTask(entryObject.get("id").toString(),_store.entries_));
 				}
 			}
+			log.info("Display selected items");
 		}
 		return new Feedback(feedbackString, filteredTasks); 
 	}
@@ -315,6 +346,7 @@ public class Command {
 				break;
 			}
 		}
+		log.info("note added");
 		_store.storeChanges();
 		String feedbackString =  String.format(MESSAGE_ADDING_NOTE, noteString);
 		return new Feedback(feedbackString);
