@@ -60,7 +60,7 @@ public class testCommands {
 		Command cmd= new Command("search laundry", store, parse);
 		Feedback actual = cmd.execute();
 		ArrayList<Task> expected= new ArrayList<Task>();
-		expected.add(new Task("t5", "do laundry", "none", "low", "personal", "none"));
+		expected.add(new Task("t5", "do laundry", "none", "low", "personal"));
 		assertEquals(expected.toString(), actual.getData().toString());
 	}
 	

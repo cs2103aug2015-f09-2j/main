@@ -61,14 +61,11 @@ public class Summary extends StackPane {
 	}
 
 	public void display(ObservableList<Task> events) {
-		summaryTable.setItems(events);
-		IDCol.setCellValueFactory(new PropertyValueFactory<Task, String>("id"));
-		timeCol.setCellValueFactory(new PropertyValueFactory<Task, String>("endDate"));
-		titleCol.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
-		categoryCol.setCellValueFactory(new PropertyValueFactory<Task, String>("category"));
-		noteCol.setCellValueFactory(new PropertyValueFactory<Task, String>("note"));
-		priorityCol.setCellValueFactory(new PropertyValueFactory<Task, String>("priority"));
+		setColumns(events);
+		updateStyle();
+	}
 
+	private void updateStyle() {
 		//update the colour for high-priority task and done task
 		priorityCol.setCellFactory(new Callback<TableColumn<Task, String>, TableCell<Task, String>>() {
 			@Override
@@ -86,9 +83,13 @@ public class Summary extends StackPane {
 						TableRow currentRow = getTableRow();
 						Task currentTask = currentRow == null ? null : (Task) currentRow.getItem();
 						if (item != null) {
+							//System.out.println(currentTask.getPriority());
 							if (currentTask.getPriority().contains("high")) {
 								this.getTableRow().getStyleClass().add("priorityHigh");
 							} 
+							if(currentTask.isTaskComplete()==true) {
+								this.getTableRow().getStyleClass().add("done");
+							}
 							//else if (currentTask.getPriority().contains("high")) {
 							//	this.getTableRow().getStyleClass().add("done");
 							//}  
@@ -112,6 +113,15 @@ public class Summary extends StackPane {
 		 * data if (item.contains("t")) this.setTextFill(Color.BLUEVIOLET);
 		 * setText(item); } } }; } });
 		 */
+	}
 
+	private void setColumns(ObservableList<Task> events) {
+		summaryTable.setItems(events);
+		IDCol.setCellValueFactory(new PropertyValueFactory<Task, String>("id"));
+		timeCol.setCellValueFactory(new PropertyValueFactory<Task, String>("endDate"));
+		titleCol.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
+		categoryCol.setCellValueFactory(new PropertyValueFactory<Task, String>("category"));
+		noteCol.setCellValueFactory(new PropertyValueFactory<Task, String>("notesNo"));
+		priorityCol.setCellValueFactory(new PropertyValueFactory<Task, String>("priority"));
 	}
 }

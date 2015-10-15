@@ -6,10 +6,10 @@
 	-fx-text-alignment: center; 
 }	
 
-.list-cell {
+/* .list-cell {
   -fx-font: 10.0pt "Arial";
   -fx-alignment: center ;
-}	
+}	*/
 
 .priorityHigh { 
   -fx-control-inner-background: palevioletred;

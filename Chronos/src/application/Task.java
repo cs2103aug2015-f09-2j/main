@@ -7,6 +7,7 @@ public class Task {
 	private String DEFAULT_END_DATE = "someday";
 	private String DEFAULT_PRIORITY = "med";
 	private String DEFAULT_CATEGORY = "none";
+	private int DEFAULT_NOTESNO = 0;
 	
 	private String _id;
 	private String _description;
@@ -14,6 +15,7 @@ public class Task {
 	private String _priority = DEFAULT_PRIORITY;
 	private String _category = DEFAULT_CATEGORY;
 	private boolean _isDone;
+	private int _notesNo;
 	private ArrayList<Note> _notes;
 	
 	
@@ -24,12 +26,13 @@ public class Task {
 			setEndDate(endDate);
 		}
 		if(!priority.equals(null)){
-			setEndDate(priority);
+			setPriority(priority);
 		}
 		if(!category.equals(null)){
-			setEndDate(category);
+			setCategory(category);
 		}
 		_isDone = false;
+		_notesNo = DEFAULT_NOTESNO;
 	}
 
 	public String getId() {
@@ -68,6 +71,10 @@ public class Task {
 		_category = category.trim();
 	}
 	
+	public int getNotesNo() {
+		return _notesNo;
+	}
+	
 	@Override
 	public String toString() {
 		return _id + ". " + _description + " " + _endDate + " " + _priority + " " + _category;
@@ -83,6 +90,7 @@ public class Task {
 	
 	public void addNote(String noteString){
 			_notes.add(new Note(noteString));
+			_notesNo++;
 	}
 	
 	//for detailed view
