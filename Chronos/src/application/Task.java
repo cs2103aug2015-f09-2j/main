@@ -7,7 +7,6 @@ public class Task {
 	private String DEFAULT_END_DATE = "someday";
 	private String DEFAULT_PRIORITY = "med";
 	private String DEFAULT_CATEGORY = "none";
-	private int DEFAULT_NOTESNO = 0;
 	
 	private String _id;
 	private String _description;
@@ -15,7 +14,6 @@ public class Task {
 	private String _priority = DEFAULT_PRIORITY;
 	private String _category = DEFAULT_CATEGORY;
 	private boolean _isDone;
-	private int _notesNo;
 	private ArrayList<Note> _notes;
 	
 	
@@ -71,8 +69,11 @@ public class Task {
 	}
 	
 	public int getNotesNo() {
-		//_notesNo = _notes.size();
-		return _notesNo;
+		try{
+			return _notes.size();
+		} catch (NullPointerException e) { //for when +notes is empty
+			return 0;
+		}
 	}
 	
 	@Override
@@ -90,13 +91,11 @@ public class Task {
 	
 	public void addNote(String noteString){
 			_notes.add(new Note(noteString));
-			_notesNo++;
 	}
 	
 	//for detailed view
 	public ArrayList<String> getNotes(){
 		ArrayList<String> notes = new ArrayList<String>();
-		assert !notes.isEmpty();
 		for(int i=0; i<_notes.size(); i++){
 			notes.add(_notes.get(i).toString());
 		}		

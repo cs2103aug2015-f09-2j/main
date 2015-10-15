@@ -3,7 +3,6 @@ package application;
 import java.util.ArrayList;
 import java.util.Stack;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.logging.Logger;
@@ -50,6 +49,9 @@ public class Command {
 	private static final String MESSAGE_CANT_REDO = "Nothing to redo.";
 	private static final String MESSAGE_SEARCHING = "Searching for: %1$s";
 	private static final String MESSAGE_UPDATING = "Updating: %1$s";
+	
+	//Error Messages
+	private static final String ERROR_NO_CONTENT = "No content entered.";
 	
 	//Constants
 	private static final String COMMAND_SEPARATOR = " ";
@@ -238,13 +240,14 @@ public class Command {
 		ArrayList<Task> data = null;
 		String feedbackString = null;
 		if(taskID!="") {
-			_isInSummaryView = false;
+			_isInSummaryView = false; //set to detail view
 			data = new ArrayList<Task>();
 			Task selectedTask = _parser.retrieveTask(taskID, _store.entries_);
 			data.add(selectedTask);
 			feedbackString = String.format(MESSAGE_RETRIEVING, taskID);
 		} else {
 			log.warning("No taskID");
+			feedbackString = ERROR_NO_CONTENT;
 		}
 		return new Feedback(feedbackString, data);
 	}
@@ -255,21 +258,30 @@ public class Command {
 			feedbackString = String.format(MESSAGE_MARKING, taskID);
 			Task completedTask = _parser.retrieveTask(taskID, _store.entries_);
 			completedTask.markTaskAsDone(true);
-			//update entries
+			_store.storeTemp();
+			update(completedTask.getId()+ ", " + "s:" + completedTask.isTaskComplete());
+			_store.storeChanges();
 			log.info("Task " + taskID + " marked as Done");
 		} else {
 			log.warning("No taskID");
+			feedbackString = ERROR_NO_CONTENT;
 		}
 		return new Feedback(feedbackString);
 	}
 
 	private Feedback add(String content) {
-		_store.storeTemp();
-		JSONObject newEntry = _parser.createItem(content);
-		_store.entries_.add(newEntry);
-		_store.storeChanges();
-		String feedbackString = String.format(MESSAGE_ADDING, content);
-		return new Feedback(feedbackString);
+		String feedbackString;
+		try {
+			_store.storeTemp();
+			JSONObject newEntry = _parser.createItem(content);
+			_store.entries_.add(newEntry);
+			_store.storeChanges();
+			feedbackString = String.format(MESSAGE_ADDING, content);
+			return new Feedback(feedbackString);
+		} catch (NullPointerException e) {
+			feedbackString = "A task needs a description!";
+			return new Feedback(feedbackString);
+		}
 	}
 	
 	private Feedback changeDirectory(String newDirectory) {
@@ -309,21 +321,21 @@ public class Command {
 		return new Feedback(feedbackString, _parser.convertToTaskArray(_store.entries_)); 
 	}
 	
-	private Feedback display(String criteria) {
+	private Feedback display(String criteriaString) {
 		_isInSummaryView = true;
 		ArrayList<Task> filteredTasks = new ArrayList<Task>();
 		String feedbackString = CONTENT_EMPTY;
-		if (criteria.equals(CONTENT_EMPTY)) {
+		if (criteriaString.equals(CONTENT_EMPTY)) {
 			feedbackString = MESSAGE_DISPLAY_ALL;
 			filteredTasks = _parser.convertToTaskArray(_store.entries_);
 			log.info("Display all items");
 		} 
 		else {
-			feedbackString = "Displaying: " + criteria;
+			feedbackString = "Displaying: " + criteriaString;
 			String condition = null;
-			String[] criterias = criteria.split(", ");
-			for(int index=0; index<criterias.length; index++) {
-				condition = criterias[index].substring(2);
+			String[] criteria = criteriaString.split(", ");
+			for(int index=0; index<criteria.length; index++) {
+				condition = criteria[index].substring(2);
 			}
 			for(int index=0; index<_store.entries_.size(); index++) {
 				String entry = _store.entries_.get(index).toString();
@@ -339,7 +351,8 @@ public class Command {
 
 	private Feedback note(String noteString) {
 		_store.storeTemp();
-		JSONObject entry;
+		
+		/*JSONObject entry;
 		String[] noteDetails = noteString.split(", ");
 		for (int i = 0; i<_store.entries_.size(); i++){
 			entry = (JSONObject) _store.entries_.get(i);
@@ -348,7 +361,7 @@ public class Command {
 				entry.put("note", noteDetails[1]);
 				break;
 			}
-		}
+		}*/
 		log.info("note added");
 		_store.storeChanges();
 		String feedbackString =  String.format(MESSAGE_ADDING_NOTE, noteString);
@@ -404,7 +417,7 @@ public class Command {
 			String id = updateDetails.get(0);
 			if (entry.get("id").equals(id)) {
 				for (int j=1; j<updateDetails.size();j++){
-				entry.replace(updateDetails.get(j), updateDetails.get(++j));
+					entry.replace(updateDetails.get(j), updateDetails.get(++j));
 				}
 				_store.entries_.set(i, entry);
 				break;

@@ -25,8 +25,11 @@ public class Parser {
 	}
 	
 	public JSONObject createItem(String content) {
-		_userPrefs.putInt("count", ++id);
 		String[] contents = content.split(", ");
+		if (contents[0] == "") {
+			throw new NullPointerException("No Task Description");
+		}
+		_userPrefs.putInt("count", ++id);
 		JSONObject entry = new JSONObject();
 		log.info("adding new item");
 		return putEntryJSONObj(entry, contents);
@@ -38,7 +41,9 @@ public class Parser {
 		entry.put("priority", "low");
 		entry.put("category", "none");
 		entry.put("due date", "someday");
-		entry.put("note", "none");
+		entry.put("notes", "none");
+		entry.put("complete", "false");
+		
 		for(int i = 1; i<contents.length; i++){
 			if(contents[i].charAt(1) == ':'){ // p: or c:
 				switch(contents[i].charAt(0)){
@@ -94,9 +99,11 @@ public class Parser {
 		String endDate = anEntry.get("due date").toString();
 		String priority = anEntry.get("priority").toString();
 		String category = anEntry.get("category").toString();
-		//String note = anEntry.get("note").toString();
-		//notes
-		return new Task(id, description, endDate, priority, category);
+		boolean completion = anEntry.get("complete").equals("true");
+		System.out.println(completion);
+		Task convertedTask = new Task(id, description, endDate, priority, category);
+		convertedTask.markTaskAsDone(completion);
+		return convertedTask;
 	}
 
 	public ArrayList<String> parseUpdateString(String updateString) {
@@ -119,6 +126,10 @@ public class Parser {
 					break;
 				case "d:":
 					updateDetails.add("due date"); 
+					updateDetails.add(details[i].substring(2));
+					break;
+				case "s:":
+					updateDetails.add("complete"); 
 					updateDetails.add(details[i].substring(2));
 					break;
 				default:
