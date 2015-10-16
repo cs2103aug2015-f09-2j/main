@@ -34,7 +34,7 @@ public class Storage {
 	}
 	
 	private void readFile(){
-		File file = new File(fileDirectory_ + "\\chronos_storage.txt");
+		File file = new File(fileDirectory_ + "/chronos_storage.txt");
 		try {
 			if(!file.createNewFile()){ 
 				//Read in the content of an existing file
@@ -52,7 +52,7 @@ public class Storage {
 	private void getContent(){
 		JSONParser jsonParser = new JSONParser();
 		try {
-			entries_ = (JSONArray)jsonParser.parse(new FileReader(fileDirectory_+"\\chronos_storage.txt"));
+			entries_ = (JSONArray)jsonParser.parse(new FileReader(fileDirectory_+"/chronos_storage.txt"));
 		} catch (IOException | ParseException e) {
 			log.warning(MESSAGE_INVALID_FILE);
 		}
@@ -102,7 +102,7 @@ public class Storage {
 	
 	private void writeToFile(){
 		try{
-			FileWriter file = new FileWriter(fileDirectory_+"\\chronos_storage.txt");
+			FileWriter file = new FileWriter(fileDirectory_+"/chronos_storage.txt");
 			file.write(entries_.toJSONString());
 			file.flush();
 			file.close();
