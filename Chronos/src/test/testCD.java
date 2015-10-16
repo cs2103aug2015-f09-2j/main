@@ -30,7 +30,7 @@ public class testCD {
 	public void test() {
 		Command cmd= new Command("cd src/test/testFiles/temp", store, parse);
 		cmd.execute();
-		File file = new File("src/test/testFiles/temp\\chronos_storage.txt");
+		File file = new File("src/test/testFiles/temp/chronos_storage.txt");
 		assertTrue(file.exists());
 	}
 

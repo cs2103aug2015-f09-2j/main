@@ -87,7 +87,7 @@ public class Storage {
 		temp_fileDirectory_ = fileDirectory_;
 		fileDirectory_ = newDirectory;
 		writeToFile();
-		File oldFile = new File(temp_fileDirectory_+"\\chronos_storage.txt");
+		File oldFile = new File(temp_fileDirectory_+"/chronos_storage.txt");
 		if(!oldFile.delete()){
 			log.warning(String.format("old file %1$s not deleted", temp_fileDirectory_));
 		}else{

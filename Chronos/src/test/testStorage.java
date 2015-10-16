@@ -25,7 +25,7 @@ public class testStorage {
 	
 	@Test
 	public void testEntry() {
-		String expected = "{\"note\":\"sleep early\",\"due date\":\"none\",\"description\":\"sleep\",\"id\":\"t4\",\"priority\":\"high\",\"category\":\"none\"}";
+		String expected = "{\"note\":\"sleep early\",\"due date\":\"none\",\"description\":\"sleep\",\"id\":\"t4\",\"priority\":\"high\",\"category\":\"none\",\"complete\":\"false\"}";
 		System.out.println(entries.get(2).toString());
 		assertEquals(expected, entries.get(2).toString());
 	}

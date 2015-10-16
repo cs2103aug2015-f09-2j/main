@@ -11,9 +11,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sun.org.apache.bcel.internal.generic.StoreInstruction;
-import com.sun.xml.internal.org.jvnet.mimepull.CleanUpExecutorFactory;
-
 import application.Command;
 import application.Feedback;
 import application.Parser;
