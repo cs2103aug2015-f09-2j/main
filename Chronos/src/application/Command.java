@@ -70,8 +70,6 @@ public class Command {
 	
 	private COMMAND_TYPE _type;
 	private String _content;
-	private boolean _isExiting = false;
-	private boolean _isInSummaryView = true;
 	
 	private static Logger log = Logger.getLogger("CommandLog");
 	
@@ -224,8 +222,7 @@ public class Command {
 				break;
 				
 			case EXIT : 
-				feedback = null;
-				_isExiting = true;
+				feedback = new Feedback();
 				break;
 				
 			case UNKNOWN : 
@@ -240,7 +237,6 @@ public class Command {
 		ArrayList<Task> data = null;
 		String feedbackString = null;
 		if(taskID!="") {
-			_isInSummaryView = false; //set to detail view
 			data = new ArrayList<Task>();
 			Task selectedTask = _parser.retrieveTask(taskID, _store.entries_);
 			data.add(selectedTask);
@@ -249,7 +245,9 @@ public class Command {
 			log.warning("No taskID");
 			feedbackString = ERROR_NO_CONTENT;
 		}
-		return new Feedback(feedbackString, data);
+		Feedback feedback = new Feedback(feedbackString, data);
+		feedback.setSummaryView(false);
+		return feedback;
 	}
 
 	private Feedback markAsDone(String taskID) {
@@ -322,7 +320,6 @@ public class Command {
 	}
 	
 	private Feedback display(String criteriaString) {
-		_isInSummaryView = true;
 		ArrayList<Task> filteredTasks = new ArrayList<Task>();
 		String feedbackString = CONTENT_EMPTY;
 		if (criteriaString.equals(CONTENT_EMPTY)) {
@@ -346,7 +343,9 @@ public class Command {
 			}
 			log.info("Display selected items");
 		}
-		return new Feedback(feedbackString, filteredTasks); 
+		Feedback feedback = new Feedback(feedbackString, filteredTasks);
+		feedback.setSummaryView(true);
+		return feedback; 
 	}
 
 	private Feedback note(String noteString) {
@@ -426,14 +425,6 @@ public class Command {
 		_store.storeChanges();
 		String feedbackString = String.format(MESSAGE_UPDATING, updateString);
 		return new Feedback(feedbackString);
-	}
-	
-	public boolean isExiting() {
-		return _isExiting;
-	}
-	
-	public boolean isInSummaryView() {
-		return _isInSummaryView;
 	}
 	
 	public boolean isRedoable(){

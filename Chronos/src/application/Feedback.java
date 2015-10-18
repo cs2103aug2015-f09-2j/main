@@ -15,7 +15,13 @@ public class Feedback {
 	private String _feedbackString;
 	private ArrayList<Task> _taskData;
 	private boolean _hasData;
+	private boolean _isExiting = false;
+	private boolean _isInSummaryView = true;
 
+	public Feedback() {
+		_isExiting = true;
+	}
+	
 	public Feedback(String feedback) {
 		_feedbackString = feedback;
 		_hasData = false;
@@ -38,5 +44,21 @@ public class Feedback {
 	
 	public boolean hasData(){
 		return _hasData;
+	}
+
+	public boolean isProgramExiting() {
+		return _isExiting;
+	}
+	
+	void setProgramExiting(boolean isExiting) {
+		_isExiting = isExiting;
+	}
+
+	public boolean isInSummaryView() {
+		return _isInSummaryView;
+	}
+	
+	void setSummaryView(boolean isInSummaryView) {
+		_isInSummaryView = isInSummaryView;
 	}
 }

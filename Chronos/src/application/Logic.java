@@ -13,8 +13,6 @@ public class Logic {
 	private static final String DEFAULT_VALUE = "none";
 	private static final int  DEFAULT_COUNT = 0;
 	
-	private boolean _isExiting = false;
-	private boolean _isInSummaryView = true;
 	private static Storage _store;
 	private static Parser _parse;
 	private static Preferences _userPrefs;
@@ -26,15 +24,7 @@ public class Logic {
 	public Feedback executeUserCommand(String userInput) {
 		Command aCommand = new Command(userInput, _store, _parse);
 		Feedback feedback = aCommand.execute();
-		_isInSummaryView = aCommand.isInSummaryView();
-		if (aCommand.isExiting()) {
-			_isExiting = true;
-		}
 		return feedback;
-	}
-
-	public boolean isProgramExiting() {
-		return _isExiting;
 	}
 	
 	public boolean isSavePresent() {
@@ -57,7 +47,4 @@ public class Logic {
 		return new Feedback(feedbackString);
 	}
 	
-	public boolean isInSummaryView() {
-		return _isInSummaryView;
-	}
 }

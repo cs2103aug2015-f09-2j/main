@@ -142,9 +142,6 @@ public class GUI extends Application {
 				_isNewUser = false;
 			} else {
 				Feedback commandFeedback = logic.executeUserCommand(text);
-				if (logic.isProgramExiting()) {
-					System.exit(EXIT_NORMAL);
-				}
 				updateFeedback(commandFeedback);
 			}
 		
@@ -157,8 +154,11 @@ public class GUI extends Application {
 	}
 
 	private void updateFeedback(Feedback feedback) {
+		if (feedback.isProgramExiting()) {
+			System.exit(EXIT_NORMAL);
+		}
 		// choose between summary or detail view
-		if (logic.isInSummaryView()) {
+		if (feedback.isInSummaryView()) {
 			addSummary(this);
 		} else {
 			addDetailView(this, feedback.getData());
