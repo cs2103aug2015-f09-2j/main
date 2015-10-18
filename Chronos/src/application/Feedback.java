@@ -38,6 +38,10 @@ public class Feedback {
 		return _feedbackString;
 	}
 	
+	public void setMessage(String feedbackString) {
+		_feedbackString = feedbackString;
+	}
+	
 	public ArrayList<Task> getData() {
 		return _taskData;
 	}

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import application.Command;
+import application.CommandCreator;
 import application.Feedback;
 import application.Logic;
 import application.Task;
@@ -71,7 +72,7 @@ public class GUI extends Application {
 	private void checkNewUser() {	
 		if (logic.isSavePresent()) {
 			_isNewUser = false;
-			updateFeedback(logic.executeUserCommand(Command.COMMAND_DISPLAY_D));
+			updateFeedback(logic.executeUserCommand("d"));
 			commandBarController.displayFeedback(MESSAGE_LOADED);
 		} else {
 			_isNewUser = true;
@@ -167,7 +168,7 @@ public class GUI extends Application {
 			updateSummary(feedback.getData());
 		} else {
 			// update display
-			updateFeedback(logic.executeUserCommand(Command.COMMAND_DISPLAY_D));
+			updateFeedback(logic.executeUserCommand("d")); //Logic: refactor this
 		}
 		commandBarController.displayFeedback(feedback.getMessage());
 	}

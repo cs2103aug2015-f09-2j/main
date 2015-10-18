@@ -13,17 +13,20 @@ public class Logic {
 	private static final String DEFAULT_VALUE = "none";
 	private static final int  DEFAULT_COUNT = 0;
 	
+	private static CommandCreator _commandCreator;
 	private static Storage _store;
 	private static Parser _parse;
 	private static Preferences _userPrefs;
 	
 	public Logic(){
 		_userPrefs = Preferences.userNodeForPackage(this.getClass());
+		_commandCreator = new CommandCreator();
 	}
 	
 	public Feedback executeUserCommand(String userInput) {
-		Command aCommand = new Command(userInput, _store, _parse);
-		Feedback feedback = aCommand.execute();
+		//Command aCommand = new Command(userInput, _store, _parse);
+		String[] inputs = _parse.parseUserContent(userInput);
+		Feedback feedback = _commandCreator.createAndExecuteCommand(inputs, _store, _parse);
 		return feedback;
 	}
 	
@@ -37,7 +40,8 @@ public class Logic {
 			return true;
 		}
 	}
-
+	
+	//refactor into cd Command
 	public Feedback setSavePath(String path) { 
 		_userPrefs.put(PREFS_PATH, path);
 		_userPrefs.putInt(PREFS_COUNT, DEFAULT_COUNT);

@@ -11,7 +11,12 @@ import java.util.logging.Logger;
 
 public class Parser {
 	
-	private static final String TASK_HEADER = "t";
+	//Strings for parseUserInput()
+	private static final String INPUT_SEPARATOR = " ";
+	private static final int INPUT_ARG_COUNT = 2;
+	
+	//Strings for ID Generation
+	private static final String TASK_HEADER = "t";	
 
 	private Integer id;
 	private String taskID = TASK_HEADER;
@@ -100,7 +105,6 @@ public class Parser {
 		String priority = anEntry.get("priority").toString();
 		String category = anEntry.get("category").toString();
 		boolean completion = anEntry.get("complete").equals("true");
-		System.out.println(completion);
 		Task convertedTask = new Task(id, description, endDate, priority, category);
 		convertedTask.markTaskAsDone(completion);
 		return convertedTask;
@@ -149,5 +153,9 @@ public class Parser {
 		} else {
 			return true;
 		}
+	}
+
+	public String[] parseUserContent(String userInput) {
+		return userInput.split(INPUT_SEPARATOR, INPUT_ARG_COUNT);
 	}
 }
