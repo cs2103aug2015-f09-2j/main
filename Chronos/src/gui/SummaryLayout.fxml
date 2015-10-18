@@ -5,11 +5,9 @@
 <?import javafx.scene.layout.*?>
 <?import java.lang.*?>
 
-<fx:root type="StackPane" xmlns="http://javafx.com/javafx/8"
-	xmlns:fx="http://javafx.com/fxml/1">
+<fx:root type="StackPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
-		<TableView fx:id="summaryTable" editable="true"
-			fixedCellSize="0.0" prefHeight="200.0" prefWidth="200.0">
+		<TableView fx:id="summaryTable" editable="true" fixedCellSize="0.0">
 			<columns>
 				<TableColumn fx:id="IDCol" prefWidth="25.0" text="ID">
 				</TableColumn>
@@ -17,7 +15,7 @@
 				<TableColumn fx:id="titleCol" prefWidth="340.0" text="title" />
 				<TableColumn fx:id="categoryCol" prefWidth="70.0" text="category" />
 				<TableColumn fx:id="noteCol" prefWidth="45.0" text="note" />
-				<TableColumn fx:id="priorityCol" prefWidth="75.0" text="priority" />
+				<TableColumn fx:id="priorityCol" minWidth="0.0" prefWidth="0.0" text="priority" visible="true" />
 			</columns>
 		</TableView>
 	</children>

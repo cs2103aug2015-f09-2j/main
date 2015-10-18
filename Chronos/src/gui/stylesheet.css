@@ -11,7 +11,7 @@
   -fx-alignment: center ;
 }	*/
 
-.priorityHigh { 
+.clash { 
   -fx-control-inner-background: palevioletred;
   -fx-accent: derive(-fx-control-inner-background, -40.0%);
   -fx-cell-hover-color: derive(-fx-control-inner-background, -20.0%);
@@ -19,16 +19,14 @@
 }
 
 .priorityHigh .text {
-  -fx-fill: black;
+  -fx-fill: red;
+}
+
+.priorityMed .text {
+  -fx-fill: green;
 }
 
 .done .text {
 	-fx-strikethrough: true;
 	-fx-fill: grey;	
-}
-
-.priorityMiddle { 
-  -fx-control-inner-background: palegreen;
-  -fx-accent: derive(-fx-control-inner-background, -40.0%);
-  -fx-cell-hover-color: derive(-fx-control-inner-background, -20.0%);
 }

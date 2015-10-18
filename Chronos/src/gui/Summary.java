@@ -87,7 +87,9 @@ public class Summary extends StackPane {
 						if (item != null) {
 							if (currentTask.getPriority().contains("high")) {
 								this.getTableRow().getStyleClass().add("priorityHigh");
-							} 
+							}  else if(currentTask.getPriority().contains("med")) {
+								this.getTableRow().getStyleClass().add("priorityMed");
+							}
 							if(currentTask.isTaskComplete()==true) {
 								this.getTableRow().getStyleClass().add("done");
 							}  
