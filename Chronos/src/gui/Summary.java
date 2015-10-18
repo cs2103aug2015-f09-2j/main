@@ -23,6 +23,9 @@ import javafx.util.Callback;
 public class Summary extends StackPane {
 
 	private static final String SUMMARY_LAYOUT_FXML = "SummaryLayout.fxml";
+	private static final String PRIORITY_HIGH_STYLE = "priorityHigh";
+	private static final String PRIORITY_MED_STYLE = "priorityMed";
+	private static final String COMPLETED_TASK_STYLE = "done";
 
 	// private GUI gui;
 
@@ -86,12 +89,12 @@ public class Summary extends StackPane {
 						Task currentTask = currentRow == null ? null : (Task) currentRow.getItem();
 						if (item != null) {
 							if (currentTask.getPriority().contains("high")) {
-								this.getTableRow().getStyleClass().add("priorityHigh");
+								this.getTableRow().getStyleClass().add(PRIORITY_HIGH_STYLE);
 							}  else if(currentTask.getPriority().contains("med")) {
-								this.getTableRow().getStyleClass().add("priorityMed");
+								this.getTableRow().getStyleClass().add(PRIORITY_MED_STYLE);
 							}
 							if(currentTask.isTaskComplete()==true) {
-								this.getTableRow().getStyleClass().add("done");
+								this.getTableRow().getStyleClass().add(COMPLETED_TASK_STYLE);
 							}  
 						}
 					}
@@ -116,8 +119,8 @@ public class Summary extends StackPane {
 
 	// clear any custom styles
 	private void cleanCurrentStyle(TableRow tableRow) {
-		tableRow.getStyleClass().remove("priorityHigh");
-		tableRow.getStyleClass().remove("priorityLow");
+		tableRow.getStyleClass().remove(PRIORITY_HIGH_STYLE);
+		tableRow.getStyleClass().remove(PRIORITY_MED_STYLE);
 	}
 	
 	private void setColumns(ObservableList<Task> events) {
