@@ -17,8 +17,8 @@ public class DoneCommand extends Command {
 	
 	protected static final String UPDATE_STRING = ", s:";
 	
-	public DoneCommand(Storage store, Parser parse, String content) {
-		super(store, parse, content);
+	public DoneCommand(String content) {
+		super(content);
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class DoneCommand extends Command {
 			_completedTask.markTaskAsDone(true);
 			_store.storeTemp();
 			String content = _completedTask.getId()+ UPDATE_STRING + _completedTask.isTaskComplete();
-			feedback = new UpdateCommand(_store, _parse, content).execute();
+			feedback = new UpdateCommand(content).execute();
 			feedback.setMessage(feedbackString);
 			_store.storeChanges();
 			log.info(String.format(LOG_MESSAGE, _content));
@@ -48,7 +48,7 @@ public class DoneCommand extends Command {
 		_completedTask.markTaskAsDone(false); 
 		_store.storeTemp();
 		String content = _completedTask.getId()+ UPDATE_STRING + _completedTask.isTaskComplete();
-		Feedback feedback = new UpdateCommand(_store, _parse, content).execute();
+		Feedback feedback = new UpdateCommand(content).execute();
 		_store.storeChanges();
 		return feedback;
 	}
