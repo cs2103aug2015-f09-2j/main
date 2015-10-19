@@ -23,7 +23,7 @@ public class DeleteCommand extends Command {
 			for (int i = 0; i < _store.entries_.size(); i++) {
 				JSONObject entry = (JSONObject) _store.entries_.get(i);
 				if (entry.get("id").equals(_content)) {
-					_store.entries_.remove(i);
+					_deletedEntry = (JSONObject) _store.entries_.remove(i);
 					break;
 				}
 			}

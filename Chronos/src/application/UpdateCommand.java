@@ -40,7 +40,8 @@ public class UpdateCommand extends Command {
 		for (int i = 0; i < _store.entries_.size(); i++) {
 			JSONObject currentEntry = (JSONObject) _store.entries_.get(i);
 			if (currentEntry.get(ID).equals(id)) { //updateEntry(entry, updateDetails);
-				_oldEntry = currentEntry;
+				_oldEntry = (JSONObject) currentEntry.clone();
+				System.out.println(_oldEntry);
 				return i;
 			}
 		}

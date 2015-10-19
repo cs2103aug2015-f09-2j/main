@@ -152,15 +152,25 @@ public class Storage {
 		return _isSavePresent;
 	}
 
-	public int getId() { //check if it's a task or an event
+	public int getTaskId() { 
 		int id = _userPrefs.getInt(PREFS_TASK_COUNT, DEFAULT_TASK_COUNT);
 		_userPrefs.putInt(PREFS_TASK_COUNT, ++id);
 		return id;
 	}
 
-	public void decreaseID() {
-		// TODO: add event id once it's been implemented
+	void decreaseTaskID() {
 		int id = _userPrefs.getInt(PREFS_TASK_COUNT, DEFAULT_TASK_COUNT);
 		_userPrefs.putInt(PREFS_TASK_COUNT, --id);
+	}
+	
+	public int getEventId() { 
+		int id = _userPrefs.getInt(PREFS_EVENT_COUNT, DEFAULT_EVENT_COUNT);
+		_userPrefs.putInt(PREFS_EVENT_COUNT, ++id);
+		return id;
+	}
+
+	void decreaseEventID() {
+		int id = _userPrefs.getInt(PREFS_EVENT_COUNT, DEFAULT_EVENT_COUNT);
+		_userPrefs.putInt(PREFS_EVENT_COUNT, --id);
 	}
 }

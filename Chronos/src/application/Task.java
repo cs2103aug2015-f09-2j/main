@@ -4,18 +4,46 @@ import java.util.ArrayList;
 
 public class Task {
 	
-	protected String DEFAULT_END_DATE = "someday";
-	protected String DEFAULT_PRIORITY = "med";
-	protected String DEFAULT_CATEGORY = "none";
+	String DEFAULT_END_DATE = "someday";
+	String DEFAULT_PRIORITY = "med";
+	String DEFAULT_CATEGORY = "none";
+	
+	private static final String ID_HEADER = "t";	
 	
 	protected String _id;
 	protected String _description;
 	protected String _endDate = DEFAULT_END_DATE;
 	protected String _priority = DEFAULT_PRIORITY;
 	protected String _category = DEFAULT_CATEGORY;
-	protected boolean _isDone;
+	protected boolean _isDone = false;
 	protected ArrayList<Note> _notes;
 	
+	public Task(String[] contents) {
+		_description = contents[0];
+		for (int i = 1; i<contents.length; i++) {
+			if (contents[i].contains("p:")) {
+				_priority = contents[i].substring(2);
+			} else if (contents[i].contains("c:")) {
+				_category = contents[i].substring(2);
+			} else { //date manipulation
+				_endDate = contents[i];
+			}
+		}
+	}
+	
+	public Task(int id, String description, String endDate, String priority, String category) {
+		_id = ID_HEADER + Integer.toString(id);
+		_description = description.trim();
+		if(!endDate.equals(null)){
+			setEndDate(endDate);
+		}
+		if(!priority.equals(null)){
+			setPriority(priority);
+		}
+		if(!category.equals(null)){
+			setCategory(category);
+		}
+	}
 	
 	public Task(String id, String description, String endDate, String priority, String category) {
 		_id = id.trim();
@@ -29,11 +57,14 @@ public class Task {
 		if(!category.equals(null)){
 			setCategory(category);
 		}
-		_isDone = false;
 	}
 
 	public String getId() {
 		return _id;
+	}
+	
+	void setId(int id) {
+		_id = ID_HEADER + Integer.toString(id);
 	}
 	
 	public String getDescription() {

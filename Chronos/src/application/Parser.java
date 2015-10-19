@@ -11,21 +11,37 @@ import java.util.logging.Logger;
 
 public class Parser {
 	
+	//Strings for Log
+	private static final String LOG_PARSER = "ParserLog";
+	private static final String LOG_ADD = "New Item Added to Storage";
+	
+	//Strings for Error Messages
+	private static final String EXCEPTION_NO_DESC = "No Task Description";
+	
+	//Strings for createItem
+	private static final String CONTENT_SEPARATOR = ", ";
+	private static final String CONTENT_EMPTY = "";
+	
 	//Strings for parseUserInput()
 	private static final String INPUT_SEPARATOR = " ";
 	private static final int INPUT_ARG_COUNT = 2;
 	
-	//Strings for ID Generation
-	private static final String TASK_HEADER = "t";	
-	private static final String EVENT_HEADER = "e";
-
-	//private Integer id;
-	private String taskID = TASK_HEADER;
-	private String eventID = EVENT_HEADER;
+	//Strings for the JSONObjects
+	static final String JSON_ID = "id";
+	static final String JSON_DESC = "description";
+	static final String JSON_PRIORITY = "priority";
+	static final String JSON_CATEGORY = "category";
+	static final String JSON_START_DATE = "start date";
+	static final String JSON_END_DATE = "due date";
+	static final String JSON_NOTES = "notes";
+	static final String JSON_COMPLETE = "complete";
+	
+	//Important constants for contents[]
+	private static final int CONTENT_DESC = 0;
+	private static final String CONTENT_EVENT_STRING = " to ";
 	
 	private static Parser _theParser;
-	
-	private static Logger log = Logger.getLogger("ParserLog");
+	private static Logger log = Logger.getLogger(LOG_PARSER);
 	
 	private Parser(){
 		
@@ -38,39 +54,40 @@ public class Parser {
 		return _theParser;
 	}
 	
-	public JSONObject createItem(String content, int id) {
-		String[] contents = content.split(", ");
-		if (contents[0] == "") {
-			throw new NullPointerException("No Task Description");
+	public Task createItem(String content) {
+		String[] contents = content.split(CONTENT_SEPARATOR);
+		if(contents[CONTENT_DESC] == CONTENT_EMPTY) {
+			throw new NullPointerException(EXCEPTION_NO_DESC);
 		}
-		JSONObject entry = new JSONObject();
-		log.info("adding new item");
-		return putEntryJSONObj(id, entry, contents);
+		Task createdItem;
+		if (findEventString(contents) > 0) {
+			createdItem = new Event(contents);
+		} else {
+			createdItem = new Task(contents);
+		}
+		return createdItem;
 	}
 	
-	public JSONObject putEntryJSONObj(int id, JSONObject entry, String[] contents) {
-		entry.put("id", taskID + id);
-		entry.put("description", contents[0]);
-		entry.put("priority", "low");
-		entry.put("category", "none");
-		entry.put("due date", "someday");
-		entry.put("notes", "none");
-		entry.put("complete", "false");
-		
-		for(int i = 1; i<contents.length; i++){
-			if(contents[i].charAt(1) == ':'){ // p: or c:
-				switch(contents[i].charAt(0)){
-					case 'p':
-						entry.put("priority", contents[i].substring(2));
-						break;
-					case 'c':
-						entry.put("category", contents[i].substring(2));
-				}
-			} else {
-				entry.put("due date",contents[i]); // format date
+	private int findEventString(String[] contents) {
+		for (int i = 0; i < contents.length; i++) {
+			if (contents[i].contains(CONTENT_EVENT_STRING)) {
+				return i;
 			}
 		}
-		assert entry != null;
+		return CONTENT_DESC;
+	}
+	
+	public JSONObject convertToJSON(Task createdTask) {
+		JSONObject entry = new JSONObject();
+		entry.put(JSON_ID, createdTask.getId());
+		entry.put(JSON_DESC, createdTask.getDescription());
+		entry.put(JSON_PRIORITY, createdTask.getPriority());
+		entry.put(JSON_CATEGORY, createdTask.getCategory());
+		if (createdTask instanceof Event) {
+			//entry.put(JSON_START_DATE, createdTask.getStartDate());
+		}
+		entry.put(JSON_END_DATE, createdTask.getEndDate());
+		entry.put(JSON_COMPLETE, createdTask.isTaskComplete());
 		return entry;
 	}
 	
@@ -117,28 +134,29 @@ public class Parser {
 		return updateDetailsArray(details, updateDetails);
 	}
 	
+	//note: for tasks only
 	public ArrayList<String> updateDetailsArray(String[] details, ArrayList<String> updateDetails) {
 		updateDetails.add(details[0]);
 		for(int i=1;i<details.length; i++){
 			switch(details[i].substring(0, 2)){
 				case "p:":
-					updateDetails.add("priority"); 
+					updateDetails.add(JSON_PRIORITY); 
 					updateDetails.add(details[i].substring(2));
 					break;
 				case "c:":
-					updateDetails.add("category"); 
+					updateDetails.add(JSON_CATEGORY); 
 					updateDetails.add(details[i].substring(2));
 					break;
 				case "d:":
-					updateDetails.add("due date"); 
+					updateDetails.add(JSON_END_DATE); 
 					updateDetails.add(details[i].substring(2));
 					break;
 				case "s:":
-					updateDetails.add("complete"); 
+					updateDetails.add(JSON_COMPLETE); 
 					updateDetails.add(details[i].substring(2));
 					break;
 				default:
-					updateDetails.add("description"); 
+					updateDetails.add(JSON_DESC); 
 					updateDetails.add(details[i]);
 					break;
 			}
