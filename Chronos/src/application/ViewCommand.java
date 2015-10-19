@@ -6,8 +6,8 @@ public class ViewCommand extends Command {
 	
 	private static final String FEEDBACK_MESSAGE = "Retrieving Task: %1$s";
 
-	public ViewCommand(Storage store, Parser parse, String content) {
-		super(store, parse, content);
+	public ViewCommand(String content) {
+		super(content);
 	}
 
 	@Override

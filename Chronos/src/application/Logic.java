@@ -1,7 +1,5 @@
 package application;
 
-import java.util.prefs.Preferences;
-
 public class Logic {
 	
 	private static CommandCreator _commandCreator;
@@ -25,6 +23,6 @@ public class Logic {
 	
 	public Feedback executeUserCommand(String userInput) {
 		String[] inputs = _parse.parseUserContent(userInput);
-		return _commandCreator.createAndExecuteCommand(inputs, _store, _parse);
+		return _commandCreator.createAndExecuteCommand(inputs);
 	}
 }

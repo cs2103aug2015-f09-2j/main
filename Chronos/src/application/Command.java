@@ -19,9 +19,9 @@ public abstract class Command {
 	
 	protected static Logger log = Logger.getLogger("CommandLog");
 	
-	public Command(Storage store, Parser parse, String content) {
-		_store = store;
-		_parse = parse;
+	public Command(String content) {
+		_store = Storage.getInstance();
+		_parse = Parser.getInstance();
 		_content = content;
 	}
 	

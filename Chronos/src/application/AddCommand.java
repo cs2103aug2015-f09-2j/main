@@ -12,8 +12,8 @@ public class AddCommand extends Command {
 	private static final String FEEDBACK_MISSING_DESC = "Error: A task needs a description!";
 	private static final String ID = "id"; //note: collate JSON strings into just one class for easy referencing
 
-	public AddCommand(Storage store, Parser parse, String content) {
-		super(store, parse, content);
+	public AddCommand(String content) {
+		super(content);
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class AddCommand extends Command {
 
 	@Override
 	public Feedback undo() {
-		DeleteCommand undoAdd = new DeleteCommand(_store, _parse, _createdItemID);
+		DeleteCommand undoAdd = new DeleteCommand(_createdItemID);
 		_store.decreaseID();
 		return undoAdd.execute();
 	}

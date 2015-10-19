@@ -5,8 +5,8 @@ public class UnknownCommand extends Command {
 	//Constant Strings
 	protected static final String FEEDBACK_MESSAGE =  "Invalid Command";
 	
-	public UnknownCommand(Storage store, Parser parse, String content) {
-		super(store, parse, content);
+	public UnknownCommand(String content) {
+		super(content);
 	}
 
 	@Override

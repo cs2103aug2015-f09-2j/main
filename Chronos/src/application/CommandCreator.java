@@ -7,7 +7,7 @@ public class CommandCreator {
 	//Command Strings
 	private static final String COMMAND_ADD_ADD = "add";
 	private static final String COMMAND_ADD_PLUS = "+";
-	static final String COMMAND_CD = "cd";
+	private static final String COMMAND_CD = "cd";
 	private static final String COMMAND_DELETE = "delete";
 	private static final String COMMAND_DELETE_MINUS = "-";
 	private static final String COMMAND_DISPLAY_D = "d";
@@ -37,7 +37,7 @@ public class CommandCreator {
 	private static Stack<Command> _pastCommands = new Stack<Command>();
 	private static Stack<Command> _undoneCommands = new Stack<Command>();
 	
-	Feedback createAndExecuteCommand(String[] inputs, Storage store, Parser parse) {
+	Feedback createAndExecuteCommand(String[] inputs) {
 		
 		COMMAND_TYPE commandType = determineCommandType(inputs[COMMAND_INDEX_COMMAND]);
 		String commandContent = getCommandContent(inputs);
@@ -46,41 +46,41 @@ public class CommandCreator {
 		switch(commandType) {
 		
 			case ADD :
-			     aCommand = new AddCommand(store, parse, commandContent);
+			     aCommand = new AddCommand(commandContent);
 			     _pastCommands.add(aCommand);
 			     break;
 		
 			case DELETE :  
-				aCommand = new DeleteCommand(store, parse, commandContent);
+				aCommand = new DeleteCommand(commandContent);
 				_pastCommands.add(aCommand);
 				break;
 		
 			case DISPLAY : 
-				aCommand = new DisplayCommand(store, parse, commandContent);
+				aCommand = new DisplayCommand(commandContent);
 				break;
 			
 			case DONE :
-				aCommand = new DoneCommand(store, parse, commandContent);
+				aCommand = new DoneCommand(commandContent);
 				_pastCommands.add(aCommand);
 				break;
 			
 			case NOTE : 
-				aCommand = new NoteCommand(store, parse, commandContent);
+				aCommand = new NoteCommand(commandContent);
 				_pastCommands.add(aCommand);
 				break;
 
 			case UPDATE :
-				aCommand = new UpdateCommand(store, parse, commandContent);
+				aCommand = new UpdateCommand(commandContent);
 				_pastCommands.add(aCommand);
 				break;
 		
 			case SEARCH :
-				aCommand = new SearchCommand(store, parse, commandContent);
+				aCommand = new SearchCommand(commandContent);
 				//add content to search history (potential enhancement)
 				break;
 		
 			case VIEW :
-				aCommand = new ViewCommand(store, parse, commandContent);
+				aCommand = new ViewCommand(commandContent);
 				break;
 			
 			case UNDO :
@@ -92,19 +92,19 @@ public class CommandCreator {
 				//break;
 			
 			case CD :
-				aCommand = new DirectoryCommand(store, parse, commandContent);
+				aCommand = new DirectoryCommand(commandContent);
 				_pastCommands.add(aCommand);
 				break;
 			
 			case EXIT : 
-				aCommand = new ExitCommand(store, parse, commandContent);
+				aCommand = new ExitCommand(commandContent);
 				break;
 			
 			case UNKNOWN : 
 				//Fallthrough
 				
 			default :
-				aCommand = new UnknownCommand(store, parse, commandContent);
+				aCommand = new UnknownCommand(commandContent);
 				break;
 		}
 		
@@ -211,7 +211,7 @@ public class CommandCreator {
 	}
 
 	public Feedback executeInitializeCommand(String path) {
-		return new InitializeCommand(Storage.getInstance(), Parser.getInstance(), path).execute();
+		return new InitializeCommand(path).execute();
 	}
 	
 	

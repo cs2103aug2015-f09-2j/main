@@ -10,8 +10,8 @@ public class SearchCommand extends Command {
 	protected static final String FEEDBACK_MESSAGE =  "Searching for: %1$s";
 	private static final String ID = "id"; //note: collate JSON strings into just one class for easy referencing
 	
-	public SearchCommand(Storage store, Parser parse, String content) {
-		super(store, parse, content);
+	public SearchCommand(String content) {
+		super(content);
 	}
 
 	@Override

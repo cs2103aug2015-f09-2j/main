@@ -11,8 +11,8 @@ public class DeleteCommand extends Command {
 	protected static final String FEEDBACK_MESSAGE =  "Deleted item with id: %1$s";
 	protected static final String FEEDBACK_MESSAGE_UNDO =  "Restored item with id: %1$s";
 	
-	public DeleteCommand(Storage store, Parser parse, String content) {
-		super(store, parse, content);
+	public DeleteCommand(String content) {
+		super(content);
 	}
 
 	@Override

@@ -15,8 +15,8 @@ public class UpdateCommand extends Command {
 	private static final String FEEDBACK_MESSAGE_UNDO =  "Restored %1$s";
 	private static final String ID = "id"; //note: collate JSON strings into just one class for easy referencing
 	
-	public UpdateCommand(Storage store, Parser parse, String content) {
-		super(store, parse, content);
+	public UpdateCommand(String content) {
+		super(content);
 	}
 
 	@Override

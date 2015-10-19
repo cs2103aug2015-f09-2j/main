@@ -5,8 +5,8 @@ public class NoteCommand extends Command {
 	//Constant Strings
 	protected static final String FEEDBACK_MESSAGE =  "Added note to %1$s";
 	
-	public NoteCommand(Storage store, Parser parse, String content) {
-		super(store, parse, content);
+	public NoteCommand(String content) {
+		super(content);
 	}
 
 	@Override

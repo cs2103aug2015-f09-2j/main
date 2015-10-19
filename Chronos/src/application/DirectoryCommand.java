@@ -8,8 +8,8 @@ public class DirectoryCommand extends Command {
 	//Constant Strings
 	protected static final String FEEDBACK_MESSAGE =  "Set Directory to: %1$s";
 	
-	public DirectoryCommand(Storage store, Parser parse, String content) {
-		super(store, parse, content);
+	public DirectoryCommand(String content) {
+		super(content);
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class DirectoryCommand extends Command {
 
 	@Override
 	public Feedback undo() {
-		return new DirectoryCommand(_store,_parse,_previousPath).execute();
+		return new DirectoryCommand(_previousPath).execute();
 	}
 	
 	

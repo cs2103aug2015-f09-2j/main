@@ -10,8 +10,8 @@ public class DisplayCommand extends Command {
 	
 	private static final String CONTENT_EMPTY = "";
 	
-	public DisplayCommand(Storage store, Parser parse, String content) {
-		super(store, parse, content);
+	public DisplayCommand(String content) {
+		super(content);
 	}
 
 	@Override

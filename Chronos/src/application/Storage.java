@@ -56,6 +56,7 @@ public class Storage {
 	
 	void initialize(String path) { //Initialize prefs
 		_userPrefs.put(PREFS_PATH, path);
+		//check if there's already chronos_storage in it and get the maximum id's
 		_userPrefs.putInt(PREFS_TASK_COUNT, DEFAULT_TASK_COUNT);
 		_userPrefs.putInt(PREFS_EVENT_COUNT, DEFAULT_EVENT_COUNT);
 		getFile(path);
@@ -129,17 +130,6 @@ public class Storage {
 		}
 		return temp_fileDirectory_;
 	}
-	
-	//Method from Parser
-	
-	/*
-	public String changeDirectory(String newDirectory) {
-		String oldDirectory = null;
-		oldDirectory = _userPrefs.get("path", "none");
-		_userPrefs.put("path", newDirectory);
-		return oldDirectory;
-	}
-	*/
 	
 	//to be called by undo/redo commands that undo/redo cd commands
 	//Do we still need this?

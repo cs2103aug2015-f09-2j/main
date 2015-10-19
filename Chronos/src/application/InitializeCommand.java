@@ -2,8 +2,8 @@ package application;
 
 public class InitializeCommand extends DirectoryCommand {
 
-	public InitializeCommand(Storage store, Parser parse, String content) {
-		super(store, parse, content);
+	public InitializeCommand(String content) {
+		super(content);
 	}
 	
 	@Override
