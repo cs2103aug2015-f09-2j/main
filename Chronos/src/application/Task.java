@@ -4,17 +4,17 @@ import java.util.ArrayList;
 
 public class Task {
 	
-	private String DEFAULT_END_DATE = "someday";
-	private String DEFAULT_PRIORITY = "med";
-	private String DEFAULT_CATEGORY = "none";
+	protected String DEFAULT_END_DATE = "someday";
+	protected String DEFAULT_PRIORITY = "med";
+	protected String DEFAULT_CATEGORY = "none";
 	
-	private String _id;
-	private String _description;
-	private String _endDate = DEFAULT_END_DATE;
-	private String _priority = DEFAULT_PRIORITY;
-	private String _category = DEFAULT_CATEGORY;
-	private boolean _isDone;
-	private ArrayList<Note> _notes;
+	protected String _id;
+	protected String _description;
+	protected String _endDate = DEFAULT_END_DATE;
+	protected String _priority = DEFAULT_PRIORITY;
+	protected String _category = DEFAULT_CATEGORY;
+	protected boolean _isDone;
+	protected ArrayList<Note> _notes;
 	
 	
 	public Task(String id, String description, String endDate, String priority, String category) {
