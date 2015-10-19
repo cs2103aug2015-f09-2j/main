@@ -7,7 +7,7 @@ public class CommandCreator {
 	//Command Strings
 	private static final String COMMAND_ADD_ADD = "add";
 	private static final String COMMAND_ADD_PLUS = "+";
-	private static final String COMMAND_CD = "cd";
+	static final String COMMAND_CD = "cd";
 	private static final String COMMAND_DELETE = "delete";
 	private static final String COMMAND_DELETE_MINUS = "-";
 	private static final String COMMAND_DISPLAY_D = "d";
@@ -208,6 +208,10 @@ public class CommandCreator {
 				return COMMAND_TYPE.UNKNOWN;
 				//break;
 		}
+	}
+
+	public Feedback executeInitializeCommand(String path) {
+		return new InitializeCommand(Storage.getInstance(), Parser.getInstance(), path).execute();
 	}
 	
 	

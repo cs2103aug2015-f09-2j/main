@@ -1,7 +1,7 @@
 package application;
 
 import java.util.ArrayList;
-import java.util.prefs.Preferences;
+
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -17,30 +17,38 @@ public class Parser {
 	
 	//Strings for ID Generation
 	private static final String TASK_HEADER = "t";	
+	private static final String EVENT_HEADER = "e";
 
-	private Integer id;
+	//private Integer id;
 	private String taskID = TASK_HEADER;
-	private static Preferences _userPrefs;
+	private String eventID = EVENT_HEADER;
+	
+	private static Parser _theParser;
 	
 	private static Logger log = Logger.getLogger("ParserLog");
 	
-	public Parser(Preferences userPrefs) {
-		_userPrefs = userPrefs;
-		id = _userPrefs.getInt("count", 0);
+	private Parser(){
+		
 	}
 	
-	public JSONObject createItem(String content) {
+	public static Parser getInstance() {
+		if (_theParser == null) {
+			_theParser = new Parser();
+		}
+		return _theParser;
+	}
+	
+	public JSONObject createItem(String content, int id) {
 		String[] contents = content.split(", ");
 		if (contents[0] == "") {
 			throw new NullPointerException("No Task Description");
 		}
-		_userPrefs.putInt("count", ++id);
 		JSONObject entry = new JSONObject();
 		log.info("adding new item");
-		return putEntryJSONObj(entry, contents);
+		return putEntryJSONObj(id, entry, contents);
 	}
 	
-	public JSONObject putEntryJSONObj(JSONObject entry, String[] contents) {
+	public JSONObject putEntryJSONObj(int id, JSONObject entry, String[] contents) {
 		entry.put("id", taskID + id);
 		entry.put("description", contents[0]);
 		entry.put("priority", "low");
@@ -79,13 +87,6 @@ public class Parser {
 		return tasks;
 	}
 
-	public String changeDirectory(String newDirectory) {
-		String oldDirectory = null;
-		oldDirectory = _userPrefs.get("path", "none");
-		_userPrefs.put("path", newDirectory);
-		return oldDirectory;
-	}
-	
 	public Task retrieveTask(String taskID, JSONArray entries) {
 		Task selectedTask = null;
 		for(int i = 0; i<entries.size(); i++) {

@@ -21,7 +21,7 @@ public class AddCommand extends Command {
 		String feedbackString;
 		try {
 			_store.storeTemp();
-			JSONObject newEntry = _parse.createItem(_content);
+			JSONObject newEntry = _parse.createItem(_content, _store.getId());
 			_createdItemID = newEntry.get("id").toString(); //store itemID for undo
 			_store.entries_.add(newEntry);
 			_store.storeChanges();
@@ -36,6 +36,7 @@ public class AddCommand extends Command {
 	@Override
 	public Feedback undo() {
 		DeleteCommand undoAdd = new DeleteCommand(_store, _parse, _createdItemID);
+		_store.decreaseID();
 		return undoAdd.execute();
 	}
 
