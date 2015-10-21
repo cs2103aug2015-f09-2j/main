@@ -129,7 +129,7 @@ public class Parser {
 	}
 
 	public ArrayList<String> parseUpdateString(String updateString) {
-		String[] details = updateString.split(", ");
+		String[] details = updateString.split(CONTENT_SEPARATOR);
 		ArrayList<String> updateDetails = new ArrayList<String>();
 		return updateDetailsArray(details, updateDetails);
 	}

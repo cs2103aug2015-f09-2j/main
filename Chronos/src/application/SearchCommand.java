@@ -25,7 +25,6 @@ public class SearchCommand extends Command {
 			    filteredTasks.add(_parse.retrieveTask(entryObject.get("id").toString(),_store.entries_));
 			}
 		}
-		
 		String feedbackString = String.format(FEEDBACK_MESSAGE, _content);
 		return new Feedback(feedbackString, filteredTasks); 
 	}
