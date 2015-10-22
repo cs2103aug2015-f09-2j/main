@@ -13,14 +13,13 @@ public class UpdateCommand extends Command {
 	//Constant Strings
 	private static final String FEEDBACK_MESSAGE =  "Updated %1$s";
 	private static final String FEEDBACK_MESSAGE_UNDO =  "Restored %1$s";
-	private static final String ID = "id"; //note: collate JSON strings into just one class for easy referencing
 	
 	public UpdateCommand(String content) {
 		super(content);
 	}
 
 	@Override
-	public Feedback execute() { //TODO: Refactor, too nested
+	public Feedback execute() { 
 		ArrayList<String> updateDetails = _parse.parseUpdateString(_content);
 		String taskID = updateDetails.get(0);
 		_id = findEntry(taskID);
@@ -39,7 +38,7 @@ public class UpdateCommand extends Command {
 	private int findEntry(String id) {
 		for (int i = 0; i < _store.entries_.size(); i++) {
 			JSONObject currentEntry = (JSONObject) _store.entries_.get(i);
-			if (currentEntry.get(ID).equals(id)) { //updateEntry(entry, updateDetails);
+			if (currentEntry.get(Parser.JSON_ID).equals(id)) {
 				_oldEntry = (JSONObject) currentEntry.clone();
 				System.out.println(_oldEntry);
 				return i;
