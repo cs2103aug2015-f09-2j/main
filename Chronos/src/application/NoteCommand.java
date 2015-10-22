@@ -1,9 +1,18 @@
 package application;
 
+import java.util.ArrayList;
+
+import org.json.simple.JSONObject;
+
 public class NoteCommand extends Command {
 
 	//Constant Strings
 	protected static final String FEEDBACK_MESSAGE =  "Added note to %1$s";
+	private static final String FEEDBACK_MESSAGE_UNDO =  "Restored %1$s";
+	
+	//Unique Attributes
+	private JSONObject _oldEntry;
+	private int _id;
 	
 	public NoteCommand(String content) {
 		super(content);
@@ -11,28 +20,44 @@ public class NoteCommand extends Command {
 
 	@Override
 	public Feedback execute() {
-		_store.storeTemp();
-		//add note to entries: similar to Update
-		_store.storeChanges();
-		String feedbackString =  String.format(FEEDBACK_MESSAGE, _content);
+		String feedbackString = null;
+		String[] noteDetails = _content.split(", ");
+		_id = findEntry(noteDetails[0]);
+		if(_id > -1) {
+			_store.storeTemp();
+			Task aTask = _parse.retrieveTask(noteDetails[0], _store.entries_);
+			aTask.addNote(noteDetails[1]); //defend this
+			_store.entries_.set(_id, _parse.convertToJSON(aTask));
+			_store.storeChanges();
+			feedbackString =  String.format(FEEDBACK_MESSAGE, _content);
+		} else { 
+			assert _content == null;
+			log.warning(LOG_NO_ID);
+			feedbackString = LOG_NO_ID;
+		}
+		
 		return new Feedback(feedbackString);
+	}
+
+	private int findEntry(String id) {
+		for (int i = 0; i < _store.entries_.size(); i++) {
+			JSONObject currentEntry = (JSONObject) _store.entries_.get(i);
+			if (currentEntry.get(Parser.JSON_ID).equals(id)) {
+				_oldEntry = (JSONObject) currentEntry.clone();
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	@Override
 	public Feedback undo() {
-		// TODO Auto-generated method stub
-		return null;
+		_store.storeTemp();
+		JSONObject entry = (JSONObject) _store.entries_.get(_id);
+		_store.entries_.set(_id, _oldEntry);
+		_store.storeChanges();
+		String feedbackString = String.format(FEEDBACK_MESSAGE_UNDO, _content);
+		return new Feedback(feedbackString);
 	}
-	
-	/*JSONObject entry;
-	String[] noteDetails = noteString.split(", ");
-	for (int i = 0; i<_store.entries_.size(); i++){
-		entry = (JSONObject) _store.entries_.get(i);
-		String id = noteDetails[0];
-		if (entry.get("id").equals(id)) {	
-			entry.put("note", noteDetails[1]);
-			break;
-		}
-	}*/
 	
 }

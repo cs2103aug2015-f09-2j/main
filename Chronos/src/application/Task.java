@@ -16,7 +16,7 @@ public class Task {
 	protected String _priority = DEFAULT_PRIORITY;
 	protected String _category = DEFAULT_CATEGORY;
 	protected boolean _isDone = false;
-	protected ArrayList<Note> _notes;
+	protected ArrayList<Note> _notes = new ArrayList<Note>();
 	
 	public Task(String[] contents) {
 		_description = contents[0];
@@ -131,6 +131,14 @@ public class Task {
 			notes.add(_notes.get(i).toString());
 		}		
 		return notes;
+	}
+
+	public Task copy() {
+		Task copiedTask = new Task(_id, _description, _endDate, _priority, _category);
+		for(Note aNote:_notes){
+			copiedTask.addNote(aNote.toString());
+		}
+		return copiedTask;
 	}
 	
 }

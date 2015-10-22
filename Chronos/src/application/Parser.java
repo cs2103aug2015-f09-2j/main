@@ -88,9 +88,22 @@ public class Parser {
 		}
 		entry.put(JSON_END_DATE, createdTask.getEndDate());
 		entry.put(JSON_COMPLETE, createdTask.isTaskComplete());
+		if(createdTask.getNotesNo() > 0) {
+			entry.put(JSON_NOTES, convertNotesToJSONArray(createdTask.getNotes()));
+		}
 		return entry;
 	}
 	
+	private JSONArray convertNotesToJSONArray(ArrayList<String> notes) {
+		JSONArray notesArray = new JSONArray();
+		for(String aNote:notes){
+			JSONObject anObject = new JSONObject();
+			anObject.put("note", aNote);
+			notesArray.add(anObject);
+		}
+		return notesArray;
+	}
+
 	public ArrayList<Task> convertToTaskArray (JSONArray contents) {
 		ArrayList<Task> tasks = new ArrayList<Task>();
 		if(contents != null){
@@ -125,7 +138,28 @@ public class Parser {
 		boolean completion = anEntry.get("complete").equals("true");
 		Task convertedTask = new Task(id, description, endDate, priority, category);
 		convertedTask.markTaskAsDone(completion);
+		if(anEntry.containsKey(JSON_NOTES)){
+			convertedTask = updatedTaskNotes(convertedTask, anEntry);
+		}
 		return convertedTask;
+	}
+
+	private Task updatedTaskNotes(Task convertedTask, JSONObject anEntry) {
+		ArrayList<String> notes = retrieveNotes(anEntry);
+		for(String aNote: notes) {
+			convertedTask.addNote(aNote);
+		}
+		return convertedTask;
+	}
+
+	private ArrayList<String> retrieveNotes(JSONObject anEntry) {
+		JSONArray notesArray = (JSONArray) anEntry.get(JSON_NOTES);
+		ArrayList<String> notes = new ArrayList<String>();
+		for(int i=0; i < notesArray.size(); i++){
+			JSONObject anObject = (JSONObject) notesArray.get(i);
+			notes.add(anObject.get("note").toString());
+		}
+		return notes;
 	}
 
 	public ArrayList<String> parseUpdateString(String updateString) {
