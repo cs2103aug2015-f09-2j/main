@@ -15,7 +15,7 @@ public class testStorage {
 	@Before
 	public void setUp(){
 		CommandCreator creator = new CommandCreator();
-		creator.executeInitializeCommand("src/test/testFiles/test");
+		creator.executeInitializeCommand("src/test/testFiles");
 		store = Storage.getInstance();
 		entries = store.entries_;
 	}
