@@ -65,4 +65,8 @@ public class Feedback {
 	void setSummaryView(boolean isInSummaryView) {
 		_isInSummaryView = isInSummaryView;
 	}
+	
+	public String toString(){
+		return _taskData.toString();
+	}
 }
