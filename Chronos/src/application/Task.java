@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 public class Task {
 	
 	String DEFAULT_END_DATE = "someday";
@@ -166,4 +167,15 @@ public class Task {
 		return copiedTask;
 	}
 	
+	public boolean isOverdue() {
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		try {
+			Date dueDate = dateFormat.parse(_endDate);
+			Date currentDate = new Date();
+			return (dueDate.compareTo(currentDate) < 0);
+		} catch (ParseException e) {
+			//Case: Someday
+			return false;
+		}
+	}
 }
