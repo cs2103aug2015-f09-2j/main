@@ -1,23 +1,25 @@
 package application;
 
+import java.text.ParseException;
+
 public class Event extends Task {
 
 	private static final String ID_HEADER = "e";	
 	
 	private String _startDate;
 	
-	public Event(String[] contents) {
-		super(contents);
+	public Event(String[] contents) throws ParseException {
+		super();
+		_description = contents[0];
 		for (int i = 1; i < contents.length; i++) {
 			if (contents[i].contains("p:")) {
-				_priority = contents[i].substring(2);
+				_priority = contents[i].substring(2).toLowerCase();
 			} else if (contents[i].contains("c:")) {
 				_category = contents[i].substring(2);
 			} else { //date manipulation
 				String[] dates = contents[i].split(" to ");
-				System.out.println(dates);
-				_startDate = dates[0];
-				_endDate = dates[1];
+				_startDate = manipulateDate(dates[0]);
+				_endDate = manipulateDate(dates[1]);
 			}
 		}
 	}

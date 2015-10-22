@@ -1,5 +1,6 @@
 package application;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 
@@ -54,7 +55,8 @@ public class Parser {
 		return _theParser;
 	}
 	
-	public Task createItem(String content) {
+	//Used by the AddCommand
+	public Task createItem(String content) throws ParseException {
 		String[] contents = content.split(CONTENT_SEPARATOR);
 		if(contents[CONTENT_DESC] == CONTENT_EMPTY) {
 			throw new NullPointerException(EXCEPTION_NO_DESC);
@@ -77,6 +79,7 @@ public class Parser {
 		return CONTENT_DESC;
 	}
 	
+	//Used by the Add and Note Commands
 	public JSONObject convertToJSON(Task createdTask) {
 		return putIntoEntry(createdTask);
 	}
@@ -88,7 +91,8 @@ public class Parser {
 		entry.put(JSON_PRIORITY, createdTask.getPriority());
 		entry.put(JSON_CATEGORY, createdTask.getCategory());
 		if (createdTask instanceof Event) {
-			//entry.put(JSON_START_DATE, createdTask.getStartDate());
+			Event createdEvent = (Event) createdTask;
+			entry.put(JSON_START_DATE, createdEvent.getStartDate());
 		}
 		entry.put(JSON_END_DATE, createdTask.getEndDate());
 		entry.put(JSON_COMPLETE, createdTask.isTaskComplete());
@@ -100,18 +104,19 @@ public class Parser {
 	
 	private JSONArray convertNotesToJSONArray(ArrayList<String> notes) {
 		JSONArray notesArray = new JSONArray();
-		for(String aNote:notes){
+		for (String aNote:notes) {
 			JSONObject anObject = new JSONObject();
 			anObject.put("note", aNote);
 			notesArray.add(anObject);
 		}
 		return notesArray;
 	}
-
+	
+	//Used by the DisplayCommand
 	public ArrayList<Task> convertToTaskArray (JSONArray contents) {
 		ArrayList<Task> tasks = new ArrayList<Task>();
-		if(contents != null){
-			for(int i=0; i<contents.size(); i++){
+		if (contents != null) {
+			for (int i = 0; i < contents.size(); i++) {
 				JSONObject anItem = (JSONObject)contents.get(i);
 				Task aTask = convertToTask(anItem);
 				tasks.add(aTask);
@@ -120,12 +125,13 @@ public class Parser {
 		assert tasks != null;
 		return tasks;
 	}
-
+	
+	//Used by Display, Done, Note, Search and View Commands
 	public Task retrieveTask(String taskID, JSONArray entries) {
 		Task selectedTask = null;
 		for(int i = 0; i<entries.size(); i++) {
 			JSONObject anEntry = (JSONObject) entries.get(i);
-			String entryID = anEntry.get("id").toString();
+			String entryID = anEntry.get(JSON_ID).toString();
 			if(entryID.equals(taskID)){
 				selectedTask = convertToTask(anEntry);
 			}
@@ -134,12 +140,12 @@ public class Parser {
 	}
 
 	private Task convertToTask(JSONObject anEntry) {
-		String id = anEntry.get("id").toString();
-		String description = anEntry.get("description").toString();
-		String endDate = anEntry.get("due date").toString();
-		String priority = anEntry.get("priority").toString();
-		String category = anEntry.get("category").toString();
-		boolean completion = anEntry.get("complete").equals("true");
+		String id = anEntry.get(JSON_ID).toString();
+		String description = anEntry.get(JSON_DESC).toString();
+		String endDate = anEntry.get(JSON_END_DATE).toString();
+		String priority = anEntry.get(JSON_PRIORITY).toString();
+		String category = anEntry.get(JSON_CATEGORY).toString();
+		boolean completion = anEntry.get(JSON_COMPLETE).equals("true");
 		Task convertedTask = new Task(id, description, endDate, priority, category);
 		convertedTask.markTaskAsDone(completion);
 		if(anEntry.containsKey(JSON_NOTES)){
@@ -165,7 +171,8 @@ public class Parser {
 		}
 		return notes;
 	}
-
+	
+	//Used by the Update Command
 	public ArrayList<String> parseUpdateString(String updateString) {
 		String[] details = updateString.split(CONTENT_SEPARATOR);
 		ArrayList<String> updateDetails = new ArrayList<String>();
