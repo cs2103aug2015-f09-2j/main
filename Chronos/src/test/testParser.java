@@ -126,12 +126,12 @@ public class testParser {
 		//int item = taskArr.size()-2;
 		taskId = taskArr.get(item).getId();
 		task = parser.retrieveTask(taskId, entries);
-<<<<<<< HEAD
+
 		assertEquals("buy paper", ("buy paper"), task.getDescription());
-=======
+
 		System.out.println(task.getDescription());
 		assertEquals("buy paper", ("sleep"), task.getDescription());
->>>>>>> 6856763b724f930098607da89f836b1457701796
+
 		assertEquals("buy paper", ("someday"), task.getEndDate());
 		assertEquals("buy paper", ("none"), task.getCategory());
 		assertEquals("buy paper", ("high"), task.getPriority());
