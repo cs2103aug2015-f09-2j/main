@@ -78,6 +78,10 @@ public class Parser {
 	}
 	
 	public JSONObject convertToJSON(Task createdTask) {
+		return putIntoEntry(createdTask);
+	}
+	
+	private JSONObject putIntoEntry(Task createdTask) {
 		JSONObject entry = new JSONObject();
 		entry.put(JSON_ID, createdTask.getId());
 		entry.put(JSON_DESC, createdTask.getDescription());

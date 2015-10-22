@@ -20,13 +20,7 @@ public class AddCommand extends Command {
 		String feedbackString;
 		try {
 			_store.storeTemp();
-			//Create Task or event
-			Task createdTask = _parse.createItem(_content);
-			if(createdTask instanceof Event) {
-				createdTask.setId(_store.getEventId());
-			} else {
-				createdTask.setId(_store.getTaskId());
-			}
+			Task createdTask = createTaskOrEvent();
 			_createdItemID = createdTask.getId();
 			_store.entries_.add(_parse.convertToJSON(createdTask));
 			_store.storeChanges();
@@ -36,6 +30,16 @@ public class AddCommand extends Command {
 			feedbackString = FEEDBACK_MISSING_DESC;
 			return new Feedback(feedbackString);
 		}
+	}
+	
+	private Task createTaskOrEvent() {
+		Task createdItem = _parse.createItem(_content);
+		if(createdItem instanceof Event) {
+			createdItem.setId(_store.getEventId());
+		} else {
+			createdItem.setId(_store.getTaskId());
+		}
+		return createdItem;
 	}
 
 	@Override
