@@ -90,11 +90,11 @@ public class testParser {
 	
 	@Test
 	public void testConvertToJSON() {
-		task = parser.createItem("buy paper, d:today, c:none, p:MED");
+		task = parser.createItem("buy paper, d:today, c:Work, p:MED");
 		entry = parser.convertToJSON(task);
 		assertEquals("description", ("buy paper"), entry.get("description"));
 		assertEquals("end date", ("d:today"), entry.get("due date"));
-		assertEquals("category", ("none"), entry.get("category"));
+		assertEquals("category", ("Work"), entry.get("category"));
 		assertEquals("priority", ("MED"), entry.get("priority"));
 		assertEquals("complete", (false), entry.get("complete"));
 		task = parser.createItem("buy milk, d:today, c:Work");
@@ -108,13 +108,24 @@ public class testParser {
 	
 	@Test
 	public void testConvertToTaskArray() {
+		add = new AddCommand("buy paper, d:today, c:Work, p:MED");
+		add.execute();
 		taskArr = parser.convertToTaskArray(entries);
 		int item = taskArr.size()-1;
-		assertEquals("buy paper", ("none"), taskArr.get(item).getCategory());
-		assertEquals("buy paper", ("high"), taskArr.get(item).getPriority());
-		assertEquals("buy paper", ("someday"), taskArr.get(item).getEndDate());
-		assertEquals("buy paper", ("sleep"), taskArr.get(item).getDescription());
+		assertEquals("buy paper", ("Work"), taskArr.get(item).getCategory());
+		assertEquals("buy paper", ("MED"), taskArr.get(item).getPriority());
+		assertEquals("buy paper", ("d:today"), taskArr.get(item).getEndDate());
+		assertEquals("buy paper", ("buy paper"), taskArr.get(item).getDescription());
 		assertEquals("buy paper", (false), taskArr.get(item).isTaskComplete());
+		add = new AddCommand("buy paper");
+		add.execute();
+		taskArr = parser.convertToTaskArray(entries);
+		taskArr.get(++item).markTaskAsDone(true);
+		assertEquals("buy paper", ("none"), taskArr.get(item).getCategory());
+		assertEquals("buy paper", ("med"), taskArr.get(item).getPriority());
+		assertEquals("buy paper", ("someday"), taskArr.get(item).getEndDate());
+		assertEquals("buy paper", ("buy paper"), taskArr.get(item).getDescription());
+		assertEquals("buy paper", (true), taskArr.get(item).isTaskComplete());
 	}
 	
 	@Test
@@ -122,20 +133,37 @@ public class testParser {
 		String taskId;
 		taskArr = parser.convertToTaskArray(entries);
 		int item = taskArr.size()-1;
+		add = new AddCommand("buy paper, d:today, c:Work, p:MED");
+		add.execute();
+		add = new AddCommand("buy milk, d:today, c:Personal, p:MED");
+		add.execute();
 		taskArr = parser.convertToTaskArray(entries);
 		//int item = taskArr.size()-2;
 		taskId = taskArr.get(item).getId();
 		task = parser.retrieveTask(taskId, entries);
+<<<<<<< HEAD
 
 		assertEquals("buy paper", ("buy paper"), task.getDescription());
 
 		System.out.println(task.getDescription());
 		assertEquals("buy paper", ("sleep"), task.getDescription());
 
+=======
+		System.out.println(task.getDescription());
+		assertEquals("buy paper", ("buy paper"), task.getDescription());
+>>>>>>> f5d93af3af6d6475d9f660fdba36e37d0748b4b5
 		assertEquals("buy paper", ("someday"), task.getEndDate());
 		assertEquals("buy paper", ("none"), task.getCategory());
-		assertEquals("buy paper", ("high"), task.getPriority());
+		assertEquals("buy paper", ("med"), task.getPriority());
 		assertEquals("buy paper", (0), task.getNotesNo());
+		taskId = taskArr.get(++item).getId();
+		update = new UpdateCommand(taskId + ", p:HIGH");
+		update.execute();
+		taskArr = parser.convertToTaskArray(entries);
+		task = parser.retrieveTask(taskId, entries);
+		assertEquals("buy milk", ("buy paper"), task.getDescription());
+		assertEquals("buy milk", ("HIGH"), task.getPriority());
+		assertEquals("buy milk", (0), task.getNotesNo());
 	}
 	
 	/**
@@ -154,12 +182,25 @@ public class testParser {
 		String taskId;
 		int item = 0;
 		ArrayList<String> updatedTask;
+		add = new AddCommand("buy paper, d:today, c:Work, p:MED");
+		add.execute();
+		add = new AddCommand("buy milk, d:today, c:Personal, p:MED");
+		add.execute();
 		taskArr = parser.convertToTaskArray(entries);
 		taskId = taskArr.get(item).getId();
 		updatedTask = parser.parseUpdateString(taskId + ", d:tomorrow");
 		assertEquals("buy paper", (taskId), updatedTask.get(item));
 		assertEquals("buy paper", ("due date"), updatedTask.get(++item));
 		assertEquals("buy paper", ("tomorrow"), updatedTask.get(++item));
+		item = 0;
+		delete = new DeleteCommand(taskId);
+		delete.execute();
+		taskArr = parser.convertToTaskArray(entries);
+		taskId = taskArr.get(item).getId();
+		updatedTask = parser.parseUpdateString(taskId + ", c:None");
+		assertEquals("buy paper", (taskId), updatedTask.get(item));
+		assertEquals("buy paper", ("category"), updatedTask.get(++item));
+		assertEquals("buy paper", ("None"), updatedTask.get(++item));
 	}
 	
 	/**
@@ -172,6 +213,10 @@ public class testParser {
 	public void testIsExistingId() {
 		String taskId;
 		int item = 0;
+		add = new AddCommand("buy paper, d:today, c:Work, p:MED");
+		add.execute();
+		add = new AddCommand("buy milk, d:today, c:Personal, p:MED");
+		add.execute();
 		assertEquals("check id", (false), parser.isExistingId("0", entries));
 		taskArr = parser.convertToTaskArray(entries);
 		taskId = taskArr.get(item).getId();

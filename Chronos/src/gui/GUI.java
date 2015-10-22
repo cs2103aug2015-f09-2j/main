@@ -43,7 +43,7 @@ public class GUI extends Application {
 	private boolean setUp = false;
 
 	private boolean _isNewUser;
-	//private ObservableList<Task> events = FXCollections.observableArrayList();
+	private ObservableList<Task> events = FXCollections.observableArrayList();
 
 	public static void main(String[] args) {
 		launch(args);
@@ -150,8 +150,8 @@ public class GUI extends Application {
 
 	// get items arrayList from Logic and print them out
 	private void updateSummary(ArrayList<Task> eventList) {
-		//events = FXCollections.observableArrayList(eventList);
-		summary.display(eventList);
+		events = FXCollections.observableArrayList(eventList);
+		summary.display(events);
 	}
 
 	private void updateFeedback(Feedback feedback) {

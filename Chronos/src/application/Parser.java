@@ -1,5 +1,6 @@
 package application;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 
@@ -55,7 +56,7 @@ public class Parser {
 	}
 	
 	//Used by the AddCommand
-	public Task createItem(String content) {
+	public Task createItem(String content) throws ParseException {
 		String[] contents = content.split(CONTENT_SEPARATOR);
 		if(contents[CONTENT_DESC] == CONTENT_EMPTY) {
 			throw new NullPointerException(EXCEPTION_NO_DESC);

@@ -1,7 +1,11 @@
 package application;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+import java.util.Calendar;
+import java.util.Date;
 public class Task {
 	
 	String DEFAULT_END_DATE = "someday";
@@ -18,19 +22,41 @@ public class Task {
 	protected boolean _isDone = false;
 	protected ArrayList<Note> _notes = new ArrayList<Note>();
 	
-	public Task(String[] contents) {
+	protected Task() {
+		
+	}
+	
+	public Task(String[] contents) throws ParseException {
 		_description = contents[0];
 		for (int i = 1; i<contents.length; i++) {
 			if (contents[i].contains("p:")) {
-				_priority = contents[i].substring(2);
+				_priority = contents[i].substring(2).toLowerCase();
 			} else if (contents[i].contains("c:")) {
 				_category = contents[i].substring(2);
 			} else { //date manipulation
-				_endDate = contents[i];
+				_endDate = manipulateDate(contents[i]);
 			}
 		}
 	}
 	
+	protected String manipulateDate(String dateString) throws ParseException {
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		Calendar theDate = Calendar.getInstance();
+		String date;
+		if (dateString.equals("today")) { 
+			date = dateFormat.format(theDate.getTime());
+		} else if (dateString.equals("tomorrow")) {
+			theDate.add(Calendar.DATE, 1);
+			date = dateFormat.format(theDate.getTime());
+		} else if (dateString.equals("someday")) {
+			date = dateString;
+		} else {
+			theDate.setTime(dateFormat.parse(dateString));
+			date = dateFormat.format(theDate.getTime());
+		}
+		return date;
+	}
+
 	public Task(int id, String description, String endDate, String priority, String category) {
 		_id = ID_HEADER + Integer.toString(id);
 		_description = description.trim();
@@ -141,4 +167,15 @@ public class Task {
 		return copiedTask;
 	}
 	
+	public boolean isOverdue() {
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		try {
+			Date dueDate = dateFormat.parse(_endDate);
+			Date currentDate = new Date();
+			return (dueDate.compareTo(currentDate) < 0);
+		} catch (ParseException e) {
+			//Case: Someday
+			return false;
+		}
+	}
 }
