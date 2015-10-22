@@ -51,6 +51,9 @@ public class Task {
 		} else if (dateString.equals("someday")) {
 			date = dateString;
 		} else {
+			if(dateString.toLowerCase().contains("m")) { //adds time if specified
+				dateFormat = new SimpleDateFormat();
+			}
 			theDate.setTime(dateFormat.parse(dateString));
 			date = dateFormat.format(theDate.getTime());
 		}
