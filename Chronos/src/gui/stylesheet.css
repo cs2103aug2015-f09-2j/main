@@ -30,3 +30,13 @@
 	-fx-strikethrough: true;
 	-fx-fill: grey;	
 }
+
+.txtFlow {
+	-fx-font-size: 30;
+	-fx-font-weight: bold;
+	-fx-text-alignment: center;
+}
+
+.listView .text {
+	-fx-font-size: 15;
+}

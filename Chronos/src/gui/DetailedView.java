@@ -45,15 +45,12 @@ public class DetailedView extends BorderPane {
 		ListView<String> list = new ListView<String>();
 		ObservableList<String> items =FXCollections.observableArrayList (
 				"ID: "+taskToView.getId(), "Category: "+taskToView.getCategory(), 
-				"Priority: "+taskToView.getPriority(), "Notes: "+taskToView.getDescription());
-		/*ArrayList<String> notes = taskToView.getNotes();
+				"Priority: "+taskToView.getPriority(), "Notes: ");
+		ArrayList<String> notes = taskToView.getNotes();
 		for (int i=0; i<notes.size(); i++) {
-			items.addAll(notes.get(i));
-		}*/
+			items.addAll("      " +(i+1)+". " +notes.get(i));
+		}
 		details.setItems(items);
-		text1.setFont(Font.font("",FontWeight.BOLD,30));
-
-		text1.setTextAlignment(TextAlignment.CENTER);
 		eventTitle.getChildren().addAll(text1);
 	}
 
