@@ -25,7 +25,7 @@ public class testCommands {
 	@Before
 	public void setUp(){
 		logic.isSavePresent();
-		creator.executeInitializeCommand("src/test/testFiles/test");
+		creator.executeInitializeCommand("src/test/testFiles");
 		store = Storage.getInstance();
 	}
 
