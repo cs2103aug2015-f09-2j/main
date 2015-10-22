@@ -19,9 +19,9 @@ import javafx.stage.Stage;
 
 public class GUI extends Application {
 
-	private static final String WINDOW_TITLE = "Chronos V0.1";
-	private static final String MESSAGE_WELCOME = "Welcome to Chronos V0.1! Where would you like Chronos to store your tasks and events?";
-	private static final String MESSAGE_LOADED = "Welcome to Chronos V0.1! Add a task to get started.";
+	private static final String WINDOW_TITLE = "Chronos V0.2";
+	private static final String MESSAGE_WELCOME = "Welcome to Chronos V0.2! Where would you like Chronos to store your tasks and events?";
+	private static final String MESSAGE_LOADED = "Welcome to Chronos V0.2! Add a task to get started.";
 
 	private static final String ROOT_LAYOUT_FXML = "RootLayout.fxml";
 
