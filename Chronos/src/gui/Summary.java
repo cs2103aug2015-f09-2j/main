@@ -95,7 +95,6 @@ public class Summary extends StackPane {
 				tasks.add(eventList.get(i));
 			} else {
 				events.add(eventList.get(i));
-				System.out.println("yeah");
 			}
 		}
 		setTaskColumns(tasks);

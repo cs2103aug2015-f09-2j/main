@@ -28,7 +28,6 @@
 
 .done .text {
 	-fx-strikethrough: true;
-	-fx-fill: grey;	
 }
 
 .txtFlow {
@@ -46,5 +45,9 @@
 }
 
 .overdue {
-	-fx-control-inner-background: palevioletred;
+	-fx-control-inner-background: goldenrod;
+}
+
+.overdue .text {
+	 -fx-fill: black;
 }
