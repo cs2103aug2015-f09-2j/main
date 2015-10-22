@@ -15,12 +15,14 @@ public class Storage {
 	private final String MESSAGE_INVALID_FILE = "Invalid File.";
 	private final String MESSAGE_FILE_CREATED = "Your agenda will be stored in \"%1$s\"";
 	private final String MESSAGE_FILE_OPENED = "Your agenda stored in \"%1$s\" is loaded";
-	
+	private final String MESSAGE_FILE_SWAPPED = "content of %1$s moved to %2$s";
+	private final String MESSAGE_ERROR_DELETE = "old file %1$s not deleted";
+	private final String MESSAGE_TEMP_SWAPPED = "swapped entries_ with temp_entries";
 	//contants
 	private static final String PREFS_PATH = "path";
 	private static final String PREFS_TASK_COUNT = "task count";
 	private static final String PREFS_EVENT_COUNT = "event count";
-		
+	private static final String DEFAULT_DIRECTORY = "/chronos_storage.txt";
 	private static final String DEFAULT_VALUE = "none";
 	private static final int  DEFAULT_TASK_COUNT = 0;
 	private static final int  DEFAULT_EVENT_COUNT = 0;
@@ -68,7 +70,7 @@ public class Storage {
 	}
 	
 	private void readFile(){
-		File file = new File(fileDirectory_ + "/chronos_storage.txt");
+		File file = new File(fileDirectory_ + DEFAULT_DIRECTORY );
 		try {
 			if(!file.createNewFile()){ 
 				//Read in the content of an existing file
@@ -86,7 +88,7 @@ public class Storage {
 	private void getContent(){
 		JSONParser jsonParser = new JSONParser();
 		try {
-			entries_ = (JSONArray)jsonParser.parse(new FileReader(fileDirectory_+"/chronos_storage.txt"));
+			entries_ = (JSONArray)jsonParser.parse(new FileReader(fileDirectory_+DEFAULT_DIRECTORY ));
 		} catch (IOException | ParseException e) {
 			log.warning(MESSAGE_INVALID_FILE);
 		}
@@ -114,19 +116,19 @@ public class Storage {
 		entries_ = temp_entries_;
 		temp_entries_ = placeHolder;
 		writeToFile();	
-		log.info("swapped entries_ with temp_entries");
+		log.info(MESSAGE_TEMP_SWAPPED);
 	}
 	
 	public String changeDirectory(String newDirectory){
 		temp_fileDirectory_ = fileDirectory_;
 		fileDirectory_ = newDirectory;
 		writeToFile();
-		File oldFile = new File(temp_fileDirectory_+"/chronos_storage.txt");
+		File oldFile = new File(temp_fileDirectory_+DEFAULT_DIRECTORY );
 		//Check if file is deleted
 		if (!oldFile.delete()) {
-			log.warning(String.format("old file %1$s not deleted", temp_fileDirectory_));
+			log.warning(String.format(MESSAGE_ERROR_DELETE, temp_fileDirectory_));
 		} else {
-			log.info(String.format("content of %1$s moved to %2$s", temp_fileDirectory_,fileDirectory_));
+			log.info(String.format(MESSAGE_FILE_SWAPPED, temp_fileDirectory_,fileDirectory_));
 		}
 		return temp_fileDirectory_;
 	}
@@ -139,7 +141,7 @@ public class Storage {
 	
 	private void writeToFile(){
 		try{
-			FileWriter file = new FileWriter(fileDirectory_+"/chronos_storage.txt");
+			FileWriter file = new FileWriter(fileDirectory_+DEFAULT_DIRECTORY );
 			file.write(entries_.toJSONString());
 			file.flush();
 			file.close();
