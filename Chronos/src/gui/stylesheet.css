@@ -40,6 +40,11 @@
 .listView .text {
 	-fx-font-size: 15;
 }
+
 .table {
 	-fx-padding: -2em 0;
+}
+
+.overdue {
+	-fx-control-inner-background: palevioletred;
 }

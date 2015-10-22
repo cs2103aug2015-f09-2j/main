@@ -29,6 +29,7 @@ public class Summary extends StackPane {
 	private static final String PRIORITY_HIGH_STYLE = "priorityHigh";
 	private static final String PRIORITY_MED_STYLE = "priorityMed";
 	private static final String COMPLETED_TASK_STYLE = "done";
+	private static final String OVERDUE_STYLE = "overdue";
 
 	// private GUI gui;
 
@@ -109,6 +110,7 @@ public class Summary extends StackPane {
 			@Override
 			public TableCell<Task, String> call(TableColumn<Task, String> priority) {
 				return new TableCell<Task, String>() {
+
 					@Override
 					public void updateItem(final String item, final boolean empty) {
 						super.updateItem(item, empty);
@@ -130,6 +132,9 @@ public class Summary extends StackPane {
 							}
 							if (currentTask.isTaskComplete() == true) {
 								this.getTableRow().getStyleClass().add(COMPLETED_TASK_STYLE);
+							}
+							if (currentTask.isOverdue() == true) {
+								this.getTableRow().getStyleClass().add(OVERDUE_STYLE);
 							}
 						}
 					}
