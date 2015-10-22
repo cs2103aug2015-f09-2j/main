@@ -108,10 +108,10 @@ public class testParser {
 	
 	@Test
 	public void testConvertToTaskArray() {
-		int item = 0;
 		add = new AddCommand("buy paper, d:today, c:Work, p:MED");
 		add.execute();
 		taskArr = parser.convertToTaskArray(entries);
+		int item = taskArr.size()-1;
 		assertEquals("buy paper", ("Work"), taskArr.get(item).getCategory());
 		assertEquals("buy paper", ("MED"), taskArr.get(item).getPriority());
 		assertEquals("buy paper", ("d:today"), taskArr.get(item).getEndDate());
@@ -131,14 +131,17 @@ public class testParser {
 	@Test
 	public void testRetrieveTask() {
 		String taskId;
-		int item = 0;
+		taskArr = parser.convertToTaskArray(entries);
+		int item = taskArr.size()-1;
 		add = new AddCommand("buy paper, d:today, c:Work, p:MED");
 		add.execute();
 		add = new AddCommand("buy milk, d:today, c:Personal, p:MED");
 		add.execute();
 		taskArr = parser.convertToTaskArray(entries);
-		taskId = taskArr.get(++item).getId();
+		//int item = taskArr.size()-2;
+		taskId = taskArr.get(item).getId();
 		task = parser.retrieveTask(taskId, entries);
+		System.out.println(task.getDescription());
 		assertEquals("buy paper", ("buy paper"), task.getDescription());
 		assertEquals("buy paper", ("someday"), task.getEndDate());
 		assertEquals("buy paper", ("none"), task.getCategory());

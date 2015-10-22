@@ -88,9 +88,9 @@ public class Summary extends StackPane {
 						TableRow currentRow = getTableRow();
 						Task currentTask = currentRow == null ? null : (Task) currentRow.getItem();
 						if (item != null) {
-							if (currentTask.getPriority().contains("high")) {
+							if (currentTask.getPriority().toLowerCase().contains("high")) {
 								this.getTableRow().getStyleClass().add(PRIORITY_HIGH_STYLE);
-							}  else if(currentTask.getPriority().contains("med")) {
+							}  else if(currentTask.getPriority().toLowerCase().contains("med")) {
 								this.getTableRow().getStyleClass().add(PRIORITY_MED_STYLE);
 							}
 							if(currentTask.isTaskComplete()==true) {
