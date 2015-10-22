@@ -150,8 +150,8 @@ public class GUI extends Application {
 
 	// get items arrayList from Logic and print them out
 	private void updateSummary(ArrayList<Task> eventList) {
-		events = FXCollections.observableArrayList(eventList);
-		summary.display(events);
+		//events = FXCollections.observableArrayList(eventList);
+		summary.display(eventList);
 	}
 
 	private void updateFeedback(Feedback feedback) {
