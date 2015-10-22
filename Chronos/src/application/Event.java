@@ -26,6 +26,11 @@ public class Event extends Task {
 		return new Task(id, _description, _endDate, _priority, _category);
 	}
 	
+	@Override
+	public String toString(){
+		return  _id + ". " + _description + " " +_startDate+" "+ _endDate + " " + _priority + " " + _category;
+	}
+	
 	public String getStartDate() {
 		return _startDate;
 	}
