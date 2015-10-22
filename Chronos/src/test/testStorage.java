@@ -1,7 +1,8 @@
 package test;
 
-import static org.junit.Assert.*;
-import application.*;
+import static org.junit.Assert.assertEquals;
+import application.CommandCreator;
+import application.Storage;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -15,7 +16,7 @@ public class testStorage {
 	@Before
 	public void setUp(){
 		CommandCreator creator = new CommandCreator();
-		creator.executeInitializeCommand("src/test/testFiles/test");
+		creator.executeInitializeCommand("src/test/testFiles");
 		store = Storage.getInstance();
 		entries = store.entries_;
 	}
