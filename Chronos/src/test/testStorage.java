@@ -1,7 +1,8 @@
 package test;
 
-import static org.junit.Assert.*;
-import application.*;
+import static org.junit.Assert.assertEquals;
+import application.CommandCreator;
+import application.Storage;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
