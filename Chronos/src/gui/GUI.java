@@ -97,7 +97,7 @@ public class GUI extends Application {
 	}
 
 	private void initLogic() {
-		logic = new Logic();
+		logic = Logic.getInstance();
 	}
 
 	private void addSummary(GUI gui) {

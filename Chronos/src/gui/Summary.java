@@ -2,13 +2,13 @@ package gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
+
+import application.Logic;
 
 //import javax.media.jai.remote.NegotiableCollection;
 
 import application.Task;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,9 +18,7 @@ import javafx.scene.control.TableRow;
 //import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.util.Callback;
 
 public class Summary extends StackPane {
@@ -30,6 +28,7 @@ public class Summary extends StackPane {
 	private static final String PRIORITY_MED_STYLE = "priorityMed";
 	private static final String COMPLETED_TASK_STYLE = "done";
 	private static final String OVERDUE_STYLE = "overdue";
+	private static final String CLASH_STYLE = "clash";
 
 	// private GUI gui;
 
@@ -121,6 +120,7 @@ public class Summary extends StackPane {
 
 					// update the item and set a custom style if necessary
 					private void addStyle(final String item) {
+						Logic logic = Logic.getInstance();
 						TableRow currentRow = getTableRow();
 						Task currentTask = currentRow == null ? null : (Task) currentRow.getItem();
 						if (item != null) {
@@ -129,11 +129,14 @@ public class Summary extends StackPane {
 							} else if (currentTask.getPriority().toLowerCase().contains("med")) {
 								this.getTableRow().getStyleClass().add(PRIORITY_MED_STYLE);
 							}
-							if (currentTask.isTaskComplete() == true) {
+							if (currentTask.isTaskComplete()) {
 								this.getTableRow().getStyleClass().add(COMPLETED_TASK_STYLE);
 							}
-							if (currentTask.isOverdue() == true) {
+							if (currentTask.isOverdue()) {
 								this.getTableRow().getStyleClass().add(OVERDUE_STYLE);
+							}
+							if (logic.checkForClashes(currentTask)) {
+								this.getTableRow().getStyleClass().add(CLASH_STYLE);
 							}
 						}
 					}

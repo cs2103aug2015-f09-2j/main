@@ -5,9 +5,17 @@ public class Logic {
 	private static CommandCreator _commandCreator;
 	private static Storage _store;
 	private static Parser _parse;
+	private static Logic _theLogic = null;
 	
-	public Logic(){
+	private Logic(){
 		_commandCreator = new CommandCreator();
+	}
+	
+	public static Logic getInstance() {
+		if (_theLogic == null) {
+			_theLogic = new Logic();
+		}
+		return _theLogic;
 	}
 	
 	public boolean isSavePresent() {
@@ -24,5 +32,9 @@ public class Logic {
 	public Feedback executeUserCommand(String userInput) {
 		String[] inputs = _parse.parseUserContent(userInput);
 		return _commandCreator.createAndExecuteCommand(inputs);
+	}
+	
+	public boolean checkForClashes(Task taskToCheck) {
+		return _parse.checkForClashes(taskToCheck, _store.entries_);
 	}
 }

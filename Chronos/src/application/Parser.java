@@ -1,8 +1,10 @@
 package application;
 
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+import java.util.Date;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -146,12 +148,23 @@ public class Parser {
 		String priority = anEntry.get(JSON_PRIORITY).toString();
 		String category = anEntry.get(JSON_CATEGORY).toString();
 		boolean completion = anEntry.get(JSON_COMPLETE).equals("true");
-		Task convertedTask = new Task(id, description, endDate, priority, category);
-		convertedTask.markTaskAsDone(completion);
-		if(anEntry.containsKey(JSON_NOTES)){
-			convertedTask = updatedTaskNotes(convertedTask, anEntry);
+		if (anEntry.containsKey(JSON_START_DATE)) {
+			String startDate = anEntry.get(JSON_START_DATE).toString();
+			Event convertedEvent = new Event(id, description, startDate, endDate, priority, category);
+			convertedEvent.markTaskAsDone(completion);
+			if (anEntry.containsKey(JSON_NOTES)) {
+				convertedEvent = (Event) updatedTaskNotes(convertedEvent, anEntry);
+			}
+			return convertedEvent;
+		} else {
+			Task convertedTask = new Task(id, description, endDate, priority, category);
+			convertedTask.markTaskAsDone(completion);
+			if(anEntry.containsKey(JSON_NOTES)){
+				convertedTask = updatedTaskNotes(convertedTask, anEntry);
+			}
+			return convertedTask;
 		}
-		return convertedTask;
+		
 	}
 
 	private Task updatedTaskNotes(Task convertedTask, JSONObject anEntry) {
@@ -221,5 +234,66 @@ public class Parser {
 
 	public String[] parseUserContent(String userInput) {
 		return userInput.split(INPUT_SEPARATOR, INPUT_ARG_COUNT);
+	}
+
+	public boolean checkForClashes(Task taskToCheck, JSONArray entries) {
+		for (int i = 0; i < entries.size(); i++) {
+			JSONObject anEntry = (JSONObject) entries.get(i);
+			if(taskToCheck.getId().equals(anEntry.get(JSON_ID).toString())){
+				continue;
+			}
+			String endString = anEntry.get(JSON_END_DATE).toString();
+			boolean isClashing;
+			if (anEntry.containsKey(JSON_START_DATE)) {
+				String startString = anEntry.get(JSON_START_DATE).toString();
+				isClashing = compareDates(taskToCheck, endString, startString);
+			} else {
+				isClashing = compareDates(taskToCheck, endString);
+			}
+			if (isClashing) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean compareDates(Task taskToCheck, String endString) {
+		try {
+			DateFormat dateFormat = new SimpleDateFormat();
+			Date endDate = dateFormat.parse(endString);
+			if (taskToCheck instanceof Event) {
+				Date eventStart = dateFormat.parse(((Event) taskToCheck).getStartDate());
+				Date eventEnd = dateFormat.parse(((Event) taskToCheck).getEndDate());
+				return endDate.after(eventStart) && endDate.before(eventEnd);
+				//return true if endDate is between eventStart and eventEnd
+			} else {
+				Date taskEnd = dateFormat.parse(taskToCheck.getEndDate());
+				return taskEnd.compareTo(endDate) == 0;
+			}
+		} catch (ParseException e) {
+			//For someday
+			return false;
+		}
+	}
+
+	private boolean compareDates(Task taskToCheck, String endString, String startString) {
+		try {
+			DateFormat dateFormat = new SimpleDateFormat();
+			Date endDate = dateFormat.parse(endString);
+			Date startDate = dateFormat.parse(startString);
+			if (taskToCheck instanceof Event) {
+				Date eventStart = dateFormat.parse(((Event) taskToCheck).getStartDate());
+				Date eventEnd = dateFormat.parse(((Event) taskToCheck).getEndDate());
+				//return true if endDate or startDate is between eventStart and eventEnd
+				return (endDate.after(eventStart) && endDate.before(eventEnd)) || startDate.after(eventStart) && startDate.before(eventEnd);
+			} else {
+				//return true if endDate or startDate is equal to eventEnd;
+				Date taskEnd = dateFormat.parse(taskToCheck.getEndDate());
+				return taskEnd.after(startDate) && taskEnd.before(endDate);
+			}
+		} catch (ParseException e) {
+			//for someday
+			return false;
+		}
 	}
 }

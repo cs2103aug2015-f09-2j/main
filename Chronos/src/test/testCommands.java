@@ -17,7 +17,7 @@ import application.Task;
 
 public class testCommands {
 	//Remember to undo after testing CRUD commands
-	Logic logic = new Logic();
+	Logic logic = Logic.getInstance();
 	Storage store;
 	JSONArray entries;
 	CommandCreator creator = new CommandCreator();

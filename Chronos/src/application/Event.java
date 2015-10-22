@@ -24,6 +24,15 @@ public class Event extends Task {
 		}
 	}
 	
+	public Event(String id, String description, String startDate, String endDate, String priority, String category) {
+		_id = id;
+		_description = description;
+		_startDate = startDate;
+		_endDate = endDate;
+		_priority = priority;
+		_category = category;
+	}
+
 	public Task toTask(int id) { //get id from storage
 		return new Task(id, _description, _endDate, _priority, _category);
 	}

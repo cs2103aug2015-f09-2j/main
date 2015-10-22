@@ -20,6 +20,7 @@ public class Task {
 	protected String _priority = DEFAULT_PRIORITY;
 	protected String _category = DEFAULT_CATEGORY;
 	protected boolean _isDone = false;
+	protected boolean _isClashing = false;
 	protected ArrayList<Note> _notes = new ArrayList<Note>();
 	
 	protected Task() {
@@ -173,12 +174,32 @@ public class Task {
 	public boolean isOverdue() {
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		try {
-			Date dueDate = dateFormat.parse(_endDate);
+			Date dueDate;
 			Date currentDate = new Date();
+			if(_endDate.toLowerCase().contains("m")) { //if deadline has a specified time
+				dateFormat = new SimpleDateFormat();
+				dueDate = dateFormat.parse(_endDate);
+			} else { //if deadline has no specified time: put it at 11:59:59
+				dueDate = dateFormat.parse(_endDate);
+				Calendar endDate = Calendar.getInstance();
+				endDate.setTime(dueDate);
+				endDate.set(Calendar.HOUR_OF_DAY, 23);
+				endDate.set(Calendar.MINUTE, 59);
+				endDate.set(Calendar.SECOND, 59);
+				dueDate = endDate.getTime();
+			}
 			return (dueDate.compareTo(currentDate) < 0);
 		} catch (ParseException e) {
 			//Case: Someday
 			return false;
 		}
+	}
+	
+	void setClashing(boolean isClashing) {
+		_isClashing = isClashing;
+	}
+	
+	public boolean isClashing() {
+		return _isClashing;
 	}
 }
