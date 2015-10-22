@@ -59,5 +59,4 @@ public class NoteCommand extends Command {
 		String feedbackString = String.format(FEEDBACK_MESSAGE_UNDO, _content);
 		return new Feedback(feedbackString);
 	}
-	
 }

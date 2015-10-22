@@ -20,13 +20,7 @@ public class DeleteCommand extends Command {
 		String feedbackString = null;
 		if(_content!="") {
 			_store.storeTemp();
-			for (int i = 0; i < _store.entries_.size(); i++) {
-				JSONObject entry = (JSONObject) _store.entries_.get(i);
-				if (entry.get("id").equals(_content)) {
-					_deletedEntry = (JSONObject) _store.entries_.remove(i);
-					break;
-				}
-			}
+			deleteItem();
 			feedbackString = String.format(FEEDBACK_MESSAGE, _content);
 			_store.storeChanges();
 		} else {
@@ -36,6 +30,15 @@ public class DeleteCommand extends Command {
 		return new Feedback(feedbackString, _parse.convertToTaskArray(_store.entries_)); 
 	}
 
+	private void deleteItem() {
+		for (int i = 0; i < _store.entries_.size(); i++) {
+			JSONObject entry = (JSONObject) _store.entries_.get(i);
+			if (entry.get("id").equals(_content)) {
+				_deletedEntry = (JSONObject) _store.entries_.remove(i);
+				break;
+			}
+		}	
+	}
 	@Override
 	public Feedback undo() {
 		_store.storeTemp();
