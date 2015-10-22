@@ -18,7 +18,7 @@ public class Storage {
 	private final String MESSAGE_FILE_SWAPPED = "content of %1$s moved to %2$s";
 	private final String MESSAGE_ERROR_DELETE = "old file %1$s not deleted";
 	private final String MESSAGE_TEMP_SWAPPED = "swapped entries_ with temp_entries";
-	//contants
+	//constants
 	private static final String PREFS_PATH = "path";
 	private static final String PREFS_TASK_COUNT = "task count";
 	private static final String PREFS_EVENT_COUNT = "event count";
@@ -43,7 +43,8 @@ public class Storage {
 		entries_ = new JSONArray();
 		_userPrefs = Preferences.userNodeForPackage(this.getClass());
 		String savedPath = _userPrefs.get(PREFS_PATH, DEFAULT_VALUE);
-		if (!savedPath.equals(DEFAULT_VALUE)) { //There's a path, so open it.
+		if (!savedPath.equals(DEFAULT_VALUE)) { 
+			//There's a path, so open it.
 			getFile(savedPath);
 			_isSavePresent = true;
 		} 
@@ -56,7 +57,8 @@ public class Storage {
 		return _theStorage;
 	}
 	
-	void initialize(String path) { //Initialize prefs
+	void initialize(String path) { 
+		//Initialize prefs
 		_userPrefs.put(PREFS_PATH, path);
 		//check if there's already chronos_storage in it and get the maximum id's
 		_userPrefs.putInt(PREFS_TASK_COUNT, DEFAULT_TASK_COUNT);

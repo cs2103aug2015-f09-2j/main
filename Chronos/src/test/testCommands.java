@@ -3,69 +3,64 @@ package test;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.prefs.Preferences;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import application.Command;
+import application.CommandCreator;
 import application.Feedback;
-import application.Parser;
+import application.Logic;
 import application.Storage;
 import application.Task;
 
 public class testCommands {
-	Parser parse = new Parser(Preferences.userNodeForPackage(this.getClass()));
-	Storage store = new Storage("src/test/testFiles/test");
-	JSONArray entries = store.entries_;
+	//Remember to undo after testing CRUD commands
+	Logic logic = new Logic();
+	Storage store;
+	JSONArray entries;
+	CommandCreator creator = new CommandCreator();
+	
 	@Before
 	public void setUp(){
-		store.storeTemp();
+		logic.isSavePresent();
+		creator.executeInitializeCommand("src/test/testFiles/test");
+		store = Storage.getInstance();
 	}
-	@After
-	public void CleanUp(){
-		store.swapTemp();
-	}
+
 	@Test
 	public void testAdd() {
-		Command cmd = new Command("add buy milk, p:high, c:personal, d:today", store, parse);
-		cmd.execute();
+		logic.executeUserCommand("add buy milk, p:high, c:personal, today");
+		entries = store.entries_;
 		JSONObject entry = (JSONObject) entries.get(4);
 		assertEquals("buy milk",entry.get("description").toString() );
+		logic.executeUserCommand("undo");
 	}
 	
 	@Test
 	public void testUpdate(){
-		Command cmd = new Command("update t4, p:high", store, parse);
-		cmd.execute();
+		logic.executeUserCommand("update t4, p:high");
+		entries = store.entries_;
 		JSONObject entry = (JSONObject) entries.get(2);
 		assertEquals("high", entry.get("priority") );
+		logic.executeUserCommand("undo");
 	}
 
 	@Test
 	public void testDelete(){
-		Command cmd = new Command("delete t4", store, parse);
-		cmd.execute();
+		logic.executeUserCommand("delete t4");
+		entries = store.entries_;
 		assertEquals(3, entries.size());
+		logic.executeUserCommand("undo");
 	}
 	
 	@Test
 	public void testSearch(){
-		Command cmd= new Command("search laundry", store, parse);
-		Feedback actual = cmd.execute();
+		Feedback actual=logic.executeUserCommand("search laundry");
 		ArrayList<Task> expected= new ArrayList<Task>();
-		expected.add(new Task("t5", "do laundry", "none", "low", "personal"));
+		expected.add(new Task("t5", "do laundry", "someday", "med", "personal"));
 		assertEquals(expected.toString(), actual.getData().toString());
 	}
 	
-	@Test
-	public void testNote(){
-		Command cmd= new Command("note t4, sleep early", store, parse);
-		cmd.execute();
-		JSONObject entry = (JSONObject) entries.get(2);
-		assertEquals("sleep early", entry.get("note") );
-	}
 }
