@@ -15,7 +15,7 @@ public class testStorage {
 	@Before
 	public void setUp(){
 		CommandCreator creator = new CommandCreator();
-		creator.executeInitializeCommand("src/test/testFiles/test");
+		creator.executeInitializeCommand("src/test/testFiles");
 		store = Storage.getInstance();
 		entries = store.entries_;
 	}
@@ -27,7 +27,7 @@ public class testStorage {
 	
 	@Test
 	public void testEntry() {
-		String expected = "{\"note\":\"sleep early\",\"due date\":\"none\",\"description\":\"sleep\",\"id\":\"t4\",\"priority\":\"high\",\"category\":\"none\",\"complete\":\"false\"}";
+		String expected = "{\"due date\":\"today\",\"description\":\"buy milk\",\"id\":\"t1\",\"priority\":\"high\",\"category\":\"personal\",\"complete\":false}";
 		System.out.println(entries.get(2).toString());
 		assertEquals(expected, entries.get(2).toString());
 	}
@@ -35,7 +35,7 @@ public class testStorage {
 	@Test
 	public void testValue(){
 		JSONObject entry = (JSONObject) entries.get(3);
-		assertEquals("do laundry", entry.get("description"));
+		assertEquals("sleep", entry.get("description"));
 	}
 
 }
