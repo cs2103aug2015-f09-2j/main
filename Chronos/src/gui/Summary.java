@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import application.Logic;
-
-//import javax.media.jai.remote.NegotiableCollection;
-
+import application.Event;
 import application.Task;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,7 +13,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
-//import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
@@ -29,8 +26,6 @@ public class Summary extends StackPane {
 	private static final String COMPLETED_TASK_STYLE = "done";
 	private static final String OVERDUE_STYLE = "overdue";
 	private static final String CLASH_STYLE = "clash";
-
-	// private GUI gui;
 
 	@FXML
 	private TableView<Task> summaryTable;
@@ -52,26 +47,30 @@ public class Summary extends StackPane {
 
 	@FXML
 	private TableColumn<Task, String> priorityCol;
-	@FXML
-	private TableView<Task> eventTable;
 
 	@FXML
-	private TableColumn<Task, String> EIDCol;
+	private TableView<Event> eventTable;
 
 	@FXML
-	private TableColumn<Task, String> EtimeCol;
+	private TableColumn<Event, String> EIDCol;
 
 	@FXML
-	private TableColumn<Task, String> EtitleCol;
+	private TableColumn<Event, String> EtimeCol;
 
 	@FXML
-	private TableColumn<Task, String> EcategoryCol;
+	private TableColumn<Event, String> EtitleCol;
 
 	@FXML
-	private TableColumn<Task, String> EnoteCol;
+	private TableColumn<Event, String> EcategoryCol;
 
 	@FXML
-	private TableColumn<Task, String> EpriorityCol;
+	private TableColumn<Event, String> EnoteCol;
+
+	@FXML
+	private TableColumn<Event, String> EpriorityCol;
+
+	@FXML
+	private TableColumn<Event, String> EndtimeCol;
 
 	public Summary(GUI gui) throws IOException {
 		// this.gui = gui;
@@ -88,21 +87,27 @@ public class Summary extends StackPane {
 
 	public void display(ArrayList<Task> eventList) {
 		ObservableList<Task> tasks = FXCollections.observableArrayList();
-		ObservableList<Task> events = FXCollections.observableArrayList();
+		ObservableList<Event> events = FXCollections.observableArrayList();
 		for (int i = 0; i < eventList.size(); i++) {
-			if (eventList.get(i).getId().contains("t")) {
+			/*if (eventList.get(i).getId().contains("t")) {
 				tasks.add(eventList.get(i));
 			} else {
-				events.add(eventList.get(i));
+				Event event = (Event) eventList.get(i);
+				events.add(event);
+			}*/
+			if(eventList.get(i) instanceof Event) {
+				events.add((Event)eventList.get(i));
+			} else {
+				tasks.add((Task) eventList.get(i));
 			}
 		}
 		setTaskColumns(tasks);
 		setEventColumns(events);
-		updateStyle(priorityCol);
-		updateStyle(EpriorityCol);
+		updateTaskStyle(priorityCol);
+		updateEventStyle(EpriorityCol);
 	}
 
-	private void updateStyle(TableColumn<Task, String> col) {
+	private void updateTaskStyle(TableColumn<Task, String> col) {
 		// update the colour for high-priority task and done task
 		col.setCellFactory(new Callback<TableColumn<Task, String>, TableCell<Task, String>>() {
 			@Override
@@ -123,6 +128,49 @@ public class Summary extends StackPane {
 						Logic logic = Logic.getInstance();
 						TableRow currentRow = getTableRow();
 						Task currentTask = currentRow == null ? null : (Task) currentRow.getItem();
+						if (item != null) {
+							if (currentTask.getPriority().toLowerCase().contains("high")) {
+								this.getTableRow().getStyleClass().add(PRIORITY_HIGH_STYLE);
+							} else if (currentTask.getPriority().toLowerCase().contains("med")) {
+								this.getTableRow().getStyleClass().add(PRIORITY_MED_STYLE);
+							}
+							if (currentTask.isTaskComplete()) {
+								this.getTableRow().getStyleClass().add(COMPLETED_TASK_STYLE);
+							}
+							if (currentTask.isOverdue()) {
+								this.getTableRow().getStyleClass().add(OVERDUE_STYLE);
+							}
+							if (logic.checkForClashes(currentTask)) {
+								this.getTableRow().getStyleClass().add(CLASH_STYLE);
+							}
+						}
+					}
+				};
+			}
+		});
+	}
+
+	private void updateEventStyle(TableColumn<Event, String> col) {
+		// update the colour for high-priority task and done task
+		col.setCellFactory(new Callback<TableColumn<Event, String>, TableCell<Event, String>>() {
+			@Override
+			public TableCell<Event, String> call(TableColumn<Event, String> priority) {
+				return new TableCell<Event, String>() {
+
+					@Override
+					public void updateItem(final String item, final boolean empty) {
+						super.updateItem(item, empty);
+
+						cleanCurrentStyle(this.getTableRow());
+
+						addStyle(item);
+					}
+
+					// update the item and set a custom style if necessary
+					private void addStyle(final String item) {
+						Logic logic = Logic.getInstance();
+						TableRow currentRow = getTableRow();
+						Task currentTask = currentRow == null ? null : (Event) currentRow.getItem();
 						if (item != null) {
 							if (currentTask.getPriority().toLowerCase().contains("high")) {
 								this.getTableRow().getStyleClass().add(PRIORITY_HIGH_STYLE);
@@ -175,13 +223,14 @@ public class Summary extends StackPane {
 		priorityCol.setCellValueFactory(new PropertyValueFactory<Task, String>("priority"));
 	}
 
-	private void setEventColumns(ObservableList<Task> events) {
+	private void setEventColumns(ObservableList<Event> events) {
 		eventTable.setItems(events);
-		EIDCol.setCellValueFactory(new PropertyValueFactory<Task, String>("id"));
-		EtimeCol.setCellValueFactory(new PropertyValueFactory<Task, String>("endDate"));
-		EtitleCol.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
-		EcategoryCol.setCellValueFactory(new PropertyValueFactory<Task, String>("category"));
-		EnoteCol.setCellValueFactory(new PropertyValueFactory<Task, String>("notesNo"));
-		EpriorityCol.setCellValueFactory(new PropertyValueFactory<Task, String>("priority"));
+		EIDCol.setCellValueFactory(new PropertyValueFactory<Event, String>("id"));
+		EtimeCol.setCellValueFactory(new PropertyValueFactory<Event, String>("startDate"));
+		EndtimeCol.setCellValueFactory(new PropertyValueFactory<Event, String>("endDate"));
+		EtitleCol.setCellValueFactory(new PropertyValueFactory<Event, String>("description"));
+		EcategoryCol.setCellValueFactory(new PropertyValueFactory<Event, String>("category"));
+		EnoteCol.setCellValueFactory(new PropertyValueFactory<Event, String>("notesNo"));
+		EpriorityCol.setCellValueFactory(new PropertyValueFactory<Event, String>("priority"));
 	}
 }

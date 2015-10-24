@@ -6,10 +6,10 @@
 	-fx-text-alignment: center; 
 }	
 
-/* .list-cell {
+.table-cell {
   -fx-font: 10.0pt "Arial";
   -fx-alignment: center ;
-}	*/
+}	
 
 .clash { 
   -fx-control-inner-background: palevioletred;
@@ -50,4 +50,8 @@
 
 .overdue .text {
 	 -fx-fill: black;
+}
+
+.autofill-text {
+    -fx-skin: "np.com.ngopal.control.AutoFillTextBoxSkin";
 }
