@@ -6,7 +6,8 @@ import org.json.simple.JSONObject;
 
 public class DisplayCommand extends Command {
 
-	private static final String MESSAGE_DISPLAY_ALL = "Displaying All";
+	private static final String MESSAGE_DISPLAY_ALL = "Displayed all items";
+	private static final String MESSAGE_DISPLAY =  "Displayed: %1$s";
 	
 	private static final String CONTENT_EMPTY = "";
 	
@@ -18,13 +19,12 @@ public class DisplayCommand extends Command {
 	public Feedback execute() {
 		ArrayList<Task> filteredTasks = new ArrayList<Task>();
 		String feedbackString = CONTENT_EMPTY;
-		if(_content.equals(CONTENT_EMPTY)) {
-			//displayAll(filteredTasks, feedbackString); Note: this method does not pass the data back to execute()
+		if (_content.equals(CONTENT_EMPTY)) {
 			feedbackString = MESSAGE_DISPLAY_ALL;
 			filteredTasks = _parse.convertToTaskArray(_store.entries_);
-			log.info("Display all items");
+			log.info(MESSAGE_DISPLAY_ALL);
 		} else {
-			feedbackString = "Displaying: " + _content;
+			feedbackString = String.format(MESSAGE_DISPLAY, _content);
 			String condition = null;
 			String[] criteria = _content.split(", ");
 			filteredTasks = displaySelectedItems(condition, criteria);

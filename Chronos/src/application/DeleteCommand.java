@@ -18,7 +18,7 @@ public class DeleteCommand extends Command {
 	@Override
 	public Feedback execute() {
 		String feedbackString = null;
-		if(_content!="") {
+		if (_content != EMPTY) {
 			_store.storeTemp();
 			deleteItem();
 			feedbackString = String.format(FEEDBACK_MESSAGE, _content);
@@ -33,7 +33,7 @@ public class DeleteCommand extends Command {
 	private void deleteItem() {
 		for (int i = 0; i < _store.entries_.size(); i++) {
 			JSONObject entry = (JSONObject) _store.entries_.get(i);
-			if (entry.get("id").equals(_content)) {
+			if (entry.get(_parse.JSON_ID).equals(_content)) {
 				_deletedEntry = (JSONObject) _store.entries_.remove(i);
 				break;
 			}

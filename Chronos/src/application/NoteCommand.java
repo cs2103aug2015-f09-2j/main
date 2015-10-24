@@ -21,9 +21,9 @@ public class NoteCommand extends Command {
 	@Override
 	public Feedback execute() {
 		String feedbackString = null;
-		String[] noteDetails = _content.split(", ");
+		String[] noteDetails = _content.split(_parse.CONTENT_SEPARATOR);
 		_id = findEntry(noteDetails[0]);
-		if(_id > -1) {
+		if (_id > -1) {
 			_store.storeTemp();
 			Task aTask = _parse.retrieveTask(noteDetails[0], _store.entries_);
 			aTask.addNote(noteDetails[1]); //defend this

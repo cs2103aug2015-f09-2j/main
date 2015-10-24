@@ -40,7 +40,7 @@ public class AddCommand extends Command {
 	
 	private Task createTaskOrEvent() throws ParseException {
 		Task createdItem = _parse.createItem(_content);
-		if(createdItem instanceof Event) {
+		if (createdItem instanceof Event) {
 			createdItem.setId(_store.getEventId());
 		} else {
 			createdItem.setId(_store.getTaskId());
@@ -51,7 +51,7 @@ public class AddCommand extends Command {
 	@Override
 	public Feedback undo() {
 		DeleteCommand undoAdd = new DeleteCommand(_createdItemID);
-		if(_createdItemID.contains("e")){
+		if (_createdItemID.contains(Event.ID_HEADER)){
 			_store.decreaseEventID();
 		} else {
 			_store.decreaseTaskID();

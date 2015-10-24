@@ -14,7 +14,7 @@ public class ViewCommand extends Command {
 	public Feedback execute() {
 		ArrayList<Task> data = null;
 		String feedbackString = null;
-		if(_content!="") {
+		if(_content != EMPTY) {
 			data = new ArrayList<Task>();
 			Task selectedTask = _parse.retrieveTask(_content, _store.entries_);
 			data.add(selectedTask);

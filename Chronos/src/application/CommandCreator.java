@@ -4,6 +4,10 @@ import java.util.Stack;
 
 public class CommandCreator {
 	
+	//Messages
+	private static final String ERROR_NO_UNDO = "Error: No command to undo.";
+	private static final String ERROR_NO_REDO = "Error: No command to redo.";
+	
 	//Command Strings
 	private static final String COMMAND_ADD_ADD = "add";
 	private static final String COMMAND_ADD_PLUS = "+";
@@ -112,19 +116,28 @@ public class CommandCreator {
 	}
 	
 	private Feedback redoCommand() {
-		Command latestCommand = _undoneCommands.pop();
-		_pastCommands.push(latestCommand);
-		return latestCommand.execute();
+		if (_undoneCommands.isEmpty()) {
+			Command latestCommand = _undoneCommands.pop();
+			_pastCommands.push(latestCommand);
+			return latestCommand.execute();
+		} else {
+			return new Feedback(ERROR_NO_REDO);
+		}
 	}
 
 	private Feedback undoLatestCommand() {
-		Command latestCommand = _pastCommands.pop();
-		_undoneCommands.push(latestCommand);
-		return latestCommand.undo();
+		if (_pastCommands.isEmpty()) {
+			Command latestCommand = _pastCommands.pop();
+			_undoneCommands.push(latestCommand);
+			return latestCommand.undo();
+		} else {
+			return new Feedback(ERROR_NO_UNDO);
+		}
+		
 	}
 
 	private String getCommandContent(String[] inputs) {
-		try{
+		try {
 			return inputs[COMMAND_INDEX_CONTENT];
 		} catch (ArrayIndexOutOfBoundsException e) {
 			return CONTENT_EMPTY;

@@ -25,7 +25,7 @@ public class DoneCommand extends Command {
 	public Feedback execute() {
 		String feedbackString = null;
 		Feedback feedback;
-		if(_content!="") {
+		if (_content != EMPTY) {
 			feedbackString = String.format(FEEDBACK_MESSAGE, _content);
 			_completedTask = _parse.retrieveTask(_content, _store.entries_);
 			_completedTask.markTaskAsDone(true);
@@ -44,7 +44,7 @@ public class DoneCommand extends Command {
 	@Override
 	public Feedback undo() {
 		_completedTask.markTaskAsDone(false); 
-		String content = _completedTask.getId()+ UPDATE_STRING + _completedTask.isTaskComplete();
+		String content = _completedTask.getId() + UPDATE_STRING + _completedTask.isTaskComplete();
 		Feedback feedback = new UpdateCommand(content).execute();
 		return feedback;
 	}
