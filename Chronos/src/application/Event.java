@@ -4,7 +4,7 @@ import java.text.ParseException;
 
 public class Event extends Task {
 
-	private static final String ID_HEADER = "e";	
+	static final String ID_HEADER = "e";	
 	
 	private String _startDate;
 	

@@ -8,6 +8,9 @@ public class DirectoryCommand extends Command {
 	//Constant Strings
 	protected static final String FEEDBACK_MESSAGE =  "Set Directory to: %1$s";
 	
+	protected static final String LOG_SAVED_NEW = "Saved new Directory";
+	protected static final String LOG_NO_DIRECTORY = "No Directory specified";
+	
 	public DirectoryCommand(String content) {
 		super(content);
 	}
@@ -15,12 +18,12 @@ public class DirectoryCommand extends Command {
 	@Override
 	public Feedback execute() {
 		String feedbackString = null;
-		if(_content!="") {
+		if (_content != EMPTY) {
 			_previousPath = _store.changeDirectory(_content); 
-			log.info("replacing old directory with new directory");
+			log.info(LOG_SAVED_NEW);
 			feedbackString = String.format(FEEDBACK_MESSAGE, _content); 
 		} else {
-			log.warning("No new directory");
+			log.warning(LOG_NO_DIRECTORY );
 			feedbackString = ERROR_NO_CONTENT;
 		}
 		return new Feedback(feedbackString);

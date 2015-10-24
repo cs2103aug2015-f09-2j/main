@@ -7,7 +7,7 @@ import org.json.simple.JSONObject;
 public class SearchCommand extends Command {
 
 	//Constant Strings
-	protected static final String FEEDBACK_MESSAGE =  "Searching for: %1$s";
+	protected static final String FEEDBACK_MESSAGE = "Searching for: %1$s";
 	private static final String ID = "id"; //note: collate JSON strings into just one class for easy referencing
 	
 	public SearchCommand(String content) {
@@ -22,7 +22,7 @@ public class SearchCommand extends Command {
 			String entry = _store.entries_.get(i).toString();
 			JSONObject entryObject = (JSONObject) _store.entries_.get(i);
 			if (entry.contains(_content)) {
-			    filteredTasks.add(_parse.retrieveTask(entryObject.get("id").toString(),_store.entries_));
+			    filteredTasks.add(_parse.retrieveTask(entryObject.get(_parse.JSON_ID).toString(),_store.entries_));
 			}
 		}
 		String feedbackString = String.format(FEEDBACK_MESSAGE, _content);

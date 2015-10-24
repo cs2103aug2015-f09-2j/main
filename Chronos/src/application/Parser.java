@@ -22,7 +22,7 @@ public class Parser {
 	private static final String EXCEPTION_NO_DESC = "No Task Description";
 	
 	//Strings for createItem
-	private static final String CONTENT_SEPARATOR = ", ";
+	static final String CONTENT_SEPARATOR = ", ";
 	private static final String CONTENT_EMPTY = "";
 	
 	//Strings for parseUserInput()

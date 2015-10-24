@@ -9,7 +9,7 @@ public class InitializeCommand extends DirectoryCommand {
 	@Override
 	public Feedback execute() {
 		String feedbackString = null;
-		if(_content!="") {
+		if( _content != EMPTY) {
 			_store.initialize(_content);
 			feedbackString = String.format(FEEDBACK_MESSAGE, _content); 
 		} else {
