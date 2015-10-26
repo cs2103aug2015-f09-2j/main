@@ -26,6 +26,7 @@ public class Summary extends StackPane {
 	private static final String COMPLETED_TASK_STYLE = "done";
 	private static final String OVERDUE_STYLE = "overdue";
 	private static final String CLASH_STYLE = "clash";
+	private static final String HAVE_NOTES = "haveNotes";
 
 	@FXML
 	private TableView<Task> summaryTable;
@@ -143,6 +144,14 @@ public class Summary extends StackPane {
 							if (logic.checkForClashes(currentTask)) {
 								this.getTableRow().getStyleClass().add(CLASH_STYLE);
 							}
+							
+							if(currentTask.getNotesNo()>0) {
+								this.getTableRow().getStyleClass().add(HAVE_NOTES);
+							}
+							
+							if(currentTask.isOverdue()&&currentTask.getNotesNo()>0) {
+								this.getTableRow().getStyleClass().add("overdueHaveNotes");
+							}
 						}
 					}
 				};
@@ -168,6 +177,7 @@ public class Summary extends StackPane {
 
 					// update the item and set a custom style if necessary
 					private void addStyle(final String item) {
+						
 						Logic logic = Logic.getInstance();
 						TableRow currentRow = getTableRow();
 						Task currentTask = currentRow == null ? null : (Event) currentRow.getItem();
@@ -185,6 +195,13 @@ public class Summary extends StackPane {
 							}
 							if (logic.checkForClashes(currentTask)) {
 								this.getTableRow().getStyleClass().add(CLASH_STYLE);
+							}	
+							if(currentTask.getNotesNo()>0) {
+								this.getTableRow().getStyleClass().add(HAVE_NOTES);
+							}
+							
+							if(currentTask.isOverdue()&&currentTask.getNotesNo()>0) {
+								this.getTableRow().getStyleClass().add("overdueHaveNotes");
 							}
 						}
 					}

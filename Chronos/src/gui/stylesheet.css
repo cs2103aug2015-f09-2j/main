@@ -45,13 +45,33 @@
 }
 
 .overdue {
-	-fx-control-inner-background: goldenrod;
+	/*-fx-control-inner-background: goldenrod;*/
+	
+	-fx-background-image: url("./exclamation.png");
+	-fx-background-size: 20 25;
+	-fx-background-repeat: stretch; 
+	-fx-background-position: 205 center;
 }
 
 .overdue .text {
-	 -fx-fill: black;
+	 -fx-font-weight: bold;
+	 -fx-font-style:italic; 
 }
 
 .autofill-text {
     -fx-skin: "np.com.ngopal.control.AutoFillTextBoxSkin";
+}
+
+.haveNotes  {
+	-fx-background-image: url("./asterisk.png");
+	-fx-background-size: 15 15;
+	-fx-background-repeat: stretch; 
+	-fx-background-position: 475 center;
+}
+
+.overdueHaveNotes {
+	-fx-background-image: url("./exclamation.png"), url("./asterisk.png");
+	-fx-background-size: 20 25, 15 15;
+	-fx-background-repeat: stretch; 
+	-fx-background-position: 205 center, 475 center;
 }
