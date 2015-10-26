@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 public class Storage {
@@ -24,8 +25,8 @@ public class Storage {
 	private static final String PREFS_EVENT_COUNT = "event count";
 	private static final String DEFAULT_DIRECTORY = "/chronos_storage.txt";
 	private static final String DEFAULT_VALUE = "none";
-	private static final int  DEFAULT_TASK_COUNT = 0;
-	private static final int  DEFAULT_EVENT_COUNT = 0;
+	private static  int  DEFAULT_TASK_COUNT = 0;
+	private static  int  DEFAULT_EVENT_COUNT = 0;
 	
 	private static Logger log = Logger.getLogger("StorageLog");
 	
@@ -77,6 +78,7 @@ public class Storage {
 			if(!file.createNewFile()){ 
 				//Read in the content of an existing file
 				getContent();
+				getMaxId();
 				log.info(String.format(MESSAGE_FILE_OPENED, fileDirectory_));
 
 			}else{
@@ -85,6 +87,29 @@ public class Storage {
 		} catch (IOException e) {
 			log.warning(MESSAGE_INVALID_FILE);
 		}
+	}
+	
+	private void getMaxId(){
+		String id;
+		int taskId, eventId;
+		JSONObject anEntry;
+		for (int i = 0; i<entries_.size();i++){
+			anEntry = (JSONObject)entries_.get(i);
+			id = (String) anEntry.get("id");
+			if (id.charAt(0)=='t'){
+				taskId = Integer.parseInt(id.substring(1));
+				if (taskId>DEFAULT_TASK_COUNT){
+					DEFAULT_TASK_COUNT = taskId;
+				}
+			}else{
+				eventId = Integer.parseInt(id.substring(1));
+				if (eventId>DEFAULT_EVENT_COUNT){
+					DEFAULT_EVENT_COUNT = eventId;
+				}
+			}
+		}
+		_userPrefs.putInt(PREFS_TASK_COUNT, DEFAULT_TASK_COUNT);
+		_userPrefs.putInt(PREFS_EVENT_COUNT, DEFAULT_EVENT_COUNT);
 	}
 	
 	private void getContent(){
