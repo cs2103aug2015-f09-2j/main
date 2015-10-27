@@ -26,6 +26,9 @@ public class Storage {
 	private static final String PREFS_EVENT_COUNT = "event count";
 	private static final String DEFAULT_DIRECTORY = "/chronos_storage.txt";
 	private static final String DEFAULT_VALUE = "none";
+	private static final char TASK_PREFIX = 't';
+	private static final char EVENT_PREFIX = 'e';
+	private static final int ERROR_TYPE_ID = 0;
 	private static  int  DEFAULT_TASK_COUNT = 0;
 	private static  int  DEFAULT_EVENT_COUNT = 0;
 	
@@ -79,6 +82,7 @@ public class Storage {
 			if(!file.createNewFile()){ 
 				//Read in the content of an existing file
 				getContent(fileDirectory_);
+				checkValidFormat();
 				getMaxId();
 				log.info(String.format(MESSAGE_FILE_OPENED, fileDirectory_));
 
@@ -90,33 +94,44 @@ public class Storage {
 		}
 	}
 	
-	private void getMaxId(){
+	//throws exception if the JSON format is incorrect i.e. 
+	private void checkValidFormat(){
+		JSONObject anEntry;
+		for (int i = 0; i<entries_.size();i++){
+			anEntry = (JSONObject)entries_.get(i);
+			//boolean a = anEntry.has("haha");
+		}
+	}
+	
+	private void getMaxId() throws ParseException{
 		String id;
 		int taskId, eventId;
 		JSONObject anEntry;
 		for (int i = 0; i<entries_.size();i++){
 			anEntry = (JSONObject)entries_.get(i);
 			id = (String) anEntry.get("id");
-			if (id.charAt(0)=='t'){
+			if (id.charAt(0)==TASK_PREFIX){
 				taskId = Integer.parseInt(id.substring(1));
 				if (taskId>DEFAULT_TASK_COUNT){
 					DEFAULT_TASK_COUNT = taskId;
 				}
-			}else{
+			}else if(id.charAt(0)==EVENT_PREFIX){
 				eventId = Integer.parseInt(id.substring(1));
 				if (eventId>DEFAULT_EVENT_COUNT){
 					DEFAULT_EVENT_COUNT = eventId;
 				}
+			}else{
+				throw new ParseException(ERROR_TYPE_ID);
 			}
 		}
 		_userPrefs.putInt(PREFS_TASK_COUNT, DEFAULT_TASK_COUNT);
 		_userPrefs.putInt(PREFS_EVENT_COUNT, DEFAULT_EVENT_COUNT);
 	}
 	
+	//throws exception if the file is not in JSON format
 	public void getContent(String fileDirectory) throws  ParseException, IOException{
 		JSONParser jsonParser = new JSONParser();
 		entries_ = (JSONArray)jsonParser.parse(new FileReader(fileDirectory+DEFAULT_DIRECTORY ));
-
 	}
 	
 	//to be called before an add, delete, update i.e. commands that will
@@ -158,11 +173,6 @@ public class Storage {
 		return temp_fileDirectory_;
 	}
 	
-	//to be called by undo/redo commands that undo/redo cd commands
-	//Do we still need this?
-	public void swapFile(){
-		changeDirectory(temp_fileDirectory_);
-	}
 	
 	private void writeToFile(){
 		try{
