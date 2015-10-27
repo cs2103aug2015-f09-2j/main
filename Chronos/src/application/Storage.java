@@ -1,6 +1,7 @@
 package application;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -77,14 +78,14 @@ public class Storage {
 		try {
 			if(!file.createNewFile()){ 
 				//Read in the content of an existing file
-				getContent();
+				getContent(fileDirectory_);
 				getMaxId();
 				log.info(String.format(MESSAGE_FILE_OPENED, fileDirectory_));
 
 			}else{
 				log.info(String.format(MESSAGE_FILE_CREATED, fileDirectory_));
 			}
-		} catch (IOException e) {
+		} catch (IOException | ParseException e) {
 			log.warning(MESSAGE_INVALID_FILE);
 		}
 	}
@@ -112,13 +113,10 @@ public class Storage {
 		_userPrefs.putInt(PREFS_EVENT_COUNT, DEFAULT_EVENT_COUNT);
 	}
 	
-	private void getContent(){
+	public void getContent(String fileDirectory) throws  ParseException, IOException{
 		JSONParser jsonParser = new JSONParser();
-		try {
-			entries_ = (JSONArray)jsonParser.parse(new FileReader(fileDirectory_+DEFAULT_DIRECTORY ));
-		} catch (IOException | ParseException e) {
-			log.warning(MESSAGE_INVALID_FILE);
-		}
+		entries_ = (JSONArray)jsonParser.parse(new FileReader(fileDirectory+DEFAULT_DIRECTORY ));
+
 	}
 	
 	//to be called before an add, delete, update i.e. commands that will
