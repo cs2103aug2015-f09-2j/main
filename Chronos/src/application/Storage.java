@@ -26,6 +26,7 @@ public class Storage {
 	private static final String PREFS_EVENT_COUNT = "event count";
 	private static final String DEFAULT_DIRECTORY = "/chronos_storage.txt";
 	private static final String DEFAULT_VALUE = "none";
+	private static final String[] ESSENTIAL_FIELDS = {"id","due date","description","priority","category","complete"};
 	private static final char TASK_PREFIX = 't';
 	private static final char EVENT_PREFIX = 'e';
 	private static final int ERROR_TYPE_ID = 0;
@@ -85,7 +86,6 @@ public class Storage {
 				checkValidFormat();
 				getMaxId();
 				log.info(String.format(MESSAGE_FILE_OPENED, fileDirectory_));
-
 			}else{
 				log.info(String.format(MESSAGE_FILE_CREATED, fileDirectory_));
 			}
@@ -94,12 +94,19 @@ public class Storage {
 		}
 	}
 	
-	//throws exception if the JSON format is incorrect i.e. 
-	private void checkValidFormat(){
+	//throws exception if the JSON format is incorrect i.e. does not contain the essential fields
+	public void checkValidFormat() throws ParseException{
 		JSONObject anEntry;
 		for (int i = 0; i<entries_.size();i++){
 			anEntry = (JSONObject)entries_.get(i);
-			//boolean a = anEntry.has("haha");
+			String key;
+			//"id" field will be tested in getMaxId method, so there is no need to check it here
+			for(int j = 1; j<ESSENTIAL_FIELDS.length; j++){
+				key = ESSENTIAL_FIELDS[j];
+				if(anEntry.get(key)==null){
+					throw new ParseException(j);
+				}
+			}			
 		}
 	}
 	

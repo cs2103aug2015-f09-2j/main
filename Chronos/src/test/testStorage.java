@@ -1,12 +1,12 @@
 package test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+
 import application.CommandCreator;
 import application.Storage;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.junit.Before;
 import org.junit.Test;
 
 public class testStorage {
@@ -14,17 +14,13 @@ public class testStorage {
 	JSONArray entries;
 	CommandCreator creator = new CommandCreator();
 
-	@Before
-	public void setUp(){
-	
-	}
-	
 	/*
 	 * Test reading in of files
-	 * partitions: no content, some content, lots of content
+	 * partitions: valid, boundaries: no content, some content, lots of content
+	 * 				   invalid, boundaries: not JSON format, incorrect JSON format
 	 */
 	@Test
-	//test boundary case for the "no content" partition
+	//test boundary case of "no content" 
 	public void testReadEmpty(){
 		creator.executeInitializeCommand("src/test/testFiles/testEmpty");
 		store = Storage.getInstance();
@@ -32,19 +28,19 @@ public class testStorage {
 		assertEquals(entries.size(), 0);
 	}
 	@Test
-	//test boundary case for the "some content" partition
+	//test boundary case of "some content" 
 	public void testReadSome() {	
-		creator.executeInitializeCommand("src/test/testFiles");
+		creator.executeInitializeCommand("src/test/testFiles/testSome");
 		store = Storage.getInstance();
 		entries = store.entries_;
 		assertEquals(entries.size(), 4);
-		String expected = "{\"due date\":\"today\",\"description\":\"buy milk\",\"id\":\"t1\",\"priority\":\"high\",\"category\":\"personal\",\"complete\":false}";
+		String expected = "{\"due date\":\"24\\/10\\/2015\",\"description\":\"buy milk\",\"id\":\"t3\",\"priority\":\"high\",\"category\":\"personal\",\"complete\":false}";
 		assertEquals(expected, entries.get(2).toString());
 		JSONObject entry = (JSONObject) entries.get(3);
 		assertEquals("sleep", entry.get("description"));
 	}
 	@Test
-	//test boundary case for the "lots of content" partition
+	//test boundary case of "lots of content"
 	public void testReadMany(){
 		creator.executeInitializeCommand("src/test/testFiles/testMany");
 		store = Storage.getInstance();
@@ -54,6 +50,33 @@ public class testStorage {
 		assertEquals(expected, entries.get(60).toString());
 		JSONObject entry = (JSONObject) entries.get(40);
 		assertEquals("sleep", entry.get("description"));
+	}
+	
+	@Test
+	//test boundary case of "not JSON format" 
+	public void testInvalid(){
+		Throwable caught = null;
+		store = Storage.getInstance();
+		try {
+			store.getContent("src/test/testFiles/testInvalid");
+		} catch (Throwable e) {
+			caught = e;
+		}
+		assertSame(org.json.simple.parser.ParseException.class,caught.getClass());	
+	}
+	
+	@Test
+	//test boundary case of "incorrect JSON format"
+	public void testIncorrect(){
+		Throwable caught = null;
+		store = Storage.getInstance();
+		try {
+			store.getContent("src/test/testFiles/testIncorrect");
+			store.checkValidFormat();
+		} catch (Throwable e) {
+			caught = e;
+		}
+		assertSame(org.json.simple.parser.ParseException.class,caught.getClass());	
 	}
 	
 
