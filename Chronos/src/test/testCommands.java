@@ -3,10 +3,12 @@ package test;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.prefs.Preferences;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import application.CommandCreator;
@@ -16,24 +18,35 @@ import application.Storage;
 import application.Task;
 
 public class testCommands {
-	//Remember to undo after testing CRUD commands
+	static //Remember to undo after testing CRUD commands
 	Logic logic = Logic.getInstance();
-	Storage store;
+	static Storage store;
 	JSONArray entries;
-	CommandCreator creator = new CommandCreator();
+	static CommandCreator creator = new CommandCreator();
+	static final String DEFAULT_PATH= "none";
+	static final String PREFS_PATH = "path";
+	static String path;
+	static Preferences userPrefs = Preferences.userNodeForPackage(Storage.class);
+
 	
-	@Before
-	public void setUp(){
+	@BeforeClass
+	public static void setUp(){
+		path = userPrefs.get(PREFS_PATH, DEFAULT_PATH);
 		logic.isSavePresent();
-		creator.executeInitializeCommand("src/test/testFiles");
+		creator.executeInitializeCommand("src/test/testFiles/testCommands");
 		store = Storage.getInstance();
+	}
+	
+	@AfterClass
+	public static void cleanUp(){
+		userPrefs.put(PREFS_PATH, path);
 	}
 
 	@Test
 	public void testAdd() {
 		logic.executeUserCommand("add buy milk, p:high, c:personal, today");
 		entries = store.entries_;
-		JSONObject entry = (JSONObject) entries.get(4);
+		JSONObject entry = (JSONObject) entries.get(5);
 		assertEquals("buy milk",entry.get("description").toString() );
 		logic.executeUserCommand("undo");
 	}
@@ -47,13 +60,6 @@ public class testCommands {
 		logic.executeUserCommand("undo");
 	}
 
-	@Test
-	public void testDelete(){
-		logic.executeUserCommand("delete t4");
-		entries = store.entries_;
-		assertEquals(3, entries.size());
-		logic.executeUserCommand("undo");
-	}
 	
 	@Test
 	public void testSearch(){
