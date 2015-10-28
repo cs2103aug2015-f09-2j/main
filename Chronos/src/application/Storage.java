@@ -25,7 +25,7 @@ public class Storage {
 	private static final String PREFS_TASK_COUNT = "task count";
 	private static final String PREFS_EVENT_COUNT = "event count";
 	private static final String DEFAULT_DIRECTORY = "/chronos_storage.txt";
-	private static final String DEFAULT_VALUE = "none";
+	private static final String DEFAULT_PATH = "none";
 	private static final String[] ESSENTIAL_FIELDS = {"id","due date","description","priority","category","complete"};
 	private static final char TASK_PREFIX = 't';
 	private static final char EVENT_PREFIX = 'e';
@@ -48,8 +48,8 @@ public class Storage {
 	private Storage() { 
 		entries_ = new JSONArray();
 		_userPrefs = Preferences.userNodeForPackage(this.getClass());
-		String savedPath = _userPrefs.get(PREFS_PATH, DEFAULT_VALUE);
-		if (!savedPath.equals(DEFAULT_VALUE)) { 
+		String savedPath = _userPrefs.get(PREFS_PATH, DEFAULT_PATH);
+		if (!savedPath.equals(DEFAULT_PATH)) { 
 			//There's a path, so open it.
 			getFile(savedPath);
 			_isSavePresent = true;
@@ -177,6 +177,7 @@ public class Storage {
 		} else {
 			log.info(String.format(MESSAGE_FILE_SWAPPED, temp_fileDirectory_,fileDirectory_));
 		}
+		_userPrefs.put(PREFS_PATH, newDirectory);
 		return temp_fileDirectory_;
 	}
 	
