@@ -1,7 +1,10 @@
 package application;
 
 public class Note {
-	private String _content = "";
+	
+	private static final String CONTENT_EMPTY = "";
+	
+	private String _content = CONTENT_EMPTY;
 	
 	public Note(String content) {
 		_content = content;

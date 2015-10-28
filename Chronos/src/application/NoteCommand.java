@@ -9,6 +9,7 @@ public class NoteCommand extends Command {
 	//Constant Strings
 	protected static final String FEEDBACK_MESSAGE =  "Added note to %1$s";
 	private static final String FEEDBACK_MESSAGE_UNDO =  "Restored %1$s";
+	private static final String CONTENT_EMPTY = "";
 	
 	//Unique Attributes
 	private JSONObject _oldEntry;
@@ -20,18 +21,13 @@ public class NoteCommand extends Command {
 
 	@Override
 	public Feedback execute() {
-		String feedbackString = null;
+		String feedbackString = CONTENT_EMPTY;
 		String[] noteDetails = _content.split(_parse.CONTENT_SEPARATOR);
 		_id = findEntry(noteDetails[0]);
 		if (_id > -1) {
-			_store.storeTemp();
-			Task aTask = _parse.retrieveTask(noteDetails[0], _store.entries_);
-			aTask.addNote(noteDetails[1]); //defend this
-			_store.entries_.set(_id, _parse.convertToJSON(aTask));
-			_store.storeChanges();
-			feedbackString =  String.format(FEEDBACK_MESSAGE, _content);
+			feedbackString = noteProcess(_id, noteDetails);
 		} else { 
-			assert _content == null;
+			assert _content == CONTENT_EMPTY;
 			log.warning(LOG_NO_ID);
 			feedbackString = LOG_NO_ID;
 		}
@@ -48,6 +44,15 @@ public class NoteCommand extends Command {
 			}
 		}
 		return -1;
+	}
+	
+	private String noteProcess(int id, String[] noteDetails) {
+		_store.storeTemp();
+		Task aTask = _parse.retrieveTask(noteDetails[0], _store.entries_);
+		aTask.addNote(noteDetails[1]); //defend this
+		_store.entries_.set(_id, _parse.convertToJSON(aTask));
+		_store.storeChanges();
+		return String.format(FEEDBACK_MESSAGE, _content);
 	}
 
 	@Override

@@ -9,7 +9,8 @@ public class DisplayCommand extends Command {
 	private static final String MESSAGE_DISPLAY_ALL = "Displayed all items";
 	private static final String MESSAGE_DISPLAY =  "Displayed: %1$s";
 	
-	private static final String CONTENT_EMPTY = "";
+	static final String CONTENT_EMPTY = "";
+	static final String CONTENT_SEPARATOR = ", ";
 	
 	public DisplayCommand(String content) {
 		super(content);
@@ -25,8 +26,8 @@ public class DisplayCommand extends Command {
 			log.info(MESSAGE_DISPLAY_ALL);
 		} else {
 			feedbackString = String.format(MESSAGE_DISPLAY, _content);
-			String condition = null;
-			String[] criteria = _content.split(", ");
+			String condition = CONTENT_EMPTY;
+			String[] criteria = _content.split(CONTENT_SEPARATOR);
 			filteredTasks = displaySelectedItems(condition, criteria);
 		}
 		Feedback feedback = new Feedback(feedbackString, filteredTasks);
