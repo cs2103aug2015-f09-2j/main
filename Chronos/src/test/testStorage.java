@@ -2,17 +2,37 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.util.prefs.Preferences;
+
 import application.CommandCreator;
 import application.Storage;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
 
 public class testStorage {
 	Storage store;
 	JSONArray entries;
 	CommandCreator creator = new CommandCreator();
+	static Preferences userPrefs = Preferences.userNodeForPackage(Storage.class);
+	static final String DEFAULT_PATH= "none";
+	static final String PREFS_PATH = "path";
+	static String path;
+
+	
+	@BeforeClass
+	public static void setUp(){
+		path = userPrefs.get(PREFS_PATH, DEFAULT_PATH);
+	}
+	
+	@AfterClass
+	public static void cleanUp(){
+		userPrefs.put(PREFS_PATH, path);
+	}
 
 	/*
 	 * Test reading in of files
