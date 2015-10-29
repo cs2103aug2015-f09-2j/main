@@ -1,5 +1,6 @@
 package application;
 
+import java.util.EmptyStackException;
 import java.util.Stack;
 
 public class CommandCreator {
@@ -116,24 +117,23 @@ public class CommandCreator {
 	}
 	
 	private Feedback redoCommand() {
-		if (_undoneCommands.isEmpty()) {
+		try {
 			Command latestCommand = _undoneCommands.pop();
 			_pastCommands.push(latestCommand);
 			return latestCommand.execute();
-		} else {
+		} catch (EmptyStackException e) {
 			return new Feedback(ERROR_NO_REDO);
 		}
 	}
 
 	private Feedback undoLatestCommand() {
-		if (_pastCommands.isEmpty()) {
+		try {
 			Command latestCommand = _pastCommands.pop();
 			_undoneCommands.push(latestCommand);
 			return latestCommand.undo();
-		} else {
+		} catch (EmptyStackException e) {
 			return new Feedback(ERROR_NO_UNDO);
 		}
-		
 	}
 
 	private String getCommandContent(String[] inputs) {
