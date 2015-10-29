@@ -66,7 +66,7 @@ public class UpdateCommand extends Command {
 				aSpan = Chronic.parse(value);	
 				value = dateFormat.format(aSpan.getBeginCalendar().getTime());
 			}
-			entry.replace(field,value );
+			entry.replace(field,value);
 		}
 		_store.entries_.set(_id, entry);
 	}

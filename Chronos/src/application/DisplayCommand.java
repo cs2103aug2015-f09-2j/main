@@ -8,8 +8,7 @@ public class DisplayCommand extends Command {
 
 	private static final String MESSAGE_DISPLAY_ALL = "Displayed all items";
 	private static final String MESSAGE_DISPLAY =  "Displayed: %1$s";
-	
-	static final String CONTENT_EMPTY = "";
+	private static final String MESSAGE_DISPLAY_SELECTED = "Displayed selected items";
 	static final String CONTENT_SEPARATOR = ", ";
 	
 	public DisplayCommand(String content) {
@@ -19,14 +18,14 @@ public class DisplayCommand extends Command {
 	@Override
 	public Feedback execute() {
 		ArrayList<Task> filteredTasks = new ArrayList<Task>();
-		String feedbackString = CONTENT_EMPTY;
-		if (_content.equals(CONTENT_EMPTY)) {
+		String feedbackString = EMPTY;
+		if (_content.equals(EMPTY)) {
 			feedbackString = MESSAGE_DISPLAY_ALL;
 			filteredTasks = _parse.convertToTaskArray(_store.entries_);
 			log.info(MESSAGE_DISPLAY_ALL);
 		} else {
 			feedbackString = String.format(MESSAGE_DISPLAY, _content);
-			String condition = CONTENT_EMPTY;
+			String condition = EMPTY;
 			String[] criteria = _content.split(CONTENT_SEPARATOR);
 			filteredTasks = displaySelectedItems(condition, criteria);
 		}
@@ -47,10 +46,10 @@ public class DisplayCommand extends Command {
 			String entry = _store.entries_.get(index).toString();
 			JSONObject entryObject = (JSONObject) _store.entries_.get(index);
 			if(entry.contains(condition)) {
-				filteredTasks.add((Task)_parse.retrieveTask(entryObject.get("id").toString(),_store.entries_));
+				filteredTasks.add((Task)_parse.retrieveTask(entryObject.get(Parser.JSON_ID).toString(),_store.entries_));
 			}
 		}
-		log.info("Display selected items");
+		log.info(MESSAGE_DISPLAY_SELECTED);
 		return filteredTasks;
 	}
 	

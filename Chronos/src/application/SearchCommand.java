@@ -11,6 +11,8 @@ public class SearchCommand extends Command {
 
 	//Constant Strings
 	protected static final String FEEDBACK_MESSAGE = "Searching for: %1$s";
+	private static final String PRIORITY_HEADER = "p:";
+	private static final String CATEGORY_HEADER = "c:";
 	
 	public SearchCommand(String content) {
 		super(content);
@@ -37,9 +39,9 @@ public class SearchCommand extends Command {
 			return true;
 		}
 		for (int i = 1; i < searchCriteria.length; i++) {
-			if (searchCriteria[i].contains("p:")) {
+			if (searchCriteria[i].contains(PRIORITY_HEADER)) {
 				return entryItem.getPriority().equals(searchCriteria[i].substring(2));
-			} else if (searchCriteria[i].contains("c:")) {
+			} else if (searchCriteria[i].contains(CATEGORY_HEADER)) {
 				return entryItem.getCategory().contains(searchCriteria[i].substring(2));
 			} else { 
 				return searchDates(searchCriteria[i], entryItem);
@@ -49,10 +51,10 @@ public class SearchCommand extends Command {
 	}
 
 	private boolean searchDates(String dateString, Task entryItem) {		
-		if (dateString.equalsIgnoreCase("someday")) {
+		if (dateString.equalsIgnoreCase(entryItem.DEFAULT_END_DATE)) {
 			return dateString.equals(entryItem.getEndDate());
 		} else {
-			if(entryItem.getEndDate().equals("someday")) {
+			if(entryItem.getEndDate().equals(entryItem.DEFAULT_END_DATE)) {
 				return false;
 			} else { 
 				Calendar searchEndDate = Chronic.parse(dateString).getBeginCalendar();

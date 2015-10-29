@@ -12,9 +12,7 @@ public class DoneCommand extends Command {
 
 	//Constant Strings
 	private static final String FEEDBACK_MESSAGE =  "Marked %1$s as done.";
-	
 	private static final String LOG_MESSAGE = "Task %1$s marked as done.";
-	
 	protected static final String UPDATE_STRING = ", s:";
 	
 	public DoneCommand(String content) {
