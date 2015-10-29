@@ -3,7 +3,6 @@ package application;
 import java.text.ParseException;
 
 import com.mdimension.jchronic.Chronic;
-import com.mdimension.jchronic.utils.Span;
 
 public class Event extends Task {
 

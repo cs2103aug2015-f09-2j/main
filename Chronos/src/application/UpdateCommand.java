@@ -1,8 +1,15 @@
 package application;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import jdk.internal.org.objectweb.asm.tree.analysis.Value;
+
 import org.json.simple.JSONObject;
+
+import com.mdimension.jchronic.Chronic;
+import com.mdimension.jchronic.utils.Span;
 
 public class UpdateCommand extends Command {
 
@@ -13,6 +20,8 @@ public class UpdateCommand extends Command {
 	//Constant Strings
 	private static final String FEEDBACK_MESSAGE =  "Updated %1$s";
 	private static final String FEEDBACK_MESSAGE_UNDO =  "Restored %1$s";
+	static final String JSON_START_DATE = "start date";
+	static final String JSON_END_DATE = "due date";
 	
 	public UpdateCommand(String content) {
 		super(content);
@@ -47,8 +56,17 @@ public class UpdateCommand extends Command {
 	}
 	
 	private void updateEntry(JSONObject entry, ArrayList<String> updateDetails) {
+		String field,value;
+		Span aSpan;
+		DateFormat dateFormat = new SimpleDateFormat(); 
 		for (int j=1; j<updateDetails.size();j++){
-			entry.replace(updateDetails.get(j), updateDetails.get(++j));
+			field = updateDetails.get(j);
+			value = updateDetails.get(++j);
+			if (field.equals(JSON_END_DATE)||field.equals(JSON_START_DATE)){
+				aSpan = Chronic.parse(value);	
+				value = dateFormat.format(aSpan.getBeginCalendar().getTime());
+			}
+			entry.replace(field,value );
 		}
 		_store.entries_.set(_id, entry);
 	}

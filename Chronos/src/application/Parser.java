@@ -205,8 +205,12 @@ public class Parser {
 					updateDetails.add(JSON_CATEGORY); 
 					updateDetails.add(details[i].substring(2));
 					break;
-				case "d:":
+				case "e:":
 					updateDetails.add(JSON_END_DATE); 
+					updateDetails.add(details[i].substring(2));
+					break;
+				case "b:":
+					updateDetails.add(JSON_START_DATE); 
 					updateDetails.add(details[i].substring(2));
 					break;
 				case "s:":
