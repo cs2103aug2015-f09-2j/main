@@ -38,8 +38,10 @@ public class CommandBarController extends BorderPane {
 	public void onKeyPress(KeyEvent event) throws IOException {
 		if (event.getCode() == KeyCode.ENTER) {
 			gui.handleCommand(commandBar.getText());
-			//System.out.println(commandBar.getText());
 			commandBar.clear();
+		} else if (event.getCode() == KeyCode.SPACE) {
+			//System.out.println(commandBar.getText());
+			gui.handleCommandPattern(commandBar.getText().trim());
 		}
 	}
 	
@@ -57,6 +59,11 @@ public class CommandBarController extends BorderPane {
 		SimpleDateFormat formatedDate = 
 				new SimpleDateFormat ("E dd MMM yyyy");
 		return "TODAY: " + formatedDate.format(date);
+	}
+
+	public void updateCommandBar(String commandPattern) {
+		commandBar.appendText(commandPattern); //edit this
+		commandBar.positionCaret(3);
 	}
 
 }

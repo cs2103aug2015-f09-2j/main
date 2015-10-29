@@ -19,16 +19,16 @@ import javafx.stage.Stage;
 
 public class GUI extends Application {
 
-	private static final String WINDOW_TITLE = "Chronos V0.2";
-	private static final String MESSAGE_WELCOME = "Welcome to Chronos V0.2! Where would you like Chronos to store your tasks and events?";
-	private static final String MESSAGE_LOADED = "Welcome to Chronos V0.2! Add a task to get started.";
+	private static final String WINDOW_TITLE = "Chronos V0.3";
+	private static final String MESSAGE_WELCOME = "Welcome to Chronos V0.3! Where would you like Chronos to store your tasks and events?";
+	private static final String MESSAGE_LOADED = "Welcome to Chronos V0.3! Add a task to get started.";
 
 	private static final String ROOT_LAYOUT_FXML = "RootLayout.fxml";
 
 	private static final int DATA_FIRST = 0;
 
 	private static final int EXIT_NORMAL = 0;
-	private static final String MESSAGE_SET_UP = "Chrons is set up properly";
+	private static final String MESSAGE_SET_UP = "Chronos is set up properly";
 	private static final String MESSAGE_SET_UP_FAIL = "Failed to set up Chrons";
 	private static final String MESSAGE_DETAILED_VIEW_FAIL = "Failed to set up DetailedView Pane";
 	private static final String MESSAGE_SUMMARY_FAIL = "Failed to set up Summary Pane";
@@ -171,5 +171,12 @@ public class GUI extends Application {
 			updateFeedback(logic.executeUserCommand("d")); //Logic: refactor this
 		}
 		commandBarController.displayFeedback(feedback.getMessage());
+	}
+
+	public void handleCommandPattern(String text) {
+		//get command pattern from Logic
+		String commandPattern = " (description), (time), c:(category), p:(priority)"; //Logic.getCommandPattern(text);
+		//display command pattern to Command Bar (or somewhere else)
+		commandBarController.updateCommandBar(commandPattern);
 	}
 }
