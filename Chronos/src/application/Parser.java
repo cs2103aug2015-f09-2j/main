@@ -63,6 +63,10 @@ public class Parser {
 		if(contents[CONTENT_DESC] == CONTENT_EMPTY) {
 			throw new NullPointerException(EXCEPTION_NO_DESC);
 		}
+		return createItem(contents);
+	}
+	
+	private Task createItem(String[] contents) throws ParseException{
 		Task createdItem;
 		if (findEventString(contents) > 0) {
 			createdItem = new Event(contents);
@@ -120,6 +124,10 @@ public class Parser {
 	
 	//Used by the DisplayCommand
 	public ArrayList<Task> convertToTaskArray (JSONArray contents) {
+		return addTaskToList(contents);
+	}
+	
+	private ArrayList<Task> addTaskToList(JSONArray contents) {
 		ArrayList<Task> tasks = new ArrayList<Task>();
 		if (contents != null) {
 			for (int i = 0; i < contents.size(); i++) {
