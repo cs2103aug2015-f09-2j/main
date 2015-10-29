@@ -9,7 +9,6 @@ public class NoteCommand extends Command {
 	//Constant Strings
 	protected static final String FEEDBACK_MESSAGE =  "Added note to %1$s";
 	private static final String FEEDBACK_MESSAGE_UNDO =  "Restored %1$s";
-	private static final String CONTENT_EMPTY = "";
 	
 	//Unique Attributes
 	private JSONObject _oldEntry;
@@ -21,13 +20,13 @@ public class NoteCommand extends Command {
 
 	@Override
 	public Feedback execute() {
-		String feedbackString = CONTENT_EMPTY;
-		String[] noteDetails = _content.split(_parse.CONTENT_SEPARATOR);
+		String feedbackString = EMPTY;
+		String[] noteDetails = _content.split(Parser.CONTENT_SEPARATOR);
 		_id = findEntry(noteDetails[0]);
 		if (_id > -1) {
 			feedbackString = noteProcess(_id, noteDetails);
 		} else { 
-			assert _content == CONTENT_EMPTY;
+			assert _content == EMPTY;
 			log.warning(LOG_NO_ID);
 			feedbackString = LOG_NO_ID;
 		}

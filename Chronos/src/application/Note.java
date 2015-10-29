@@ -2,9 +2,7 @@ package application;
 
 public class Note {
 	
-	private static final String CONTENT_EMPTY = "";
-	
-	private String _content = CONTENT_EMPTY;
+	private String _content = Command.EMPTY;
 	
 	public Note(String content) {
 		_content = content;
