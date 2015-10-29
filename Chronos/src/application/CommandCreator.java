@@ -33,19 +33,17 @@ public class CommandCreator {
 	//Command Patterns
 	private static final String PATTERN_ADD = "add (description), (date), c:(category), p:(priority)";
 	private static final String PATTERN_DELETE = "delete (task/event id)";
-	private static final String PATTERN_DISPLAY = "displays task/events: d";
+	private static final String PATTERN_DISPLAY = "d OR da";
 	private static final String PATTERN_DONE = "done (task/event id)";
-	private static final String PATTERN_NOTE = "note (task/event id)";
-	private static final String PATTERN_UPDATE = "update (task id), (description), p:(priority), c:(category), e:(end date), b:(start date), s:(complete?)"; //flesh this out
-	private static final String PATTERN_SEARCH = "search (description), (date), c:(category), p:(priority)";
+	private static final String PATTERN_NOTE = "note (task/event id), (note)";
+	private static final String PATTERN_UPDATE = "update (task id), (description), p:(priority), c:(category), e:(end date), b:(start date), s:(complete)"; 
+	private static final String PATTERN_SEARCH = "search (search term OR *), (date), c:(category), p:(priority)";
 	private static final String PATTERN_VIEW = "view (task/event id)";
-	private static final String PATTERN_UNDO = "undo a previous action";
-	private static final String PATTERN_REDO = "redo an undone action";
-	private static final String PATTERN_CD = "cd (directory to save)";
-	private static final String PATTERN_EXIT = "exits the program";
-	private static final String PATTERN_UNKNOWN = "unknown command";
-	
-	
+	private static final String PATTERN_UNDO = "Undoes a previous action. Undoable actions: %1$s";
+	private static final String PATTERN_REDO = "Redoes an undone action. Redoable actions: %1$s";
+	private static final String PATTERN_CD = "cd (directory)";
+	private static final String PATTERN_EXIT = "Closes Chronos";
+	private static final String PATTERN_UNKNOWN = "Error: Invalid command";
 		
 	enum COMMAND_TYPE {
 		ADD, CD, DELETE, DISPLAY, DONE, EXIT, NOTE, REDO, SEARCH, UNDO, UNKNOWN, UPDATE, VIEW  
@@ -244,68 +242,90 @@ public class CommandCreator {
 		return new InitializeCommand(path).execute();
 	}
 
-	public static String generateCommandPattern(String commandString) {
+	public static Instruction generateInstructions(String commandString) {
 		COMMAND_TYPE commandType = determineCommandType(commandString);
-		String commandPattern;
+		Instruction commandInstruction = new Instruction();
 		switch (commandType) {
 			
 			case ADD :
-			     commandPattern = PATTERN_ADD;
+			     commandInstruction.setCommandPattern(PATTERN_ADD);
+			     commandInstruction.addToInstructions("Enter a description");
+			     commandInstruction.addToRequiredFields("(description)");
+			     commandInstruction.addToInstructions("Optional fields: date or a date range (ex. today to tomorrow), priority, category");
 			     break;
 		
-			case DELETE :  
-			     commandPattern = PATTERN_DELETE;
+			case DELETE : //Note troubleshoot for invalid ids
+			     commandInstruction.setCommandPattern(PATTERN_DELETE);
+			     commandInstruction.addToInstructions("Type the task or event id that you want to delete.");
+			     commandInstruction.addToRequiredFields("(task/event id)");
 				 break;
 		
-			case DISPLAY : 
-				 commandPattern = PATTERN_DISPLAY;
+			case DISPLAY : //Edit this
+				 commandInstruction.setCommandPattern(PATTERN_DISPLAY);
+				 commandInstruction.addToInstructions("Displays all tasks");
 				 break;
 			
-			case DONE :
-				 commandPattern = PATTERN_DONE;
+			case DONE : 
+				 commandInstruction.setCommandPattern(PATTERN_DONE);
+			     commandInstruction.addToInstructions("Type the task or event id of the completed item.");
+			     commandInstruction.addToRequiredFields("(task/event id)");
 				 break;
 			
 			case NOTE : 
-				 commandPattern = PATTERN_NOTE;
+				 commandInstruction.setCommandPattern(PATTERN_NOTE);
+				 commandInstruction.addToInstructions("Type the task or event id of the item to add the note to.");
+				 commandInstruction.addToRequiredFields("(task/event id)");
+				 commandInstruction.addToInstructions("Type the contents of your note");
+				 commandInstruction.addToRequiredFields("(note contents)");
 				 break;
 	
 			case UPDATE :
-				 commandPattern = PATTERN_UPDATE;
+				commandInstruction.setCommandPattern(PATTERN_UPDATE);
+			     commandInstruction.addToInstructions("Enter the id of the item you want to update.");
+			     commandInstruction.addToRequiredFields("(task/event id)");
+			     commandInstruction.addToInstructions("Enter one or more of the fields you want to update.");
 				 break;
 		
 			case SEARCH :
-				 commandPattern = PATTERN_SEARCH;
+				 commandInstruction.setCommandPattern(PATTERN_SEARCH);
+			     commandInstruction.addToInstructions("Enter a search term, or * if no search term.");
+			     commandInstruction.addToRequiredFields("(search term)");
+			     commandInstruction.addToInstructions("Optional fields: date or a date range (ex. today to tomorrow), priority, category");
 				 break;
 		
 			case VIEW :
-				 commandPattern = PATTERN_VIEW;
+				 commandInstruction.setCommandPattern(PATTERN_VIEW);
+			     commandInstruction.addToInstructions("Enter the id of the item you want to view.");
+			     commandInstruction.addToRequiredFields("(task/event id)");
 				 break;
 			
 			case UNDO :
-				 commandPattern = PATTERN_UNDO;
+				 commandInstruction.setCommandPattern(String.format(PATTERN_UNDO, _pastCommands.size()));
 				 break;
 			
 			case REDO :
-				 commandPattern = PATTERN_REDO;
+				 commandInstruction.setCommandPattern(String.format(PATTERN_REDO, _undoneCommands.size()));
 				 break;
 			
 			case CD :
-				 commandPattern = PATTERN_CD;
+				 commandInstruction.setCommandPattern(PATTERN_CD);
+			     commandInstruction.addToInstructions("Enter the directory you want to save to. (Ex. C:\\Users)");
+			     commandInstruction.addToRequiredFields("(directory)");
 				 break;
 			
 			case EXIT : 
-				 commandPattern = PATTERN_EXIT;
+				 commandInstruction.setCommandPattern(PATTERN_EXIT);
 				 break;
 			
 			case UNKNOWN : 
 				//Fallthrough
 				
 			default :
-				commandPattern = PATTERN_UNKNOWN;
+				commandInstruction.setCommandPattern(PATTERN_UNKNOWN);
 				break;
 		}
 		
-		return commandPattern;
+		return commandInstruction;
 	}
 	
 }

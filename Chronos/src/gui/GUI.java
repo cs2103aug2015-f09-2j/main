@@ -4,9 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-import application.Command;
-import application.CommandCreator;
 import application.Feedback;
+import application.Instruction;
 import application.Logic;
 import application.Task;
 import javafx.application.Application;
@@ -41,6 +40,9 @@ public class GUI extends Application {
 	private static DetailedView detailView = null;
 	private static Logger log = Logger.getLogger("GUILog");
 	private boolean setUp = false;
+	
+	boolean isHandlingCommand = false;
+	private Instruction currentInstruction = null;
 
 	private boolean _isNewUser;
 	private ObservableList<Task> events = FXCollections.observableArrayList();
@@ -174,11 +176,31 @@ public class GUI extends Application {
 	}
 
 	public void handleCommandPattern(String text) {
-		//get command pattern from Logic
-		String commandPattern = Logic.getCommandPattern(text);
-		//display command pattern to Command Bar (ideal)
-		//commandBarController.updateCommandBar(commandPattern);
-		//display to feedback String
-		commandBarController.displayFeedback(commandPattern);
+		currentInstruction = Logic.getCommandInstruction(text);
+		isHandlingCommand = true;
+		handleCommandPattern();
 	}
+
+	public void handleCommandPattern() {
+		//assert Instruction != null
+		
+		//display to feedback String
+		String feedbackString = currentInstruction.getCommandPattern();
+		if (currentInstruction.hasInstructions()) {
+			feedbackString = feedbackString + "\n" + currentInstruction.getNextInstruction();
+		}
+		commandBarController.displayFeedback(feedbackString);
+		
+		//display command pattern to Command Bar (ideal)
+		commandBarController.updateCommandBar(currentInstruction.getNextRequiredField());
+		
+		//if all goes well, go to the next step
+		currentInstruction.nextStep();
+		
+		if(currentInstruction.isFinished()) {
+			isHandlingCommand = false;
+		} 
+	}
+	
+	
 }

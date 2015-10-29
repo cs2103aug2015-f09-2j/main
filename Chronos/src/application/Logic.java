@@ -38,8 +38,9 @@ public class Logic {
 		return _parse.checkForClashes(taskToCheck, _store.entries_);
 	}
 
-	public static String getCommandPattern(String commandString) {
-		String[] inputs = _parse.parseUserContent(commandString);
-		return CommandCreator.generateCommandPattern(inputs[CommandCreator.COMMAND_INDEX_COMMAND]);
+	public static Instruction getCommandInstruction(String commandString) {
+		//String[] inputs = _parse.parseUserContent(commandString);
+		//return CommandCreator.generateInstructions(inputs[CommandCreator.COMMAND_INDEX_COMMAND]);
+		return CommandCreator.generateInstructions(commandString);
 	}
 }

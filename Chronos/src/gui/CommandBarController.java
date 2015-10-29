@@ -16,7 +16,8 @@ public class CommandBarController extends BorderPane {
 
 	private static final String COMMAND_BAR_LAYOUT_FXML = "CommandBarLayout.fxml";
 	private GUI gui;
-
+	private boolean hasAComma = false;
+	
 	@FXML
 	private TextField commandBar;
 	
@@ -36,15 +37,28 @@ public class CommandBarController extends BorderPane {
 	}
 
 	public void onKeyPress(KeyEvent event) throws IOException {
+		commandBar.requestFocus();
+		commandBar.setEditable(true);
 		if (event.getCode() == KeyCode.ENTER) {
 			gui.handleCommand(commandBar.getText());
 			commandBar.clear();
 		} else if (event.getCode() == KeyCode.SPACE) {
-			//System.out.println(commandBar.getText());
-			gui.handleCommandPattern(commandBar.getText().trim());
+			if(!gui.isHandlingCommand && hasOnlyOneWord()) {
+				gui.handleCommandPattern(commandBar.getText().trim());
+			}
+		} else if (event.getCode() == KeyCode.COMMA) {
+			if(gui.isHandlingCommand) {
+				hasAComma = true;
+				gui.handleCommandPattern();
+			} 
 		}
 	}
 	
+	private boolean hasOnlyOneWord() {
+		String[] commands = commandBar.getText().split(" ");
+		return commands.length == 1;
+	}
+
 	public void displayFeedback(String helpingText){
 		feedback.setText(helpingText);
 	}
@@ -61,9 +75,24 @@ public class CommandBarController extends BorderPane {
 		return "TODAY: " + formatedDate.format(date);
 	}
 
-	public void updateCommandBar(String commandPattern) {
-		commandBar.appendText(commandPattern); //edit this
-		commandBar.positionCaret(3);
+	public void updateCommandBar(String requiredField) {
+		if (!requiredField.equals("")) { //add a required field
+			commandBar.requestFocus(); // get focus first
+			commandBar.setEditable(false);
+			String commandText = commandBar.getText();
+			System.out.println(commandText);
+			System.out.println(hasAComma);
+			int startingRange = commandText.length();
+			if (hasAComma) {
+				commandBar.appendText(", " + requiredField);
+				startingRange += 2;
+				hasAComma = false;
+			} else {
+				commandBar.appendText(" " + requiredField); //edit this
+				startingRange++;
+			}
+			commandBar.selectRange(startingRange,  startingRange + requiredField.length());
+		}
 	}
 
 }
