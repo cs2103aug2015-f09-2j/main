@@ -166,7 +166,7 @@ public class Task {
 	}
 	
 	public boolean isOverdue() {
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy hh:mm a");
 		try {
 			Date dueDate;
 			Date currentDate = new Date();
@@ -182,6 +182,9 @@ public class Task {
 				endDate.set(Calendar.SECOND, 59);
 				dueDate = endDate.getTime();
 			}
+			System.out.println(_id);
+			System.out.println(dueDate);
+			System.out.println(currentDate);
 			return (dueDate.compareTo(currentDate) < 0);
 		} catch (ParseException e) {
 			//Case: Someday

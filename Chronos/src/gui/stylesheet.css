@@ -50,7 +50,7 @@
 	-fx-background-image: url("./exclamation.png");
 	-fx-background-size: 20 25;
 	-fx-background-repeat: stretch; 
-	-fx-background-position: 215 center;
+	-fx-background-position: 235 center;
 }
 
 .overdue .text {
@@ -73,5 +73,5 @@
 	-fx-background-image: url("./exclamation.png"), url("./asterisk.png");
 	-fx-background-size: 20 25, 15 15;
 	-fx-background-repeat: stretch; 
-	-fx-background-position: 215 center, 485 center;
+	-fx-background-position: 235 center, 485 center;
 }
