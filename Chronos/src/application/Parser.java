@@ -142,6 +142,10 @@ public class Parser {
 	
 	//Used by Display, Done, Note, Search and View Commands
 	public Task retrieveTask(String taskID, JSONArray entries) {
+		return findTask(taskID, entries);
+	}
+
+	private Task findTask(String taskID, JSONArray entries) {
 		Task selectedTask = null;
 		for(int i = 0; i<entries.size(); i++) {
 			JSONObject anEntry = (JSONObject) entries.get(i);
@@ -152,7 +156,7 @@ public class Parser {
 		}
 		return selectedTask;
 	}
-
+	
 	public Task convertToTask(JSONObject anEntry) {
 		String id = anEntry.get(JSON_ID).toString();
 		String description = anEntry.get(JSON_DESC).toString();
@@ -161,22 +165,32 @@ public class Parser {
 		String category = anEntry.get(JSON_CATEGORY).toString();
 		boolean completion = anEntry.get(JSON_COMPLETE).equals("true");
 		if (anEntry.containsKey(JSON_START_DATE)) {
-			String startDate = anEntry.get(JSON_START_DATE).toString();
-			Event convertedEvent = new Event(id, description, startDate, endDate, priority, category);
-			convertedEvent.markTaskAsDone(completion);
+			Event convertedEvent = (Event) convertToEvent(anEntry, id, description, endDate, priority, category, completion);
 			if (anEntry.containsKey(JSON_NOTES)) {
 				convertedEvent = (Event) updatedTaskNotes(convertedEvent, anEntry);
 			}
 			return convertedEvent;
 		} else {
-			Task convertedTask = new Task(id, description, endDate, priority, category);
-			convertedTask.markTaskAsDone(completion);
+			Task convertedTask = convertTask(id, description, endDate, priority, category, completion);
 			if(anEntry.containsKey(JSON_NOTES)){
 				convertedTask = updatedTaskNotes(convertedTask, anEntry);
 			}
 			return convertedTask;
 		}
 		
+	}
+	
+	private Task convertToEvent(JSONObject anEntry, String id, String description, String endDate, String priority, String category, boolean completion) {
+		String startDate = anEntry.get(JSON_START_DATE).toString();
+		Event convertedEvent = new Event(id, description, startDate, endDate, priority, category);
+		convertedEvent.markTaskAsDone(completion);
+		return convertedEvent;
+	}
+	
+	private Task convertTask(String id, String description, String endDate, String priority, String category, boolean completion) {
+		Task convertedTask = new Task(id, description, endDate, priority, category);
+		convertedTask.markTaskAsDone(completion);
+		return convertedTask;
 	}
 
 	private Task updatedTaskNotes(Task convertedTask, JSONObject anEntry) {
@@ -205,7 +219,7 @@ public class Parser {
 	}
 	
 	//note: for tasks only
-	public ArrayList<String> updateDetailsArray(String[] details, ArrayList<String> updateDetails) {
+	private ArrayList<String> updateDetailsArray(String[] details, ArrayList<String> updateDetails) {
 		updateDetails.add(details[0]);
 		for(int i=1;i<details.length; i++){
 			switch(details[i].substring(0, 2)){
