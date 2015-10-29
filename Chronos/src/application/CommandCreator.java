@@ -29,13 +29,30 @@ public class CommandCreator {
 	private static final String COMMAND_UPDATE = "update";
 	private static final String COMMAND_UPDATE_U = "u";
 	private static final String COMMAND_VIEW = "view";
+	
+	//Command Patterns
+	private static final String PATTERN_ADD = "add (description), (date), c:(category), p:(priority)";
+	private static final String PATTERN_DELETE = "delete (task/event id)";
+	private static final String PATTERN_DISPLAY = "displays task/events: d";
+	private static final String PATTERN_DONE = "done (task/event id)";
+	private static final String PATTERN_NOTE = "note (task/event id)";
+	private static final String PATTERN_UPDATE = "update (task id), (description), p:(priority), c:(category), e:(end date), b:(start date), s:(complete?)"; //flesh this out
+	private static final String PATTERN_SEARCH = "search (description), (date), c:(category), p:(priority)";
+	private static final String PATTERN_VIEW = "view (task/event id)";
+	private static final String PATTERN_UNDO = "undo a previous action";
+	private static final String PATTERN_REDO = "redo an undone action";
+	private static final String PATTERN_CD = "cd (directory to save)";
+	private static final String PATTERN_EXIT = "exits the program";
+	private static final String PATTERN_UNKNOWN = "unknown command";
+	
+	
 		
 	enum COMMAND_TYPE {
 		ADD, CD, DELETE, DISPLAY, DONE, EXIT, NOTE, REDO, SEARCH, UNDO, UNKNOWN, UPDATE, VIEW  
 	};
 	
 	//Strings for command creation
-	private static final int COMMAND_INDEX_COMMAND = 0;
+	public static final int COMMAND_INDEX_COMMAND = 0;
 	private static final int COMMAND_INDEX_CONTENT = 1;
 	private static final String CONTENT_EMPTY = "";
 	
@@ -144,7 +161,7 @@ public class CommandCreator {
 		}
 	}
 
-	private COMMAND_TYPE determineCommandType(String typeString) {
+	private static COMMAND_TYPE determineCommandType(String typeString) {
 		
 		switch(typeString.toLowerCase()) {
 			
@@ -226,7 +243,69 @@ public class CommandCreator {
 	public Feedback executeInitializeCommand(String path) {
 		return new InitializeCommand(path).execute();
 	}
+
+	public static String generateCommandPattern(String commandString) {
+		COMMAND_TYPE commandType = determineCommandType(commandString);
+		String commandPattern;
+		switch (commandType) {
+			
+			case ADD :
+			     commandPattern = PATTERN_ADD;
+			     break;
+		
+			case DELETE :  
+			     commandPattern = PATTERN_DELETE;
+				 break;
+		
+			case DISPLAY : 
+				 commandPattern = PATTERN_DISPLAY;
+				 break;
+			
+			case DONE :
+				 commandPattern = PATTERN_DONE;
+				 break;
+			
+			case NOTE : 
+				 commandPattern = PATTERN_NOTE;
+				 break;
 	
-	
+			case UPDATE :
+				 commandPattern = PATTERN_UPDATE;
+				 break;
+		
+			case SEARCH :
+				 commandPattern = PATTERN_SEARCH;
+				 break;
+		
+			case VIEW :
+				 commandPattern = PATTERN_VIEW;
+				 break;
+			
+			case UNDO :
+				 commandPattern = PATTERN_UNDO;
+				 break;
+			
+			case REDO :
+				 commandPattern = PATTERN_REDO;
+				 break;
+			
+			case CD :
+				 commandPattern = PATTERN_CD;
+				 break;
+			
+			case EXIT : 
+				 commandPattern = PATTERN_EXIT;
+				 break;
+			
+			case UNKNOWN : 
+				//Fallthrough
+				
+			default :
+				commandPattern = PATTERN_UNKNOWN;
+				break;
+		}
+		
+		return commandPattern;
+	}
 	
 }

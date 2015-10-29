@@ -175,8 +175,10 @@ public class GUI extends Application {
 
 	public void handleCommandPattern(String text) {
 		//get command pattern from Logic
-		String commandPattern = " (description), (time), c:(category), p:(priority)"; //Logic.getCommandPattern(text);
-		//display command pattern to Command Bar (or somewhere else)
-		commandBarController.updateCommandBar(commandPattern);
+		String commandPattern = Logic.getCommandPattern(text);
+		//display command pattern to Command Bar (ideal)
+		//commandBarController.updateCommandBar(commandPattern);
+		//display to feedback String
+		commandBarController.displayFeedback(commandPattern);
 	}
 }
