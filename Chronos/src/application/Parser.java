@@ -59,7 +59,7 @@ public class Parser {
 	
 	//Used by the AddCommand
 	public Task createItem(String content) throws ParseException {
-		String[] contents = content.split(CONTENT_SEPARATOR);
+		String[] contents = getContentArray(content); 
 		if(contents[CONTENT_DESC] == CONTENT_EMPTY) {
 			throw new NullPointerException(EXCEPTION_NO_DESC);
 		}
@@ -70,6 +70,10 @@ public class Parser {
 			createdItem = new Task(contents);
 		}
 		return createdItem;
+	}
+	
+	public String[] getContentArray(String content) {
+		return content.split(CONTENT_SEPARATOR);
 	}
 	
 	private int findEventString(String[] contents) {
@@ -141,7 +145,7 @@ public class Parser {
 		return selectedTask;
 	}
 
-	private Task convertToTask(JSONObject anEntry) {
+	public Task convertToTask(JSONObject anEntry) {
 		String id = anEntry.get(JSON_ID).toString();
 		String description = anEntry.get(JSON_DESC).toString();
 		String endDate = anEntry.get(JSON_END_DATE).toString();
