@@ -23,6 +23,8 @@ public class UpdateCommand extends Command {
 	static final String JSON_START_DATE = "start date";
 	static final String JSON_END_DATE = "due date";
 	
+	private static final int LIMIT_ID = -1;
+	
 	public UpdateCommand(String content) {
 		super(content);
 	}
@@ -32,7 +34,7 @@ public class UpdateCommand extends Command {
 		ArrayList<String> updateDetails = _parse.parseUpdateString(_content);
 		String taskID = updateDetails.get(0);
 		_id = findEntry(taskID);
-		if (_id > -1) {
+		if (_id > LIMIT_ID) {
 			_store.storeTemp();
 			JSONObject entry = (JSONObject) _store.entries_.get(_id);
 			updateEntry(entry, updateDetails);
