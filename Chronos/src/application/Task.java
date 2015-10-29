@@ -14,7 +14,7 @@ public class Task {
 	String DEFAULT_END_DATE = "someday";
 	String DEFAULT_PRIORITY = "med";
 	String DEFAULT_CATEGORY = "none";
-	
+	String DEFAULT_STATUS = "false";
 	private static final String ID_HEADER = "t";	
 	
 	protected String _id;
@@ -22,6 +22,7 @@ public class Task {
 	protected String _endDate = DEFAULT_END_DATE;
 	protected String _priority = DEFAULT_PRIORITY;
 	protected String _category = DEFAULT_CATEGORY;
+	protected String _status = DEFAULT_STATUS;
 	protected boolean _isDone = false;
 	protected boolean _isClashing = false;
 	protected ArrayList<Note> _notes = new ArrayList<Note>();
@@ -106,7 +107,10 @@ public class Task {
 	public String getPriority() {
 		return _priority;
 	}
-
+	
+	public String getStatus(){
+		return _status;
+	}
 	void setPriority(String priority) {
 		_priority = priority.trim();
 	}

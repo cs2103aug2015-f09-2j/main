@@ -105,7 +105,7 @@ public class Parser {
 			entry.put(JSON_START_DATE, createdEvent.getStartDate());
 		}
 		entry.put(JSON_END_DATE, createdTask.getEndDate());
-		entry.put(JSON_COMPLETE, createdTask.isTaskComplete());
+		entry.put(JSON_COMPLETE, createdTask.getStatus());
 		if(createdTask.getNotesNo() > 0) {
 			entry.put(JSON_NOTES, convertNotesToJSONArray(createdTask.getNotes()));
 		}
