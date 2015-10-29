@@ -47,6 +47,7 @@ public class Task {
 	protected String manipulateDate(Calendar theDate) throws ParseException {	
 		//set default time
 		DateFormat dateFormat = new SimpleDateFormat(); 
+		
 		return dateFormat.format(theDate.getTime());
 	}
 
@@ -161,7 +162,7 @@ public class Task {
 	}
 	
 	public boolean isOverdue() {
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
 		try {
 			Date dueDate;
 			Date currentDate = new Date();

@@ -27,6 +27,7 @@ public class Summary extends StackPane {
 	private static final String OVERDUE_STYLE = "overdue";
 	private static final String CLASH_STYLE = "clash";
 	private static final String HAVE_NOTES = "haveNotes";
+	private static final String NOTES_OVERDUE = "overdueHaveNotes";
 
 	@FXML
 	private TableView<Task> summaryTable;
@@ -135,9 +136,6 @@ public class Summary extends StackPane {
 							} else if (currentTask.getPriority().toLowerCase().contains("med")) {
 								this.getTableRow().getStyleClass().add(PRIORITY_MED_STYLE);
 							}
-							if (currentTask.isTaskComplete()) {
-								this.getTableRow().getStyleClass().add(COMPLETED_TASK_STYLE);
-							}
 							if (currentTask.isOverdue()) {
 								this.getTableRow().getStyleClass().add(OVERDUE_STYLE);
 							}
@@ -150,7 +148,11 @@ public class Summary extends StackPane {
 							}
 							
 							if(currentTask.isOverdue()&&currentTask.getNotesNo()>0) {
-								this.getTableRow().getStyleClass().add("overdueHaveNotes");
+								this.getTableRow().getStyleClass().add(NOTES_OVERDUE);
+							}
+							if (currentTask.isTaskComplete()) {
+								cleanCurrentStyle(this.getTableRow());
+								this.getTableRow().getStyleClass().add(COMPLETED_TASK_STYLE);
 							}
 						}
 					}
@@ -187,9 +189,7 @@ public class Summary extends StackPane {
 							} else if (currentTask.getPriority().toLowerCase().contains("med")) {
 								this.getTableRow().getStyleClass().add(PRIORITY_MED_STYLE);
 							}
-							if (currentTask.isTaskComplete()) {
-								this.getTableRow().getStyleClass().add(COMPLETED_TASK_STYLE);
-							}
+							
 							if (currentTask.isOverdue()) {
 								this.getTableRow().getStyleClass().add(OVERDUE_STYLE);
 							}
@@ -201,7 +201,11 @@ public class Summary extends StackPane {
 							}
 							
 							if(currentTask.isOverdue()&&currentTask.getNotesNo()>0) {
-								this.getTableRow().getStyleClass().add("overdueHaveNotes");
+								this.getTableRow().getStyleClass().add(NOTES_OVERDUE);
+							}
+							if (currentTask.isTaskComplete()) {
+								cleanCurrentStyle(this.getTableRow());
+								this.getTableRow().getStyleClass().add(COMPLETED_TASK_STYLE);
 							}
 						}
 					}
@@ -226,8 +230,9 @@ public class Summary extends StackPane {
 
 	// clear any custom styles
 	private void cleanCurrentStyle(TableRow tableRow) {
-		tableRow.getStyleClass().remove(PRIORITY_HIGH_STYLE);
-		tableRow.getStyleClass().remove(PRIORITY_MED_STYLE);
+		tableRow.getStyleClass().remove(HAVE_NOTES);
+		tableRow.getStyleClass().remove(NOTES_OVERDUE);
+		tableRow.getStyleClass().remove(OVERDUE_STYLE);
 	}
 
 	private void setTaskColumns(ObservableList<Task> tasks) {
