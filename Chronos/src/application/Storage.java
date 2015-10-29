@@ -112,25 +112,27 @@ public class Storage {
 	
 	private void getMaxId() throws ParseException{
 		String id;
-		int taskId, eventId;
+		int taskId, eventId, maxTaskId = 0, maxEventId = 0;
 		JSONObject anEntry;
 		for (int i = 0; i<entries_.size();i++){
 			anEntry = (JSONObject)entries_.get(i);
 			id = (String) anEntry.get("id");
 			if (id.charAt(0)==TASK_PREFIX){
 				taskId = Integer.parseInt(id.substring(1));
-				if (taskId>DEFAULT_TASK_COUNT){
-					DEFAULT_TASK_COUNT = taskId;
+				if (taskId>maxTaskId){
+					maxTaskId = taskId;
 				}
 			}else if(id.charAt(0)==EVENT_PREFIX){
 				eventId = Integer.parseInt(id.substring(1));
-				if (eventId>DEFAULT_EVENT_COUNT){
-					DEFAULT_EVENT_COUNT = eventId;
+				if (eventId>maxEventId){
+					maxEventId = eventId;
 				}
 			}else{
 				throw new ParseException(ERROR_TYPE_ID);
 			}
 		}
+		DEFAULT_TASK_COUNT = maxTaskId;
+		DEFAULT_EVENT_COUNT = maxEventId;
 		_userPrefs.putInt(PREFS_TASK_COUNT, DEFAULT_TASK_COUNT);
 		_userPrefs.putInt(PREFS_EVENT_COUNT, DEFAULT_EVENT_COUNT);
 	}
