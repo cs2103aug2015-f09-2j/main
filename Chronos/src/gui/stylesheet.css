@@ -28,6 +28,7 @@
 
 .done .text {
 	-fx-strikethrough: true;
+	-fx-fill: gray;
 }
 
 .txtFlow {

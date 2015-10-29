@@ -39,8 +39,6 @@ public class Logic {
 	}
 
 	public static Instruction getCommandInstruction(String commandString) {
-		//String[] inputs = _parse.parseUserContent(commandString);
-		//return CommandCreator.generateInstructions(inputs[CommandCreator.COMMAND_INDEX_COMMAND]);
 		return CommandCreator.generateInstructions(commandString);
 	}
 }

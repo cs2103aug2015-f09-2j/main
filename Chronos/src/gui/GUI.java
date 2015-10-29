@@ -53,7 +53,6 @@ public class GUI extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-
 		try {
 			initRootLayout();
 			initPrimaryStage(primaryStage);
@@ -194,11 +193,11 @@ public class GUI extends Application {
 		//display command pattern to Command Bar (ideal)
 		commandBarController.updateCommandBar(currentInstruction.getNextRequiredField());
 		
-		//if all goes well, go to the next step
 		currentInstruction.nextStep();
 		
 		if(currentInstruction.isFinished()) {
 			isHandlingCommand = false;
+			commandBarController.hasAComma = false;
 		} 
 	}
 	

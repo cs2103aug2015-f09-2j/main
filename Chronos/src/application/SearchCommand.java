@@ -1,5 +1,8 @@
 package application;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -44,13 +47,17 @@ public class SearchCommand extends Command {
 			} else if (searchCriteria[i].contains(CATEGORY_HEADER)) {
 				return entryItem.getCategory().contains(searchCriteria[i].substring(2));
 			} else { 
-				return searchDates(searchCriteria[i], entryItem);
+				try {
+					return searchDates(searchCriteria[i], entryItem);
+				} catch (ParseException e) {
+					return false;
+				}
 			}
 		}
 		return false;
 	}
 
-	private boolean searchDates(String dateString, Task entryItem) {		
+	private boolean searchDates(String dateString, Task entryItem) throws ParseException {		
 		if (dateString.equalsIgnoreCase(entryItem.DEFAULT_END_DATE)) {
 			return dateString.equals(entryItem.getEndDate());
 		} else {
@@ -58,7 +65,9 @@ public class SearchCommand extends Command {
 				return false;
 			} else { 
 				Calendar searchEndDate = Chronic.parse(dateString).getBeginCalendar();
-				Calendar endDate = Chronic.parse(entryItem.getEndDate()).getBeginCalendar();
+				DateFormat dateFormat = new SimpleDateFormat();
+				Calendar endDate = Calendar.getInstance();
+				endDate.setTime(dateFormat.parse(entryItem.getEndDate()));
 				if (isSameDay(searchEndDate, endDate)) {
 					return true;
 				} else if (entryItem instanceof Event) {

@@ -16,7 +16,7 @@ public class CommandBarController extends BorderPane {
 
 	private static final String COMMAND_BAR_LAYOUT_FXML = "CommandBarLayout.fxml";
 	private GUI gui;
-	private boolean hasAComma = false;
+	boolean hasAComma = false;
 	
 	@FXML
 	private TextField commandBar;
@@ -80,8 +80,6 @@ public class CommandBarController extends BorderPane {
 			commandBar.requestFocus(); // get focus first
 			commandBar.setEditable(false);
 			String commandText = commandBar.getText();
-			System.out.println(commandText);
-			System.out.println(hasAComma);
 			int startingRange = commandText.length();
 			if (hasAComma) {
 				commandBar.appendText(", " + requiredField);
