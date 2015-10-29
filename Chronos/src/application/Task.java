@@ -6,6 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import com.mdimension.jchronic.Chronic;
+import com.mdimension.jchronic.utils.Span;
 public class Task {
 	
 	String DEFAULT_END_DATE = "someday";
@@ -35,30 +38,16 @@ public class Task {
 			} else if (contents[i].contains("c:")) {
 				_category = contents[i].substring(2);
 			} else { //date manipulation
-				_endDate = manipulateDate(contents[i]);
+				Span aSpan = Chronic.parse(contents[i]);	
+				_endDate = manipulateDate(aSpan.getBeginCalendar());
 			}
 		}
 	}
 	
-	protected String manipulateDate(String dateString) throws ParseException {
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		Calendar theDate = Calendar.getInstance();
-		String date;
-		if (dateString.equals("today")) { 
-			date = dateFormat.format(theDate.getTime());
-		} else if (dateString.equals("tomorrow")) {
-			theDate.add(Calendar.DATE, 1);
-			date = dateFormat.format(theDate.getTime());
-		} else if (dateString.equals("someday")) {
-			date = dateString;
-		} else {
-			if(dateString.toLowerCase().contains("m")) { //adds time if specified
-				dateFormat = new SimpleDateFormat();
-			}
-			theDate.setTime(dateFormat.parse(dateString));
-			date = dateFormat.format(theDate.getTime());
-		}
-		return date;
+	protected String manipulateDate(Calendar theDate) throws ParseException {	
+		//set default time
+		DateFormat dateFormat = new SimpleDateFormat(); 
+		return dateFormat.format(theDate.getTime());
 	}
 
 	public Task(int id, String description, String endDate, String priority, String category) {

@@ -2,6 +2,9 @@ package application;
 
 import java.text.ParseException;
 
+import com.mdimension.jchronic.Chronic;
+import com.mdimension.jchronic.utils.Span;
+
 public class Event extends Task {
 
 	static final String ID_HEADER = "e";	
@@ -24,8 +27,8 @@ public class Event extends Task {
 				_category = contents[i].substring(2);
 			} else { //date manipulation
 				String[] dates = contents[i].split(DATE_SEPARATOR);
-				_startDate = manipulateDate(dates[0]);
-				_endDate = manipulateDate(dates[1]);
+				_startDate = manipulateDate(Chronic.parse(dates[0]).getBeginCalendar());
+				_endDate = manipulateDate(Chronic.parse(dates[1]).getEndCalendar());
 			}
 		}
 	}
