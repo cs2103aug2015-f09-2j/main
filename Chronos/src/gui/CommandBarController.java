@@ -52,6 +52,11 @@ public class CommandBarController extends BorderPane {
 				gui.handleCommandPattern();
 			} 
 		}
+		
+		if(commandBar.getText().trim().equals("")) {
+			commandBar.clear();
+			gui.isHandlingCommand = false;
+		}
 	}
 	
 	private boolean hasOnlyOneWord() {

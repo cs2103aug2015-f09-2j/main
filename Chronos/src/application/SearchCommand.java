@@ -58,6 +58,7 @@ public class SearchCommand extends Command {
 	}
 
 	private boolean searchDates(String dateString, Task entryItem) throws ParseException {		
+		DateFormat dateFormat = new SimpleDateFormat();
 		if (dateString.equalsIgnoreCase(entryItem.DEFAULT_END_DATE)) {
 			return dateString.equals(entryItem.getEndDate());
 		} else {
@@ -65,13 +66,14 @@ public class SearchCommand extends Command {
 				return false;
 			} else { 
 				Calendar searchEndDate = Chronic.parse(dateString).getBeginCalendar();
-				DateFormat dateFormat = new SimpleDateFormat();
 				Calendar endDate = Calendar.getInstance();
 				endDate.setTime(dateFormat.parse(entryItem.getEndDate()));
 				if (isSameDay(searchEndDate, endDate)) {
 					return true;
 				} else if (entryItem instanceof Event) {
-					Calendar startDate = Chronic.parse(((Event) entryItem).getStartDate()).getBeginCalendar();
+					Calendar startDate = Calendar.getInstance();
+					startDate.setTime(dateFormat.parse(((Event) entryItem).getStartDate()));
+					//Calendar startDate = Chronic.parse(((Event) entryItem).getStartDate()).getBeginCalendar();
 					return isSameDay(searchEndDate, startDate);
 				} else {
 					return false;
