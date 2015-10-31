@@ -35,6 +35,8 @@
 	-fx-font-size: 30;
 	-fx-font-weight: bold;
 	-fx-text-alignment: center;
+	-fx-background-color: white;
+	-fx-border-color: lightgrey;
 }
 
 .listView .text {
@@ -75,4 +77,23 @@
 	-fx-background-size: 20 25, 15 15;
 	-fx-background-repeat: stretch; 
 	-fx-background-position: 235 center, 485 center;
+}
+
+.countdown {
+	-fx-background-image: url("./countdown.jpg");
+	-fx-background-size: 250 260;
+	-fx-background-repeat: stretch;
+	-fx-background-position: center center;
+}
+
+.time1 {
+	-fx-font-size: 29;
+	-fx-font-weight: 900;
+	-fx-font-family: 'Brush Script MT', cursive;
+}
+
+.time2 {
+	-fx-font-size: 23;
+	 -fx-font-weight: bold;
+	-fx-font-family: 'Brush Script MT', cursive;
 }

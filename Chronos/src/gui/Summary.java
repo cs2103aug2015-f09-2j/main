@@ -91,12 +91,6 @@ public class Summary extends StackPane {
 		ObservableList<Task> tasks = FXCollections.observableArrayList();
 		ObservableList<Event> events = FXCollections.observableArrayList();
 		for (int i = 0; i < eventList.size(); i++) {
-			/*if (eventList.get(i).getId().contains("t")) {
-				tasks.add(eventList.get(i));
-			} else {
-				Event event = (Event) eventList.get(i);
-				events.add(event);
-			}*/
 			if(eventList.get(i) instanceof Event) {
 				events.add((Event)eventList.get(i));
 			} else {
