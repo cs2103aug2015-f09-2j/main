@@ -21,7 +21,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-public class DetailedView extends BorderPane {
+public class DetailedViewController extends BorderPane {
 
 	private static final String DETAIL_LAYOUT_FXML = "DetailedViewLayout.fxml";
 	private final String ID = "ID: %1$s ";
@@ -38,7 +38,6 @@ public class DetailedView extends BorderPane {
 	private final String NOT_OVERDUE = "Until";
 	private final String DATE_FORMAT = "dd/MM/yy hh:mm";
 	private final String INDICATOR_TIME = "m";
-	private static final String MESSAGE_DETAILED_VIEW_FAIL = "Failed to set up DetailedView Pane";
 
 	// displayed items
 	@FXML
@@ -53,7 +52,7 @@ public class DetailedView extends BorderPane {
 	@FXML
 	private Label status;
 
-	public DetailedView() throws IOException {
+	public DetailedViewController() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(DETAIL_LAYOUT_FXML));
 		loader.setController(this);
 		loader.setRoot(this);
@@ -92,7 +91,7 @@ public class DetailedView extends BorderPane {
 
 	// add information about the id, time, priority and category to the list
 	// object
-	private void addInfo(Task taskToView, ObservableList<String> items) {
+	private void addInfo(Task taskToView, ObservableList<String> items){
 		items.add(String.format(ID, taskToView.getId()));
 		if (taskToView instanceof Event) {
 			items.add(String.format(START_DATE, ((Event) taskToView).getStartDate()));

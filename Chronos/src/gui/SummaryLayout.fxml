@@ -13,13 +13,12 @@
 				<content>
 					<TableView fx:id="eventTable" prefHeight="500.0" editable="true" fixedCellSize="0.0">
 						<columns>
-							<TableColumn fx:id="EIDCol" prefWidth="35.0" text="ID" />
-							<TableColumn fx:id="EtimeCol" prefWidth="100.0" text="start time" />
-							<TableColumn fx:id="EndtimeCol" prefWidth="100.0" text="end time" />
-							<TableColumn fx:id="EtitleCol" prefWidth="270.0" text="title" />
-							<TableColumn fx:id="EcategoryCol" prefWidth="58.0" text="category" />
-							<TableColumn fx:id="EnoteCol" minWidth="0.0" prefWidth="0.0" text="note" />
-							<TableColumn fx:id="EpriorityCol" minWidth="0.0" prefWidth="0.0" text="priority" />
+							<TableColumn fx:id="EventIDCol" prefWidth="35.0" text="ID" />
+							<TableColumn fx:id="EventTimeCol" prefWidth="100.0" text="start time" />
+							<TableColumn fx:id="EventEndTimeCol" prefWidth="100.0" text="end time" />
+							<TableColumn fx:id="EventTitleCol" prefWidth="270.0" text="title" />
+							<TableColumn fx:id="EventCategoryCol" prefWidth="58.0" text="category" />
+							<TableColumn fx:id="EventPriorityCol" minWidth="0.0" prefWidth="0.0" text="priority" />
 						</columns>
 					</TableView>
 				</content>
@@ -27,14 +26,13 @@
 			
 			<ScrollPane  prefHeight="170.0" minHeight="0.0" vbarPolicy="ALWAYS">
 				<content>
-					<TableView fx:id="summaryTable" prefHeight="700.0" editable="true" fixedCellSize="0.0" styleClass="table">
+					<TableView fx:id="taskTable" prefHeight="700.0" editable="true" fixedCellSize="0.0" styleClass="table">
 						<columns>
-							<TableColumn fx:id="IDCol" prefWidth="35.0" text="ID" />
-							<TableColumn fx:id="timeCol" prefWidth="200.0" text="time" />
-							<TableColumn fx:id="titleCol" prefWidth="270.0" text="title" />
-							<TableColumn fx:id="categoryCol" prefWidth="60.0" text="category" />
-							<TableColumn fx:id="noteCol" minWidth="0.0" prefWidth="0.0" text="note" />
-							<TableColumn fx:id="priorityCol" minWidth="0.0" prefWidth="0.0" text="priority" />
+							<TableColumn fx:id="TaskIDCol" prefWidth="35.0" text="ID" />
+							<TableColumn fx:id="TaskTimeCol" prefWidth="200.0" text="time" />
+							<TableColumn fx:id="TaskTitleCol" prefWidth="270.0" text="title" />
+							<TableColumn fx:id="TaskCategoryCol" prefWidth="60.0" text="category" />
+							<TableColumn fx:id="TaskPriorityCol" minWidth="0.0" prefWidth="0.0" text="priority" />
 						</columns>
 					</TableView>
 				</content>

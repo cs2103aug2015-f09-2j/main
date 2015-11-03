@@ -35,9 +35,9 @@ public class GUI extends Application {
 	private BorderPane rootLayout;
 	private Logic logic;
 	private static CommandBarController commandBarController = null;
-	private static Summary summary = null;
-	private static DetailedView detailView = null;
-	private static FreeTimeDisplay freeTimeDisplay = null;
+	private static SummaryController summary = null;
+	private static DetailedViewController detailView = null;
+	private static FreeTimeDisplayController freeTimeDisplay = null;
 	private static Logger log = Logger.getLogger("GUILog");
 	private boolean setUp = false;
 
@@ -87,7 +87,7 @@ public class GUI extends Application {
 
 	private void addDetailView(ArrayList<Task> data) {
 		try {
-			detailView = new DetailedView();
+			detailView = new DetailedViewController();
 			rootLayout.setCenter(detailView);
 			Task taskToView = data.get(DATA_FIRST);
 			detailView.display(taskToView);
@@ -102,7 +102,7 @@ public class GUI extends Application {
 
 	private void addSummary() {
 		try {
-			summary = new Summary();
+			summary = new SummaryController();
 			rootLayout.setCenter(summary);
 		} catch (IOException e) {
 			log.warning(MESSAGE_SUMMARY_FAIL);
@@ -120,7 +120,7 @@ public class GUI extends Application {
 
 	private void addFreeTimeDisplay() {
 		try {
-			freeTimeDisplay = new FreeTimeDisplay();
+			freeTimeDisplay = new FreeTimeDisplayController();
 			rootLayout.setCenter(freeTimeDisplay);
 			freeTimeDisplay.display();
 		} catch (IOException e) {
