@@ -74,8 +74,7 @@ public class Summary extends StackPane {
 	@FXML
 	private TableColumn<Event, String> EndtimeCol;
 
-	public Summary(GUI gui) throws IOException {
-		// this.gui = gui;
+	public Summary() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(SUMMARY_LAYOUT_FXML));
 		loader.setController(this);
 		loader.setRoot(this);
@@ -83,6 +82,7 @@ public class Summary extends StackPane {
 			loader.load();
 		} catch (IOException e) {
 			e.printStackTrace();
+			throw e;
 		}
 
 	}
@@ -122,7 +122,7 @@ public class Summary extends StackPane {
 					// update the item and set a custom style if necessary
 					private void addStyle(final String item) {
 						Logic logic = Logic.getInstance();
-						TableRow currentRow = getTableRow();
+						TableRow<?> currentRow = getTableRow();
 						Task currentTask = currentRow == null ? null : (Task) currentRow.getItem();
 						if (item != null) {
 							if (currentTask.getPriority().toLowerCase().contains("high")) {
@@ -175,7 +175,7 @@ public class Summary extends StackPane {
 					private void addStyle(final String item) {
 						
 						Logic logic = Logic.getInstance();
-						TableRow currentRow = getTableRow();
+						TableRow<?> currentRow = getTableRow();
 						Task currentTask = currentRow == null ? null : (Event) currentRow.getItem();
 						if (item != null) {
 							if (currentTask.getPriority().toLowerCase().contains("high")) {
@@ -223,7 +223,7 @@ public class Summary extends StackPane {
 	}
 
 	// clear any custom styles
-	private void cleanCurrentStyle(TableRow tableRow) {
+	private void cleanCurrentStyle(TableRow<?> tableRow) {
 		tableRow.getStyleClass().remove(HAVE_NOTES);
 		tableRow.getStyleClass().remove(NOTES_OVERDUE);
 		tableRow.getStyleClass().remove(OVERDUE_STYLE);

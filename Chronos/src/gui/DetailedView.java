@@ -30,6 +30,7 @@ public class DetailedView extends BorderPane {
 	private final String PRIORITY = "Priority: %1$s ";
 	private final String CATEGORY = "Category: %1$s ";
 	private final String NOTES = "Notes: ";
+	private final String NOTE = "      %1$s.  %2$s";
 	private final int HOURS_PER_DAY = 24;
 	private final String HOURS = "%1$s hours";
 	private final String DAYS = "%1$s days ";
@@ -37,6 +38,7 @@ public class DetailedView extends BorderPane {
 	private final String NOT_OVERDUE = "Until";
 	private final String DATE_FORMAT = "dd/MM/yy hh:mm";
 	private final String INDICATOR_TIME = "m";
+	private static final String MESSAGE_DETAILED_VIEW_FAIL = "Failed to set up DetailedView Pane";
 
 	// displayed items
 	@FXML
@@ -51,11 +53,16 @@ public class DetailedView extends BorderPane {
 	@FXML
 	private Label status;
 
-	public DetailedView(GUI gui) throws IOException {
+	public DetailedView() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(DETAIL_LAYOUT_FXML));
 		loader.setController(this);
 		loader.setRoot(this);
-		loader.load();
+		try {
+			loader.load();
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	// GUI will call this method if user want to view certain task
@@ -96,7 +103,7 @@ public class DetailedView extends BorderPane {
 		items.add(String.format(NOTES));
 		ArrayList<String> notes = taskToView.getNotes();
 		for (int i = 1; i <= notes.size(); i++) {
-			items.addAll("      " + i + ". " + notes.get(i));
+			items.add(String.format(NOTE,i,notes.get(i-1)));
 		}
 	}
 
