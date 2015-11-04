@@ -36,7 +36,7 @@ public class DetailedViewController extends BorderPane {
 	private final String DAYS = "%1$s days ";
 	private final String OVERDUE = "Since";
 	private final String NOT_OVERDUE = "Until";
-	private final String DATE_FORMAT = "dd/MM/yy hh:mm";
+	private final String DATE_FORMAT = "dd/MM/yy hh:mm aa";
 	private final String INDICATOR_TIME = "m";
 
 	// displayed items
@@ -136,7 +136,7 @@ public class DetailedViewController extends BorderPane {
 			Date dueDate;
 			Date currentDate = new Date();
 			if (endDate.toLowerCase().contains(INDICATOR_TIME)) { // if deadline has a specified time
-				dateFormat = new SimpleDateFormat();
+				//dateFormat = new SimpleDateFormat();
 				dueDate = dateFormat.parse(endDate);
 			} else { // if deadline has no specified time: put it at 11:59:59
 				dueDate = dateFormat.parse(endDate);
