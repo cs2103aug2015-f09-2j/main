@@ -166,12 +166,12 @@ public class Task {
 	}
 	
 	public boolean isOverdue() {
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy hh:mm");
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm aa");
 		try {
 			Date dueDate;
 			Date currentDate = new Date();
 			if(_endDate.toLowerCase().contains("m")) { //if deadline has a specified time
-				dateFormat = new SimpleDateFormat();
+				//dateFormat = new SimpleDateFormat();
 				dueDate = dateFormat.parse(_endDate);
 			} else { //if deadline has no specified time: put it at 11:59:59
 				dueDate = dateFormat.parse(_endDate);

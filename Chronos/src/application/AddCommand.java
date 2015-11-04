@@ -13,6 +13,9 @@ public class AddCommand extends Command {
 	protected static final String FEEDBACK_MESSAGE =  "Added: %1$s";
 	private static final String FEEDBACK_MISSING_DESC = "Error: A task needs a description";
 	private static final String FEEDBACK_WRONG_DATE = "Error: Invalid Date";
+	private static final String FEEDBACK_WRONG_END_DATE = "Error: end cannot be earlier than start";
+	private static final String MESSAGE_INVALID_END = "End date < start date";
+
 
 	public AddCommand(String content) {
 		super(content);
@@ -33,12 +36,18 @@ public class AddCommand extends Command {
 			feedbackString = FEEDBACK_MISSING_DESC;
 			return new Feedback(feedbackString);
 		} catch (ParseException e) {
+			
 			feedbackString = FEEDBACK_WRONG_DATE;
 			return new Feedback(feedbackString);
-		} 
+		} catch (Exception e) {
+			//if (e.getMessage().equals(MESSAGE_INVALID_END)){
+				feedbackString = FEEDBACK_WRONG_END_DATE;
+				return new Feedback(feedbackString);
+			//}
+		}
 	}
 	
-	private Task createTaskOrEvent() throws ParseException {
+	private Task createTaskOrEvent() throws ParseException,Exception {
 		Task createdItem = _parse.createItem(_content);
 		if (createdItem instanceof Event) {
 			createdItem.setId(_store.getEventId());

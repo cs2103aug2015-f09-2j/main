@@ -58,7 +58,7 @@ public class Parser {
 	}
 	
 	//Used by the AddCommand
-	public Task createItem(String content) throws ParseException {
+	public Task createItem(String content) throws ParseException,Exception {
 		String[] contents = getContentArray(content); 
 		if(contents[CONTENT_DESC] == CONTENT_EMPTY) {
 			throw new NullPointerException(EXCEPTION_NO_DESC);
@@ -66,7 +66,7 @@ public class Parser {
 		return createItem(contents);
 	}
 	
-	private Task createItem(String[] contents) throws ParseException{
+	private Task createItem(String[] contents) throws ParseException,Exception {
 		Task createdItem;
 		if (findEventString(contents) > 0) {
 			createdItem = new Event(contents);
