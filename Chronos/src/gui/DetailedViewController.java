@@ -21,7 +21,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-public class DetailedView extends BorderPane {
+public class DetailedViewController extends BorderPane {
 
 	private static final String DETAIL_LAYOUT_FXML = "DetailedViewLayout.fxml";
 	private final String ID = "ID: %1$s ";
@@ -30,6 +30,7 @@ public class DetailedView extends BorderPane {
 	private final String PRIORITY = "Priority: %1$s ";
 	private final String CATEGORY = "Category: %1$s ";
 	private final String NOTES = "Notes: ";
+	private final String NOTE = "      %1$s.  %2$s";
 	private final int HOURS_PER_DAY = 24;
 	private final String HOURS = "%1$s hours";
 	private final String DAYS = "%1$s days ";
@@ -51,11 +52,16 @@ public class DetailedView extends BorderPane {
 	@FXML
 	private Label status;
 
-	public DetailedView(GUI gui) throws IOException {
+	public DetailedViewController() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(DETAIL_LAYOUT_FXML));
 		loader.setController(this);
 		loader.setRoot(this);
-		loader.load();
+		try {
+			loader.load();
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	// GUI will call this method if user want to view certain task
@@ -85,7 +91,7 @@ public class DetailedView extends BorderPane {
 
 	// add information about the id, time, priority and category to the list
 	// object
-	private void addInfo(Task taskToView, ObservableList<String> items) {
+	private void addInfo(Task taskToView, ObservableList<String> items){
 		items.add(String.format(ID, taskToView.getId()));
 		if (taskToView instanceof Event) {
 			items.add(String.format(START_DATE, ((Event) taskToView).getStartDate()));
@@ -96,7 +102,7 @@ public class DetailedView extends BorderPane {
 		items.add(String.format(NOTES));
 		ArrayList<String> notes = taskToView.getNotes();
 		for (int i = 1; i <= notes.size(); i++) {
-			items.addAll("      " + i + ". " + notes.get(i));
+			items.add(String.format(NOTE,i,notes.get(i-1)));
 		}
 	}
 

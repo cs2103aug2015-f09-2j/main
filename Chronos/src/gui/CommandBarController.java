@@ -32,7 +32,12 @@ public class CommandBarController extends BorderPane {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(COMMAND_BAR_LAYOUT_FXML));
 		loader.setController(this);
 		loader.setRoot(this);
-		loader.load();
+		try {
+			loader.load();
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw e;
+		}
 		displayDate();
 	}
 

@@ -15,9 +15,9 @@
 		</AnchorPane>
 	</top>
 	<center>
-				<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="150.0" prefWidth="400.0">
+				<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="260.0" prefWidth="380.0">
 					<children>
-						<ListView fx:id="details" prefHeight="259.0" prefWidth="600.0" styleClass="listView" />
+						<ListView fx:id="details" minHeight="0.0" prefHeight="260.0" prefWidth="380.0" styleClass="listView" />
 					</children>
 				</AnchorPane>
 	</center>

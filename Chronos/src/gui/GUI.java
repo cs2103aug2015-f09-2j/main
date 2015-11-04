@@ -9,8 +9,6 @@ import application.Instruction;
 import application.Logic;
 import application.Task;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -32,20 +30,21 @@ public class GUI extends Application {
 	private static final String MESSAGE_DETAILED_VIEW_FAIL = "Failed to set up DetailedView Pane";
 	private static final String MESSAGE_SUMMARY_FAIL = "Failed to set up Summary Pane";
 	private static final String MESSAGE_COMMAND_BAR_FAIL = "Failed to set up Command Bar Pane";
-	
+	private static final String MESSAGE_FREE_TIME_DISPLAY_FAIL = "Failed to set up FreeTimeDisplay Pane";
+
 	private BorderPane rootLayout;
 	private Logic logic;
 	private static CommandBarController commandBarController = null;
-	private static Summary summary = null;
-	private static DetailedView detailView = null;
+	private static SummaryController summary = null;
+	private static DetailedViewController detailView = null;
+	private static FreeTimeDisplayController freeTimeDisplay = null;
 	private static Logger log = Logger.getLogger("GUILog");
 	private boolean setUp = false;
-	
+
 	boolean isHandlingCommand = false;
 	private Instruction currentInstruction = null;
 
 	private boolean _isNewUser;
-	private ObservableList<Task> events = FXCollections.observableArrayList();
 
 	public static void main(String[] args) {
 		launch(args);
@@ -59,9 +58,9 @@ public class GUI extends Application {
 			initLogic();
 
 			addCommandBar(this);
-			addSummary(this);
+			addSummary();
 			log.info(String.format(MESSAGE_SET_UP));
-			
+
 			checkNewUser();
 		} catch (IOException e) {
 			log.warning(MESSAGE_SET_UP_FAIL);
@@ -69,8 +68,8 @@ public class GUI extends Application {
 		}
 	}
 
-	// check if savefile exists
-	private void checkNewUser() {	
+	// check if save file exists
+	private void checkNewUser() {
 		if (logic.isSavePresent()) {
 			_isNewUser = false;
 			updateFeedback(logic.executeUserCommand("d"));
@@ -86,9 +85,9 @@ public class GUI extends Application {
 		summary.setVisible(false);
 	}
 
-	private void addDetailView(GUI gui, ArrayList<Task> data) {
+	private void addDetailView(ArrayList<Task> data) {
 		try {
-			detailView = new DetailedView(this);
+			detailView = new DetailedViewController();
 			rootLayout.setCenter(detailView);
 			Task taskToView = data.get(DATA_FIRST);
 			detailView.display(taskToView);
@@ -101,26 +100,31 @@ public class GUI extends Application {
 		logic = Logic.getInstance();
 	}
 
-	private void addSummary(GUI gui) {
+	private void addSummary() {
 		try {
-			summary = new Summary(this);
+			summary = new SummaryController();
 			rootLayout.setCenter(summary);
 		} catch (IOException e) {
 			log.warning(MESSAGE_SUMMARY_FAIL);
 		}
 	}
 
-	/*
-	 * private ObservableList<Task> getEvents() { ArrayList<Task> entries =
-	 * logic.getTasks(); for (int i = 0; i < entries.size(); i++){
-	 * events.add(entries.get(i)); } return events; }
-	 */
 	private void addCommandBar(GUI gui) {
 		try {
 			commandBarController = new CommandBarController(gui);
 			rootLayout.setTop(commandBarController);
 		} catch (IOException e) {
 			log.warning(MESSAGE_COMMAND_BAR_FAIL);
+		}
+	}
+
+	private void addFreeTimeDisplay() {
+		try {
+			freeTimeDisplay = new FreeTimeDisplayController();
+			rootLayout.setCenter(freeTimeDisplay);
+			freeTimeDisplay.display();
+		} catch (IOException e) {
+			log.warning(MESSAGE_FREE_TIME_DISPLAY_FAIL);
 		}
 	}
 
@@ -138,20 +142,25 @@ public class GUI extends Application {
 	}
 
 	public void handleCommand(String text) {
-			if (_isNewUser) {
-				updateFeedback(logic.setSavePath(text));
-				summary.setVisible(true);
-				_isNewUser = false;
+		if (_isNewUser) {
+			updateFeedback(logic.setSavePath(text));
+			summary.setVisible(true);
+			_isNewUser = false;
+		} else {
+			
+			// TODO: change this
+			if (text.contains("free")) {
+				addFreeTimeDisplay();
 			} else {
 				Feedback commandFeedback = logic.executeUserCommand(text);
 				updateFeedback(commandFeedback);
 			}
-		
+		}
+
 	}
 
 	// get items arrayList from Logic and print them out
 	private void updateSummary(ArrayList<Task> eventList) {
-		//events = FXCollections.observableArrayList(eventList);
 		summary.display(eventList);
 	}
 
@@ -161,15 +170,16 @@ public class GUI extends Application {
 		}
 		// choose between summary or detail view
 		if (feedback.isInSummaryView()) {
-			addSummary(this);
+			addSummary();
 		} else {
-			addDetailView(this, feedback.getData());
+			addDetailView(feedback.getData());
 		}
 		if (feedback.hasData()) {
 			updateSummary(feedback.getData());
 		} else {
 			// update display
-			updateFeedback(logic.executeUserCommand("d")); //Logic: refactor this
+			updateFeedback(logic.executeUserCommand("d")); // Logic: refactor
+															// this
 		}
 		commandBarController.displayFeedback(feedback.getMessage());
 	}
@@ -181,25 +191,24 @@ public class GUI extends Application {
 	}
 
 	public void handleCommandPattern() {
-		//assert Instruction != null
-		
-		//display to feedback String
+		// assert Instruction != null
+
+		// display to feedback String
 		String feedbackString = currentInstruction.getCommandPattern();
 		if (currentInstruction.hasInstructions()) {
 			feedbackString = feedbackString + "\n" + currentInstruction.getNextInstruction();
 		}
 		commandBarController.displayFeedback(feedbackString);
-		
-		//display command pattern to Command Bar (ideal)
+
+		// display command pattern to Command Bar (ideal)
 		commandBarController.updateCommandBar(currentInstruction.getNextRequiredField());
-		
+
 		currentInstruction.nextStep();
-		
-		if(currentInstruction.isFinished()) {
+
+		if (currentInstruction.isFinished()) {
 			isHandlingCommand = false;
 			commandBarController.hasAComma = false;
-		} 
+		}
 	}
-	
-	
+
 }
