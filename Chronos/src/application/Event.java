@@ -55,7 +55,7 @@ public class Event extends Task {
 	
 	@Override
 	public String toString(){
-		return  _id + ID_DISPLAY + _description + EMPTY_SPACE + _startDate+ EMPTY_SPACE + _endDate + EMPTY_SPACE + _priority + EMPTY_SPACE + _category;
+		return  _id + ID_DISPLAY + _description + EMPTY_SPACE + _startDate+ DATE_SEPARATOR + _endDate + EMPTY_SPACE + _priority + EMPTY_SPACE + _category;
 	}
 	
 	public String getStartDate() {
