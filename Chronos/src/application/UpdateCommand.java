@@ -68,9 +68,34 @@ public class UpdateCommand extends Command {
 				aSpan = Chronic.parse(value);	
 				value = dateFormat.format(aSpan.getBeginCalendar().getTime());
 			}
-			entry.replace(field,value);
+			if(entry.get(JSON_START_DATE) == null) {	//for tasks
+				if(field.equals(JSON_START_DATE)) {		//convert task to event
+					Event event = taskToEvent(entry, value);
+					DeleteCommand deleteTask = new DeleteCommand(entry.get(_parse.JSON_ID).toString());
+					deleteTask.execute();
+					_store.entries_.add(_parse.convertToJSON(event));
+				}
+				else {		//for updating task as usual
+					entry.replace(field,value);
+					_store.entries_.set(_id, entry);
+				}
+			}
+			else {			//for event
+				entry.replace(field,value);
+				_store.entries_.set(_id, entry);
+			}
 		}
-		_store.entries_.set(_id, entry);
+	}
+	
+	private Event taskToEvent(JSONObject task, String value) {
+		String desc = task.get(_parse.JSON_DESC).toString();
+		String endDate = task.get(_parse.JSON_END_DATE).toString();
+		String priority = task.get(_parse.JSON_PRIORITY).toString();
+		String category = task.get(_parse.JSON_CATEGORY).toString();
+		Event event = new Event(EMPTY, desc, EMPTY, endDate, priority, category);
+		event.setStartDate(value);
+		event.setId(_store.getEventId());
+		return event;
 	}
 
 	@Override
