@@ -226,7 +226,7 @@ public class SummaryController extends StackPane {
 	
 	private void checkAlarm(Task currentTask){
 		Date alarm = currentTask.getAlarmDate();
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy hh:mm"); 
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm"); 
 		Date now = new Date();
 		if (alarm.before(now)){
 			GUI.triggerAlarm(currentTask);

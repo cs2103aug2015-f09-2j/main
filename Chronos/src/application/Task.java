@@ -203,7 +203,7 @@ public class Task {
 		try {
 			Date dueDate;
 			Date currentDate = new Date();
-			if(_endDate.toLowerCase().contains("m")) { //if deadline has a specified time
+			if(_endDate.toLowerCase().contains(":")) { //if deadline has a specified time
 				//dateFormat = new SimpleDateFormat();
 				dueDate = dateFormat.parse(_endDate);
 			} else { //if deadline has no specified time: put it at 11:59:59

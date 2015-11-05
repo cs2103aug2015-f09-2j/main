@@ -60,7 +60,7 @@ public class UpdateCommand extends Command {
 	protected void updateEntry(JSONObject entry, ArrayList<String> updateDetails) {
 		String field,value;
 		Span aSpan;
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm a"); 
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm"); 
 		for (int j=1; j<updateDetails.size();j++){
 			field = updateDetails.get(j);
 			value = updateDetails.get(++j);

@@ -12,7 +12,6 @@ import application.Feedback;
 import application.Instruction;
 import application.Logic;
 import application.Task;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -21,6 +20,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.application.Platform;
@@ -254,6 +254,7 @@ public class GUI extends Application {
         String message = String.format(MESSAGE_ALARM, currentTask.getId(),currentTask.getDescription());
         Text messageShown = new Text(message);
         messageShown.setFont(Font.font("Verdana"));
+        messageShown.setTextAlignment(TextAlignment.CENTER);
         dialogVbox.getChildren().add(messageShown);
         Scene dialogScene = new Scene(dialogVbox, 300, 100);
         dialog.setScene(dialogScene);
