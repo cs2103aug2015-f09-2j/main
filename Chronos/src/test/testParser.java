@@ -7,6 +7,7 @@ import java.util.prefs.Preferences;
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
+
 import org.junit.Test;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -39,6 +40,7 @@ public class testParser {
 	static String path;
 	static CommandCreator creator = new CommandCreator();
 	
+	//@@author A0125424N
 	@BeforeClass
 	public static void setUpBeforeClass(){
 		parser = Parser.getInstance();
@@ -46,6 +48,7 @@ public class testParser {
 		creator.executeInitializeCommand("src/test/testFiles/testParser");
 	}
 	
+	//@@author A0125424N
 	@AfterClass
 	public static void cleanUp(){
 		userPrefs.put(PREFS_PATH, path);
@@ -54,37 +57,37 @@ public class testParser {
 	@Test
 	//This is a boundary case for the creating task partition
 	public void testCreateItem1() throws Exception {
-		Task createdTask = parser.createItem("submit report, tomorrow, c:work, p:high");
+		Task createdTask = parser.createItem("submit report, 11/07/2015 12:00 PM, c:work, p:high");
 		String actual = createdTask.toString();
-		String expected = "null. submit report 30/10/15 12:00 PM high work";
+		String expected = "null. submit report 07/11/2015 12:00 PM high work";
 		assertEquals(expected, actual);
 	}
 	
 	@Test
 	//This is a boundary case for the creating event partition
 	public void testCreateItem2() throws Exception {
-		Event createdEvent = (Event) parser.createItem("submit report, 23/10/2015 2:00 pm to 23/10/2015 3:00 pm, c:work, p:high");
+		Event createdEvent = (Event) parser.createItem("submit report, 10/23/2015 2:00 pm to 10/23/2015 3:00 pm, c:work, p:high");
 		String actual = createdEvent.toString();
-		String expected = "null. submit report 23/10/15 2:00 PM 23/10/15 3:00 PM high work";
+		String expected = "null. submit report 23/10/2015 2:00 PM to 23/10/2015 3:00 PM high work";
 		assertEquals(expected, actual);
 	}
 	
-	
+	//@@author A0125424N
 	/**
 	 *  Boundary Case for creating task partition
 	 *  Equivalence Partition: [any string] 
 	 *  [null]
 	 *  Boundary Values: Non-empty String, a String of at least length of one.
-	 * @throws ParseException 
+	 * @throws Exception 
 	 */
 	@Test
 	public void testCreateItem() throws Exception {
 		int item = 0;
-		task = parser.createItem("buy paper, today, c:Work, p:MED");
+		task = parser.createItem("buy paper, 11/06/2015 12:00 PM, c:Work, p:MED");
 		taskArr.add(task);
-		task = parser.createItem("buy milk, today, c:Personal, p:MED");
+		task = parser.createItem("buy milk, 11/06/2015 12:00 PM, c:Personal, p:MED");
 		taskArr.add(task);
-		task = parser.createItem("buy toy for son, today, c:Personal, p:MED");
+		task = parser.createItem("buy toy for son, 11/06/2015 12:00 PM, c:Personal, p:MED");
 		taskArr.add(task);
 		assertEquals("buy paper", ("Work"), taskArr.get(item).getCategory());
 		assertEquals("buy paper", ("med"), taskArr.get(item).getPriority());
@@ -105,16 +108,17 @@ public class testParser {
 		assertEquals("buy toy for son", (true), taskArr.get(item).isTaskComplete());
 	}
 	
+	//@@author A0125424N
 	@Test
 	public void testConvertToJSON() throws Exception {
-		task = parser.createItem("buy paper, today, c:Work, p:MED");
+		task = parser.createItem("buy paper, 11/06/2015 12:00 PM, c:Work, p:MED");
 		entry = parser.convertToJSON(task);
 		assertEquals("description", ("buy paper"), entry.get("description"));
 		//assertEquals("end date", ("30/10/15 12:00 AM"), entry.get("due date"));
 		assertEquals("category", ("Work"), entry.get("category"));
 		assertEquals("priority", ("med"), entry.get("priority"));
 		assertEquals("complete", (false), entry.get("complete"));
-		task = parser.createItem("buy milk, today, c:Work");
+		task = parser.createItem("buy milk, 11/06/2015 12:00 PM, c:Work");
 		entry = parser.convertToJSON(task);
 		assertEquals("description", ("buy milk"), entry.get("description"));
 		//assertEquals("end date", ("30/10/15 12:00 AM"), entry.get("due date"));
@@ -123,9 +127,10 @@ public class testParser {
 		assertEquals("complete", (false), entry.get("complete"));
 	}
 	
+	//@@author A0125424N
 	@Test
 	public void testConvertToTaskArray() {
-		add = new AddCommand("buy paper, d:today, c:personal, p:MED");
+		add = new AddCommand("buy paper, 11/06/2015 12:00 PM, c:personal, p:MED");
 		add.execute();
 		taskArr = parser.convertToTaskArray(entries);
 		int item = taskArr.size()-1;
@@ -145,14 +150,15 @@ public class testParser {
 		assertEquals("buy paper", (true), taskArr.get(item).isTaskComplete());
 	}
 	
+	//@@author A0125424N
 	@Test
 	public void testRetrieveTask() {
 		String taskId;
 		taskArr = parser.convertToTaskArray(entries);
 		int item = taskArr.size()-1;
-		add = new AddCommand("buy paper, d:today, c:Work, p:MED");
+		add = new AddCommand("buy paper, 11/06/2015 12:00 PM, c:Work, p:MED");
 		add.execute();
-		add = new AddCommand("buy milk, d:today, c:Personal, p:MED");
+		add = new AddCommand("buy milk, 11/06/2015 12:00 PM, c:Personal, p:MED");
 		add.execute();
 		taskArr = parser.convertToTaskArray(entries);
 		//int item = taskArr.size()-2;
@@ -183,6 +189,7 @@ public class testParser {
 		assertEquals("buy milk", (0), task.getNotesNo());
 	}
 	
+	//@@author A0125424N
 	/**
 	 *  Boundary case for updating field partition
 	 *  Equivalence Partition: [any task id + ", d:" + any date] 
@@ -199,16 +206,16 @@ public class testParser {
 		String taskId;
 		int item = 0;
 		ArrayList<String> updatedTask;
-		add = new AddCommand("buy paper, d:today, c:Work, p:MED");
+		add = new AddCommand("buy paper, 11/06/2015 12:00 PM, c:Work, p:MED, off");
 		add.execute();
-		add = new AddCommand("buy milk, d:today, c:Personal, p:MED");
+		add = new AddCommand("buy milk, 11/06/2015 12:00 PM, c:Personal, p:MED, off");
 		add.execute();
 		taskArr = parser.convertToTaskArray(entries);
 		taskId = taskArr.get(item).getId();
 		updatedTask = parser.parseUpdateString(taskId + ", d:tomorrow");
 		assertEquals("buy paper", (taskId), updatedTask.get(item));
 		assertEquals("buy paper", ("description"), updatedTask.get(++item));
-		assertEquals("buy paper", ("d:tomorrow"), updatedTask.get(++item));
+		assertEquals("buy paper", ("11/06/2015 12:00 PM"), updatedTask.get(++item));
 		item = 0;
 		delete = new DeleteCommand(taskId);
 		delete.execute();
@@ -220,6 +227,7 @@ public class testParser {
 		assertEquals("buy paper", ("None"), updatedTask.get(++item));
 	}
 	
+	//@@author A0125424N
 	/**
 	 *  Boundary Case for checking for existing id partition
 	 *  Equivalence Partition: [taskId is an existing task id number] 
@@ -230,9 +238,9 @@ public class testParser {
 	public void testIsExistingId() {
 		String taskId;
 		int item = 0;
-		add = new AddCommand("buy paper, d:today, c:Work, p:MED");
+		add = new AddCommand("buy paper, 11/06/2015 12:00 PM, c:Work, p:MED");
 		add.execute();
-		add = new AddCommand("buy milk, d:today, c:Personal, p:MED");
+		add = new AddCommand("buy milk, 11/06/2015 12:00 PM, c:Personal, p:MED");
 		add.execute();
 		assertEquals("check id", (false), parser.isExistingId("0", entries));
 		taskArr = parser.convertToTaskArray(entries);
