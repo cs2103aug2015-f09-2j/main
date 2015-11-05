@@ -12,7 +12,7 @@ import com.mdimension.jchronic.utils.Span;
 public class Task {
 	
 	String DEFAULT_END_DATE = "someday";
-	String DEFAULT_PRIORITY = "med";
+	String DEFAULT_PRIORITY = "low";
 	String DEFAULT_CATEGORY = "none";
 	String DEFAULT_STATUS = "false";
 	String DEFAULT_ALARM = "off";
