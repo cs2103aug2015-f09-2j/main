@@ -39,9 +39,9 @@ public class GUI extends Application {
 	
 	private static Stage _stage;
 
-	private static final String WINDOW_TITLE = "Chronos V0.3";
-	private static final String MESSAGE_WELCOME = "Welcome to Chronos V0.3! Where would you like Chronos to store your tasks and events?";
-	private static final String MESSAGE_LOADED = "Welcome to Chronos V0.3! Add a task to get started.";
+	private static final String WINDOW_TITLE = "Chronos V0.4";
+	private static final String MESSAGE_WELCOME = "Welcome to Chronos V0.4! Where would you like Chronos to store your tasks and events?";
+	private static final String MESSAGE_LOADED = "Welcome to Chronos V0.4! Add a task to get started.";
 	private static final String ROOT_LAYOUT_FXML = "RootLayout.fxml";
 	
 	private static final int DATA_FIRST = 0;
