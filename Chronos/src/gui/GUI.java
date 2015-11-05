@@ -24,12 +24,12 @@ public class GUI extends Application {
 	private static final String WINDOW_TITLE = "Chronos V0.3";
 	private static final String MESSAGE_WELCOME = "Welcome to Chronos V0.3! Where would you like Chronos to store your tasks and events?";
 	private static final String MESSAGE_LOADED = "Welcome to Chronos V0.3! Add a task to get started.";
-
 	private static final String ROOT_LAYOUT_FXML = "RootLayout.fxml";
+	private static final String DISPLAY = "d";
 
 	private static final int DATA_FIRST = 0;
-
 	private static final int EXIT_NORMAL = 0;
+	
 	private static final String MESSAGE_SET_UP = "Chronos is set up properly";
 	private static final String MESSAGE_SET_UP_FAIL = "Failed to set up Chrons";
 	private static final String MESSAGE_DETAILED_VIEW_FAIL = "Failed to set up DetailedView Pane";
@@ -55,13 +55,13 @@ public class GUI extends Application {
 		launch(args);
 	}
 
+	//load the root UI 
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 			initRootLayout();
 			initPrimaryStage(primaryStage);
 			initLogic();
-
 			addCommandBar(this);
 			addSummary();
 			log.info(String.format(MESSAGE_SET_UP));
@@ -77,7 +77,7 @@ public class GUI extends Application {
 	private void checkNewUser() {
 		if (logic.isSavePresent()) {
 			_isNewUser = false;
-			updateFeedback(logic.executeUserCommand("d"));
+			updateFeedback(logic.executeUserCommand(DISPLAY));
 			commandBarController.displayFeedback(MESSAGE_LOADED);
 		} else {
 			_isNewUser = true;
@@ -90,6 +90,7 @@ public class GUI extends Application {
 		summary.setVisible(false);
 	}
 
+	//load the DetailedView frame and display the first task in the task array
 	private void addDetailView(ArrayList<Task> data) {
 		try {
 			detailView = new DetailedViewController();
@@ -147,13 +148,14 @@ public class GUI extends Application {
 		_stage = primaryStage;
 	}
 
+	//this will be called by CommandBarController class if enter if detected and the command
+	//is passed to this method
 	public void handleCommand(String text) {
 		if (_isNewUser) {
 			updateFeedback(logic.setSavePath(text));
 			summary.setVisible(true);
 			_isNewUser = false;
 		} else {
-			
 			// TODO: change this
 			if (text.contains("free")) {
 				addFreeTimeDisplay();
@@ -162,7 +164,6 @@ public class GUI extends Application {
 				updateFeedback(commandFeedback);
 			}
 		}
-
 	}
 	
 	protected static void triggerAlarm(Task currentTask){
@@ -196,21 +197,20 @@ public class GUI extends Application {
 			updateSummary(feedback.getData());
 		} else {
 			// update display
-			updateFeedback(logic.executeUserCommand("d")); // Logic: refactor
-															// this
+			updateFeedback(logic.executeUserCommand(DISPLAY)); 
 		}
 		commandBarController.displayFeedback(feedback.getMessage());
 	}
 
+	//called by CommandBarController if space is keyed in to show helping message
 	public void handleCommandPattern(String text) {
 		currentInstruction = Logic.getCommandInstruction(text);
 		isHandlingCommand = true;
 		handleCommandPattern();
 	}
 
+	//called by CommandBarController if comma is keyed in to show extra helping message
 	public void handleCommandPattern() {
-		// assert Instruction != null
-
 		// display to feedback String
 		String feedbackString = currentInstruction.getCommandPattern();
 		if (currentInstruction.hasInstructions()) {

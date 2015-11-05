@@ -92,7 +92,7 @@ public class UpdateCommand extends Command {
 		String endDate = task.get(_parse.JSON_END_DATE).toString();
 		String priority = task.get(_parse.JSON_PRIORITY).toString();
 		String category = task.get(_parse.JSON_CATEGORY).toString();
-		Event event = new Event(EMPTY, desc, EMPTY, endDate, priority, category);
+		Event event = new Event(EMPTY, desc, EMPTY, endDate, priority, category, null);
 		event.setStartDate(value);
 		event.setId(_store.getEventId());
 		return event;

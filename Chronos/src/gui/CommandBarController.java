@@ -15,6 +15,8 @@ import javafx.scene.layout.BorderPane;
 public class CommandBarController extends BorderPane {
 
 	private static final String COMMAND_BAR_LAYOUT_FXML = "CommandBarLayout.fxml";
+	private final String DATE = "TODAY: %1$s";
+	private static final int ONE_WORD = 1;
 	private GUI gui;
 	boolean hasAComma = false;
 	
@@ -41,6 +43,7 @@ public class CommandBarController extends BorderPane {
 		displayDate();
 	}
 
+	//Trigger when something is keyed in
 	public void onKeyPress(KeyEvent event) throws IOException {
 		commandBar.requestFocus();
 		commandBar.setEditable(true);
@@ -52,7 +55,7 @@ public class CommandBarController extends BorderPane {
 				gui.handleCommandPattern(commandBar.getText().trim());
 			}
 		} else if (event.getCode() == KeyCode.COMMA) {
-			if(gui.isHandlingCommand) {
+			if(gui.isHandlingCommand) { //only execute if there is command is valid
 				hasAComma = true;
 				gui.handleCommandPattern();
 			} 
@@ -66,7 +69,7 @@ public class CommandBarController extends BorderPane {
 	
 	private boolean hasOnlyOneWord() {
 		String[] commands = commandBar.getText().split(" ");
-		return commands.length == 1;
+		return commands.length == ONE_WORD;
 	}
 
 	public void displayFeedback(String helpingText){
@@ -74,7 +77,6 @@ public class CommandBarController extends BorderPane {
 	}
 	
 	private void displayDate(){
-		//System.out.println(todayDate);
 		date.setText(getDate());
 	}
 	
@@ -82,13 +84,13 @@ public class CommandBarController extends BorderPane {
 		Date date = new Date();
 		SimpleDateFormat formatedDate = 
 				new SimpleDateFormat ("E dd MMM yyyy");
-		return "TODAY: " + formatedDate.format(date);
+		return String.format(DATE, formatedDate.format(date));
 	}
 
 	public void updateCommandBar(String requiredField) {
 		if (!requiredField.equals("")) { //add a required field
 			commandBar.requestFocus(); // get focus first
-			commandBar.setEditable(false);
+			commandBar.setEditable(false); //prevent deletion of the selection
 			String commandText = commandBar.getText();
 			int startingRange = commandText.length();
 			if (hasAComma) {
@@ -96,7 +98,7 @@ public class CommandBarController extends BorderPane {
 				startingRange += 2;
 				hasAComma = false;
 			} else {
-				commandBar.appendText(" " + requiredField); //edit this
+				commandBar.appendText(" " + requiredField);
 				startingRange++;
 			}
 			commandBar.selectRange(startingRange,  startingRange + requiredField.length());
