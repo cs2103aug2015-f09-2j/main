@@ -7,7 +7,6 @@ import java.util.prefs.Preferences;
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
-
 import org.junit.Test;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -54,7 +53,7 @@ public class testParser {
 
 	@Test
 	//This is a boundary case for the creating task partition
-	public void testCreateItem1() throws ParseException {
+	public void testCreateItem1() throws Exception {
 		Task createdTask = parser.createItem("submit report, tomorrow, c:work, p:high");
 		String actual = createdTask.toString();
 		String expected = "null. submit report 30/10/15 12:00 PM high work";
@@ -63,7 +62,7 @@ public class testParser {
 	
 	@Test
 	//This is a boundary case for the creating event partition
-	public void testCreateItem2() throws ParseException {
+	public void testCreateItem2() throws Exception {
 		Event createdEvent = (Event) parser.createItem("submit report, 23/10/2015 2:00 pm to 23/10/2015 3:00 pm, c:work, p:high");
 		String actual = createdEvent.toString();
 		String expected = "null. submit report 23/10/15 2:00 PM 23/10/15 3:00 PM high work";
@@ -79,7 +78,7 @@ public class testParser {
 	 * @throws ParseException 
 	 */
 	@Test
-	public void testCreateItem() throws ParseException {
+	public void testCreateItem() throws Exception {
 		int item = 0;
 		task = parser.createItem("buy paper, today, c:Work, p:MED");
 		taskArr.add(task);
@@ -107,7 +106,7 @@ public class testParser {
 	}
 	
 	@Test
-	public void testConvertToJSON() throws ParseException {
+	public void testConvertToJSON() throws Exception {
 		task = parser.createItem("buy paper, today, c:Work, p:MED");
 		entry = parser.convertToJSON(task);
 		assertEquals("description", ("buy paper"), entry.get("description"));

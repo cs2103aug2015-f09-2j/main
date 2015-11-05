@@ -65,7 +65,7 @@ public class testCommands {
 	public void testSearch(){
 		Feedback actual=logic.executeUserCommand("search laundry");
 		ArrayList<Task> expected= new ArrayList<Task>();
-		expected.add(new Task("t5", "do laundry", "someday", "med", "personal"));
+		expected.add(new Task("t5", "do laundry", "someday", "med", "personal","off"));
 		assertEquals(expected.toString(), actual.getData().toString());
 	}
 	

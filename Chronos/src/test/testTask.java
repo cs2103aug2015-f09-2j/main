@@ -108,7 +108,7 @@ public class testTask {
 	
 	@Test //Testing Class Passing Methods
 	public void testWithIntId() {
-		Task testTask = new Task(1, "buy milk", "23/10/2015", "high", "personal");
+		Task testTask = new Task(1, "buy milk", "23/10/2015", "high", "personal","off");
 		String expectedId = "t1";
 		String expectedDescription = "buy milk";
 		String expectedEndDate = "23/10/2015";
@@ -123,7 +123,7 @@ public class testTask {
 	
 	@Test //Testing Class Passing Methods
 	public void testWithStringId() {
-		Task testTask = new Task("t1", "buy milk", "23/10/2015", "high", "personal");
+		Task testTask = new Task("t1", "buy milk", "23/10/2015", "high", "personal","off");
 		String expectedId = "t1";
 		String expectedDescription = "buy milk";
 		String expectedEndDate = "23/10/2015";
