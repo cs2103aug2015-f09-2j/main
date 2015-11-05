@@ -53,13 +53,14 @@ public class AlarmCommand extends UpdateCommand {
 			}else{
 				alarmOffset = entry.get(JSON_END_DATE).toString();
 			}
-			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm aa"); 
+			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy hh:mm"); 
 			Date offset = dateFormat.parse(alarmOffset);
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(offset);
 			cal.add(Calendar.HOUR,hours*(-1));
 			Date alarm = cal.getTime();
 			String alarmString = dateFormat.format(alarm);
+			System.out.println(alarmString);
 			entry.replace(JSON_ALRAM, alarmString);
 		}
 	}
