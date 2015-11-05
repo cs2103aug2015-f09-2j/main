@@ -334,4 +334,13 @@ public class Parser {
 			return false;
 		}
 	}
+
+	public ArrayList<String> parseExtendString(String extendString) {
+		String[] details = extendString.split(CONTENT_SEPARATOR);
+		ArrayList<String> extendDetails = new ArrayList<String>();
+		extendDetails.add(details[0]);
+		extendDetails.add(JSON_END_DATE);
+		extendDetails.add(details[1]);
+		return extendDetails;
+	}
 }

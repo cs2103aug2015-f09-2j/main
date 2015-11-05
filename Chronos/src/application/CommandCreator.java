@@ -31,6 +31,7 @@ public class CommandCreator {
 	private static final String COMMAND_UPDATE_U = "u";
 	private static final String COMMAND_VIEW = "view";
 	private static final String COMMAND_ALARM = "alarm";
+	private static final String COMMAND_EXTEND = "extend";
 	
 	//Command Patterns
 	private static final String PATTERN_ADD = "add (description), (date), c:(category), p:(priority)";
@@ -46,10 +47,11 @@ public class CommandCreator {
 	private static final String PATTERN_CD = "cd (directory)";
 	private static final String PATTERN_EXIT = "Closes Chronos";
 	private static final String PATTERN_ALARM = "alarm (task/event id), (number of hours prior OR off)";
+	private static final String PATTERN_EXTEND = "extend (task/event id)";
 	private static final String PATTERN_UNKNOWN = "Error: Invalid command";
 		
 	enum COMMAND_TYPE {
-		ADD, CD, DELETE, DISPLAY, DONE, EXIT, NOTE, REDO, SEARCH, UNDO, UNKNOWN, UPDATE, VIEW , ALARM 
+		ADD, CD, DELETE, DISPLAY, DONE, EXIT, EXTEND, NOTE, REDO, SEARCH, UNDO, UNKNOWN, UPDATE, VIEW , ALARM 
 	};
 	
 	//Strings for command creation
@@ -85,6 +87,11 @@ public class CommandCreator {
 			
 			case DONE :
 				aCommand = new DoneCommand(commandContent);
+				_pastCommands.add(aCommand);
+				break;
+				
+			case EXTEND :
+				aCommand = new ExtendCommand(commandContent);
 				_pastCommands.add(aCommand);
 				break;
 			
@@ -210,6 +217,10 @@ public class CommandCreator {
 			case COMMAND_EXIT : 
 				return COMMAND_TYPE.EXIT;
 				//break;
+				
+			case COMMAND_EXTEND : 
+				return COMMAND_TYPE.EXTEND;
+				//break;
 			
 			case COMMAND_NOTE : 
 				return COMMAND_TYPE.NOTE;
@@ -287,6 +298,14 @@ public class CommandCreator {
 				 commandInstruction.setCommandPattern(PATTERN_DONE);
 			     commandInstruction.addToInstructions("Type the task or event id of the completed item.");
 			     commandInstruction.addToRequiredFields("(task/event id)");
+				 break;
+			
+			case EXTEND : 
+				 commandInstruction.setCommandPattern(PATTERN_EXTEND);
+			     commandInstruction.addToInstructions("Type the task or event id of item to extend.");
+			     commandInstruction.addToRequiredFields("(task/event id)");
+			     commandInstruction.addToInstructions("Type the new deadline");
+				 commandInstruction.addToRequiredFields("(new end date)");
 				 break;
 			
 			case NOTE : 
