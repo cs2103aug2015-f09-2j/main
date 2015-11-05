@@ -43,24 +43,23 @@ public class GUI extends Application {
 	private static final String MESSAGE_WELCOME = "Welcome to Chronos V0.4! Where would you like Chronos to store your tasks and events?";
 	private static final String MESSAGE_LOADED = "Welcome to Chronos V0.4! Add a task to get started.";
 	private static final String ROOT_LAYOUT_FXML = "RootLayout.fxml";
-	
+
+	private static final String ROOT_LAYOUT_FXML = "RootLayout.fxml";
+
 	private static final int DATA_FIRST = 0;
 	private static final int EXIT_NORMAL = 0;
-	
+
 	private static final String MESSAGE_SET_UP = "Chronos is set up properly";
 	private static final String MESSAGE_SET_UP_FAIL = "Failed to set up Chrons";
 	private static final String MESSAGE_DETAILED_VIEW_FAIL = "Failed to set up DetailedView Pane";
 	private static final String MESSAGE_SUMMARY_FAIL = "Failed to set up Summary Pane";
 	private static final String MESSAGE_COMMAND_BAR_FAIL = "Failed to set up Command Bar Pane";
 	private static final String MESSAGE_FREE_TIME_DISPLAY_FAIL = "Failed to set up FreeTimeDisplay Pane";
-
 	private static final String MESSAGE_TRAYICON_FAIL = "Failed to set up tray icon in system tray";
 	
 	private static final String CLOSE_SYSTEM = "Exit";
 
-
 	private static final String MESSAGE_ALARM = "%1$s\n%2$s\nis due soon";
-
 
 	private BorderPane rootLayout;
 	protected static Logic logic;
@@ -81,13 +80,13 @@ public class GUI extends Application {
 		launch(args);
 	}
 
-	//load the root UI 
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 			initRootLayout();
 			initPrimaryStage(primaryStage);
 			initLogic();
+
 			addCommandBar(this);
 			addSummary();
 			log.info(String.format(MESSAGE_SET_UP));
@@ -116,7 +115,6 @@ public class GUI extends Application {
 		summary.setVisible(false);
 	}
 
-	//load the DetailedView frame and display the first task in the task array
 	private void addDetailView(ArrayList<Task> data) {
 		try {
 			detailView = new DetailedViewController();
@@ -175,6 +173,12 @@ public class GUI extends Application {
 		createTray(primaryStage, scene);
 	}
 	
+	//@@author A0125424N
+	/**
+	 * This method creates a tray and subsequently a tray icon for the application.
+	 * @param stage
+	 * @param scene
+	 */
 	private void createTray(final Stage stage, final Scene scene) {
 		if(SystemTray.isSupported()) {
 			SystemTray tray = SystemTray.getSystemTray();
@@ -188,11 +192,16 @@ public class GUI extends Application {
 			} catch (AWTException e) {
 				log.warning(MESSAGE_TRAYICON_FAIL);
 			}
-			
 			KeyBoardShortcuts(scene, stage);
 		}
 	}
 	
+	//@@author A0125424N
+	/**
+	 * This method implements the respective keyboard shortcuts.
+	 * @param scene
+	 * @param stage
+	 */
 	private void KeyBoardShortcuts(Scene scene, final Stage stage) {
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(final KeyEvent key) {
@@ -208,9 +217,13 @@ public class GUI extends Application {
 			}
 		});
 	}
-
-
-
+	
+	//@@author A0125424N
+	/**
+	 * This method brings the program to the back of other applications, 
+	 * and is run when called upon at any time.
+	 * @param stage
+	 */
     private void hide(final Stage stage) {
         Platform.runLater(new Runnable() {
             @Override
@@ -224,16 +237,13 @@ public class GUI extends Application {
         });
 	}
 
-
-
-	//this will be called by CommandBarController class if enter if detected and the command
-	//is passed to this method
 	public void handleCommand(String text) {
 		if (_isNewUser) {
 			updateFeedback(logic.setSavePath(text));
 			summary.setVisible(true);
 			_isNewUser = false;
 		} else {
+			
 			// TODO: change this
 			if (text.contains("free")) {
 				addFreeTimeDisplay();
@@ -242,6 +252,7 @@ public class GUI extends Application {
 				updateFeedback(commandFeedback);
 			}
 		}
+
 	}
 	
 	protected static void triggerAlarm(Task currentTask){
@@ -285,15 +296,15 @@ public class GUI extends Application {
 		commandBarController.displayFeedback(feedback.getMessage());
 	}
 
-	//called by CommandBarController if space is keyed in to show helping message
 	public void handleCommandPattern(String text) {
 		currentInstruction = Logic.getCommandInstruction(text);
 		isHandlingCommand = true;
 		handleCommandPattern();
 	}
 
-	//called by CommandBarController if comma is keyed in to show extra helping message
 	public void handleCommandPattern() {
+		// assert Instruction != null
+
 		// display to feedback String
 		String feedbackString = currentInstruction.getCommandPattern();
 		if (currentInstruction.hasInstructions()) {
@@ -329,5 +340,5 @@ public class GUI extends Application {
 			//do nothing
 		}
 	}	
-	
+
 }
