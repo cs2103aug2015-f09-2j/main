@@ -59,6 +59,14 @@ public class Parser {
 	}
 	
 	//Used by the AddCommand
+	/**
+	 * This operation is used by the AddCommand to create the task/event 
+	 * which the user wants to add.
+	 * @param content	User input string
+	 * @return
+	 * @throws ParseException
+	 * @throws Exception
+	 */
 	public Task createItem(String content) throws ParseException,Exception {
 		String[] contents = getContentArray(content); 
 		if(contents[CONTENT_DESC] == CONTENT_EMPTY) {
@@ -77,10 +85,20 @@ public class Parser {
 		return createdItem;
 	}
 	
+	/**
+	 * This method helps to split the user input into different categories.
+	 * @param content		user input string
+	 * @return				String[]
+	 */
 	public String[] getContentArray(String content) {
 		return content.split(CONTENT_SEPARATOR);
 	}
 	
+	/**
+	 * This method finds out if the user input string is for an event type of string.
+	 * @param contents		Array of string of different categories of the user input
+	 * @return
+	 */
 	private int findEventString(String[] contents) {
 		for (int i = 0; i < contents.length; i++) {
 			if (contents[i].contains(CONTENT_EVENT_STRING)) {
@@ -91,6 +109,12 @@ public class Parser {
 	}
 	
 	//Used by the Add and Note Commands
+	/**
+	 * This method is for the conversion from Task to JSONObject for storing 
+	 * in storage file.
+	 * @param createdTask		Task that is needed to be stored in file
+	 * @return
+	 */
 	public JSONObject convertToJSON(Task createdTask) {
 		return putIntoEntry(createdTask);
 	}
@@ -124,11 +148,19 @@ public class Parser {
 		return notesArray;
 	}
 	
+	//@@author A0125424N
 	//Used by the DisplayCommand
+	/**
+	 * This method is used by display command and it converts JSONArray to 
+	 * TaskArray.
+	 * @param contents			Array of items in file
+	 * @return tasks			ArrayList of tasks
+	 */
 	public ArrayList<Task> convertToTaskArray (JSONArray contents) {
 		return addTaskToList(contents);
 	}
 	
+	//@@author A0125424N
 	private ArrayList<Task> addTaskToList(JSONArray contents) {
 		ArrayList<Task> tasks = new ArrayList<Task>();
 		if (contents != null) {
@@ -142,11 +174,21 @@ public class Parser {
 		return tasks;
 	}
 	
+	/**
+	 * This method is used by display, done, note, search and view commands
+	 * and it find the task/event that contains the same ID as the user 
+	 * requested.
+	 * @param taskID				ID of the selected task
+	 * @param entries				storage file
+	 * @return selectedTask			Task which the user requested for
+	 */
+	//@@author A0125424N
 	//Used by Display, Done, Note, Search and View Commands
 	public Task retrieveTask(String taskID, JSONArray entries) {
 		return findTask(taskID, entries);
 	}
-
+	
+	//@@author A0125424N
 	private Task findTask(String taskID, JSONArray entries) {
 		Task selectedTask = null;
 		for(int i = 0; i<entries.size(); i++) {
@@ -159,6 +201,11 @@ public class Parser {
 		return selectedTask;
 	}
 	
+	/**
+	 * This method does the conversion from JSONObject to Task.
+	 * @param anEntry		An JSONObject from storage file
+	 * @return convertedTask/convertedEvent		Task/Event which is converted
+	 */
 	public Task convertToTask(JSONObject anEntry) {
 		String id = anEntry.get(JSON_ID).toString();
 		String description = anEntry.get(JSON_DESC).toString();
@@ -195,7 +242,13 @@ public class Parser {
 		convertedTask.markTaskAsDone(completion);
 		return convertedTask;
 	}
-
+	
+	/**
+	 * This method update the notes for specific task.
+	 * @param convertedTask		selected task to update notes
+	 * @param anEntry			specified task in JSONObject type
+	 * @return convertedTask
+	 */
 	private Task updatedTaskNotes(Task convertedTask, JSONObject anEntry) {
 		ArrayList<String> notes = retrieveNotes(anEntry);
 		for(String aNote: notes) {
@@ -214,7 +267,15 @@ public class Parser {
 		return notes;
 	}
 	
+	
+	//@@author A0125424N
 	//Used by the Update Command
+	/**
+	 * This method is used by the update command which store the updated string
+	 * into an arraylist.
+	 * @param updateString			The whole input string which the user wants to update
+	 * @return updateDetails		Arraylist which stores the updated string
+	 */
 	public ArrayList<String> parseUpdateString(String updateString) {
 		String[] details = updateString.split(CONTENT_SEPARATOR);
 		ArrayList<String> updateDetails = new ArrayList<String>();
@@ -226,6 +287,7 @@ public class Parser {
 		return alarmString.split(CONTENT_SEPARATOR);
 	}
 	
+	//@@author A0125424N
 	//note: for tasks only
 	private ArrayList<String> updateDetailsArray(String[] details, ArrayList<String> updateDetails) {
 		updateDetails.add(details[0]);
@@ -260,6 +322,13 @@ public class Parser {
 		return updateDetails;
 	}
 	
+	//@@author A0125424N
+	/**
+	 * This method checks if id exists in the file.
+	 * @param taskID		ID of task which need to be checked
+	 * @param entries		storage file
+	 * @return true if ID exists. False if it doesn't.
+	 */
 	public boolean isExistingId(String taskID, JSONArray entries) {
 		Task checkTaskExist = null;
 		checkTaskExist = retrieveTask(taskID, entries);
