@@ -65,53 +65,63 @@ public class UpdateCommand extends Command {
 		String field,value;
 		Span aSpan;
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm");
-		int offset = -1;
 		String id = entry.get(_parse.JSON_ID).toString();
 		boolean isChanged = false;
-		try{
-			if(entry.get(JSON_ALARM) != OFF_ALARM){
-				Date alarmFrom;
-				if(entry.get(JSON_START_DATE)!=null){
-					alarmFrom = dateFormat.parse(entry.get(JSON_START_DATE).toString());
-				}else{
-					alarmFrom = dateFormat.parse(entry.get(JSON_END_DATE).toString());
-				}
-				Date alarm = dateFormat.parse(entry.get(JSON_ALARM).toString());
-				offset = (int)( alarmFrom.getTime() - alarm.getTime())/HOUR_TO_MILLI;
-				System.out.println(offset);
-			}
-		}catch (ParseException e){
-			log.info(ERROR_PARSING_ALARM);
-		}
+		int offset = checkAlarmOffset(entry, dateFormat);
 		for (int j=1; j<updateDetails.size();j++){
 			field = updateDetails.get(j);
 			value = updateDetails.get(++j);
 			if (field.equals(JSON_END_DATE)||field.equals(JSON_START_DATE)){
+				//if there is a change in dates, we have to update the alarm
 				isChanged = true;
 				aSpan = Chronic.parse(value);	
 				value = dateFormat.format(aSpan.getBeginCalendar().getTime());
 			}
-			if(entry.get(JSON_START_DATE) == null) {	//for tasks
-				if(field.equals(JSON_START_DATE)) {		//convert task to event
-					Event event = taskToEvent(entry, value);
-					id = event.getId();
-					DeleteCommand deleteTask = new DeleteCommand(entry.get(_parse.JSON_ID).toString());
-					deleteTask.execute();
-					_store.entries_.add(_parse.convertToJSON(event));
-				}
-				else {		//for updating task as usual
-					entry.replace(field,value);
-					_store.entries_.set(_id, entry);
-				}
-			}
-			else {			//for event
-				entry.replace(field,value);
-				_store.entries_.set(_id, entry);
-			}
+			id = updateEntry(entry, field, value, id);
 		}
+		//update the alarm if there is a need to do so
 		if (isChanged){
 			AlarmCommand setAlarm = new AlarmCommand(String.format(ALARM_COMMAND, id, offset));
 			setAlarm.execute();
+		}
+	}
+
+	private String updateEntry(JSONObject entry, String field, String value,
+			String id) {
+		if(entry.get(JSON_START_DATE) == null &&field.equals(JSON_START_DATE)) {//convert task to event
+				Event event = taskToEvent(entry, value);
+				id = event.getId();
+				DeleteCommand deleteTask = new DeleteCommand(entry.get(_parse.JSON_ID).toString());
+				deleteTask.execute();
+				_store.entries_.add(_parse.convertToJSON(event));
+		}else {			//for event and  updating task as usual
+			entry.replace(field,value);
+			_store.entries_.set(_id, entry);
+		}
+		return id;
+	}
+
+	private int checkAlarmOffset(JSONObject entry, DateFormat dateFormat) {
+		try{
+			//check if the entry has alarm
+			if(entry.get(JSON_ALARM) != OFF_ALARM){
+				Date alarmFrom;
+				//if the entry has alarm, check how many hours prior the user wants the alarm to go off
+				if(entry.get(JSON_START_DATE)!=null){
+					//if it is event, calculate from the start of the event
+					alarmFrom = dateFormat.parse(entry.get(JSON_START_DATE).toString());
+				}else{
+					//if it is task, calculate from the end of the event
+					alarmFrom = dateFormat.parse(entry.get(JSON_END_DATE).toString());
+				}
+				Date alarm = dateFormat.parse(entry.get(JSON_ALARM).toString());
+				return (int)( alarmFrom.getTime() - alarm.getTime())/HOUR_TO_MILLI;
+			}else{
+				return -1;
+			}
+		}catch (ParseException e){
+			log.info(ERROR_PARSING_ALARM);
+			return -1;
 		}
 	}
 	
