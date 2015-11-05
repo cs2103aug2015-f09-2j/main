@@ -23,7 +23,12 @@ public class DisplayCommand extends Command {
 	public DisplayCommand(String content) {
 		super(content);
 	}
-
+	
+	//@@author A0125424N
+	/**
+	 * This method executes the display command. It can choose to display all
+	 * the items or selected ones.
+	 */
 	@Override
 	public Feedback execute() {
 		ArrayList<Task> filteredTasks = new ArrayList<Task>();
@@ -43,7 +48,13 @@ public class DisplayCommand extends Command {
 		return feedback; 
 	}
 
-	//TODO: Check for correctness
+	//@@author A0125424N
+	/**
+	 * This method display only selected items.
+	 * @param condition
+	 * @param criteria			input string from user
+	 * @return filteredTasks 	arraylist with the selected tasks
+	 */
 	private ArrayList<Task> displaySelectedItems(String condition, String[] criteria) {
 		
 		for(int index=0; index<criteria.length; index++) {
