@@ -57,7 +57,7 @@ public class UpdateCommand extends Command {
 		return -1;
 	}
 	
-	private void updateEntry(JSONObject entry, ArrayList<String> updateDetails) {
+	protected void updateEntry(JSONObject entry, ArrayList<String> updateDetails) {
 		String field,value;
 		Span aSpan;
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm a"); 
