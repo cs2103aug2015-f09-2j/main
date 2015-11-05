@@ -38,7 +38,7 @@ public class GUI extends Application {
 	private static final String MESSAGE_FREE_TIME_DISPLAY_FAIL = "Failed to set up FreeTimeDisplay Pane";
 
 	private BorderPane rootLayout;
-	private Logic logic;
+	protected static Logic logic;
 	private static CommandBarController commandBarController = null;
 	private static SummaryController summary = null;
 	private static DetailedViewController detailView = null;
@@ -174,7 +174,7 @@ public class GUI extends Application {
         Scene dialogScene = new Scene(dialogVbox, 300, 200);
         dialog.setScene(dialogScene);
         dialog.show();
-        currentTask.setAlarm("off");
+        logic.switchOffAlarm(currentTask);
 	}
 
 	// get items arrayList from Logic and print them out
