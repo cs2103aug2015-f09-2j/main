@@ -3,9 +3,8 @@ package application;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
-import jdk.internal.org.objectweb.asm.tree.analysis.Value;
-
+import java.util.Date;
+import java.text.ParseException;
 import org.json.simple.JSONObject;
 
 import com.mdimension.jchronic.Chronic;
@@ -22,6 +21,11 @@ public class UpdateCommand extends Command {
 	protected static final String FEEDBACK_MESSAGE_UNDO =  "Restored %1$s";
 	static final String JSON_START_DATE = "start date";
 	static final String JSON_END_DATE = "due date";
+	static final String JSON_ALARM = "alarm";
+	static final String OFF_ALARM = "off";
+	static final String ALARM_COMMAND = "%1$s, %2$s";
+	static final String ERROR_PARSING_ALARM = "failed to parse dates for alarm";
+	static final int HOUR_TO_MILLI = 1000*60*60;
 	
 	protected static final int LIMIT_ID = -1;
 	
@@ -60,17 +64,37 @@ public class UpdateCommand extends Command {
 	protected void updateEntry(JSONObject entry, ArrayList<String> updateDetails) {
 		String field,value;
 		Span aSpan;
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm"); 
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm");
+		int offset = -1;
+		String id = entry.get(_parse.JSON_ID).toString();
+		boolean isChanged = false;
+		try{
+			if(entry.get(JSON_ALARM) != OFF_ALARM){
+				Date alarmFrom;
+				if(entry.get(JSON_START_DATE)!=null){
+					alarmFrom = dateFormat.parse(entry.get(JSON_START_DATE).toString());
+				}else{
+					alarmFrom = dateFormat.parse(entry.get(JSON_END_DATE).toString());
+				}
+				Date alarm = dateFormat.parse(entry.get(JSON_ALARM).toString());
+				offset = (int)( alarmFrom.getTime() - alarm.getTime())/HOUR_TO_MILLI;
+				System.out.println(offset);
+			}
+		}catch (ParseException e){
+			log.info(ERROR_PARSING_ALARM);
+		}
 		for (int j=1; j<updateDetails.size();j++){
 			field = updateDetails.get(j);
 			value = updateDetails.get(++j);
 			if (field.equals(JSON_END_DATE)||field.equals(JSON_START_DATE)){
+				isChanged = true;
 				aSpan = Chronic.parse(value);	
 				value = dateFormat.format(aSpan.getBeginCalendar().getTime());
 			}
 			if(entry.get(JSON_START_DATE) == null) {	//for tasks
 				if(field.equals(JSON_START_DATE)) {		//convert task to event
 					Event event = taskToEvent(entry, value);
+					id = event.getId();
 					DeleteCommand deleteTask = new DeleteCommand(entry.get(_parse.JSON_ID).toString());
 					deleteTask.execute();
 					_store.entries_.add(_parse.convertToJSON(event));
@@ -84,6 +108,10 @@ public class UpdateCommand extends Command {
 				entry.replace(field,value);
 				_store.entries_.set(_id, entry);
 			}
+		}
+		if (isChanged){
+			AlarmCommand setAlarm = new AlarmCommand(String.format(ALARM_COMMAND, id, offset));
+			setAlarm.execute();
 		}
 	}
 	

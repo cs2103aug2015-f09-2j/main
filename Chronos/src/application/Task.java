@@ -167,7 +167,7 @@ public class Task {
 	}
 	@Override
 	public String toString() {
-		return _id + ". " + _description + " " + _endDate + " " + _priority + " " + _category;
+		return _id + ". " + _description + " " + _endDate + " "+ _alarm+" "+ _priority + " " + _category;
 	}
 	
 	public boolean isTaskComplete() {
