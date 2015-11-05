@@ -23,8 +23,8 @@ public class Task {
 	protected String _endDate = DEFAULT_END_DATE;
 	protected String _priority = DEFAULT_PRIORITY;
 	protected String _category = DEFAULT_CATEGORY;
-	protected String _status = DEFAULT_STATUS;
 	protected String _alarm = DEFAULT_ALARM;
+	protected String _status = DEFAULT_STATUS;
 	protected boolean _isDone = false;
 	protected boolean _isClashing = false;
 	protected ArrayList<Note> _notes = new ArrayList<Note>();
@@ -118,11 +118,12 @@ public class Task {
 		return _priority;
 	}
 	
-	public String getStatus(){
-		return _status;
-	}
 	void setPriority(String priority) {
 		_priority = priority.trim();
+	}
+	
+	public String getStatus(){
+		return _status;
 	}
 
 	public String getCategory() {
@@ -167,7 +168,9 @@ public class Task {
 	}
 	@Override
 	public String toString() {
-		return _id + ". " + _description + " " + _endDate + " "+ _alarm+" "+ _priority + " " + _category;
+
+		return _id + ". " + _description + " " + _endDate + " "+ _alarm+" "+ _priority + " " + _category+" "+_isDone;
+
 	}
 	
 	public boolean isTaskComplete() {

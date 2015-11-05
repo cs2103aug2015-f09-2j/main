@@ -107,7 +107,7 @@ public class Parser {
 			entry.put(JSON_START_DATE, createdEvent.getStartDate());
 		}
 		entry.put(JSON_END_DATE, createdTask.getEndDate());
-		entry.put(JSON_COMPLETE, createdTask.getStatus());
+		entry.put(JSON_COMPLETE, createdTask.isTaskComplete());
 		if(createdTask.getNotesNo() > 0) {
 			entry.put(JSON_NOTES, convertNotesToJSONArray(createdTask.getNotes()));
 		}
@@ -191,7 +191,7 @@ public class Parser {
 	}
 	
 	private Task convertTask(String id, String description, String endDate, String priority, String category, boolean completion, String alarm) {
-		Task convertedTask = new Task(id, description, endDate, priority, category,alarm);
+		Task convertedTask = new Task(id, description, endDate, priority, category, alarm);
 		convertedTask.markTaskAsDone(completion);
 		return convertedTask;
 	}

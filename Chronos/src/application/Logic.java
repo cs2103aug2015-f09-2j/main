@@ -72,4 +72,8 @@ public class Logic {
 			return CommandCreator.getTypedCommandString(_commandIndex);
 		}
 	}
+	
+	public Feedback updateDisplay() {
+		return _commandCreator.executeGUIDisplayCommand();
+	}
 }
