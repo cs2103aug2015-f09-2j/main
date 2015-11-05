@@ -44,8 +44,6 @@ public class GUI extends Application {
 	private static final String MESSAGE_LOADED = "Welcome to Chronos V0.4! Add a task to get started.";
 	private static final String ROOT_LAYOUT_FXML = "RootLayout.fxml";
 
-	private static final String ROOT_LAYOUT_FXML = "RootLayout.fxml";
-
 	private static final int DATA_FIRST = 0;
 	private static final int EXIT_NORMAL = 0;
 
@@ -296,15 +294,25 @@ public class GUI extends Application {
 		commandBarController.displayFeedback(feedback.getMessage());
 	}
 
-	public void handleCommandPattern(String text) {
-		currentInstruction = Logic.getCommandInstruction(text);
+	//@@author A0126223U
+	/**
+	 * Retrieves command instructions based on the entered command
+	 *
+	 * @param enteredCommand   The command string
+	 */
+	public void handleCommandPattern(String enteredCommand) {
+		currentInstruction = Logic.getCommandInstruction(enteredCommand);
 		isHandlingCommand = true;
 		handleCommandPattern();
 	}
 
+	//@@author A0126223U
+	/**
+	 * Displays and scrolls through instructions and command pattern to the user by 
+	 * updating the command bar and feedback string
+	 *
+	 */
 	public void handleCommandPattern() {
-		// assert Instruction != null
-
 		// display to feedback String
 		String feedbackString = currentInstruction.getCommandPattern();
 		if (currentInstruction.hasInstructions()) {
@@ -312,7 +320,7 @@ public class GUI extends Application {
 		}
 		commandBarController.displayFeedback(feedbackString);
 
-		// display command pattern to Command Bar (ideal)
+		// display command pattern to Command Bar 
 		commandBarController.updateCommandBar(currentInstruction.getNextRequiredField());
 
 		currentInstruction.nextStep();
@@ -323,6 +331,11 @@ public class GUI extends Application {
 		}
 	}
 
+	//@@author A0126223U
+	/**
+	 * Retrieves and displays a previously typed command
+	 *
+	 */
 	public void retrievePastCommand() {
 		String pastCommand = Logic.getPreviouslyTypedCommand();
 		try {
@@ -332,6 +345,11 @@ public class GUI extends Application {
 		}
 	}
 
+	//@@author A0126223U
+	/**
+	 * Retrieves and displays the next typed command 
+	 *
+	 */
 	public void retrieveNextCommand() {
 		String pastCommand = Logic.getNextTypedCommand();
 		try {

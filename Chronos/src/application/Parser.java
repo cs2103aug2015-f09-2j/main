@@ -58,7 +58,6 @@ public class Parser {
 		return _theParser;
 	}
 	
-	//Used by the AddCommand
 	/**
 	 * This operation is used by the AddCommand to create the task/event 
 	 * which the user wants to add.

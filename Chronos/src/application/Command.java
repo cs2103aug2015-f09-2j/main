@@ -2,6 +2,10 @@ package application;
 
 import java.util.logging.Logger;
 
+//@@author A0126223U
+/**
+ * This class is used as a format for several Command classes within the package.
+ */
 public abstract class Command {
 
 	//Messages
@@ -27,10 +31,16 @@ public abstract class Command {
 		_content = content; 
 	}
 	
+	/**
+	 * Carries out command operation
+	 * @return a Feedback object to return to the GUI
+	 */
 	public abstract Feedback execute();
 	
+	/**
+	 * Reverses command operation
+	 * @return a Feedback object to return to the GUI
+	 */
 	public abstract Feedback undo();
-	
-	
 
 }
