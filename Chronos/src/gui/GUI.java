@@ -1,8 +1,12 @@
 package gui;
 
+import javafx.geometry.Insets;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
+
+import com.sun.prism.paint.Color;
 
 import application.Feedback;
 import application.Instruction;
@@ -10,9 +14,11 @@ import application.Logic;
 import application.Task;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -36,7 +42,7 @@ public class GUI extends Application {
 	private static final String MESSAGE_SUMMARY_FAIL = "Failed to set up Summary Pane";
 	private static final String MESSAGE_COMMAND_BAR_FAIL = "Failed to set up Command Bar Pane";
 	private static final String MESSAGE_FREE_TIME_DISPLAY_FAIL = "Failed to set up FreeTimeDisplay Pane";
-
+	private static final String MESSAGE_ALARM = "%1$s\n%2$s\nis due soon";
 	private BorderPane rootLayout;
 	protected static Logic logic;
 	private static CommandBarController commandBarController = null;
@@ -169,9 +175,13 @@ public class GUI extends Application {
 		final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(_stage);
-        VBox dialogVbox = new VBox(20);
-        dialogVbox.getChildren().add(new Text(currentTask.getDescription()+" is due soon"));
-        Scene dialogScene = new Scene(dialogVbox, 300, 200);
+        VBox dialogVbox = new VBox();
+        dialogVbox.alignmentProperty().set(Pos.CENTER);
+        String message = String.format(MESSAGE_ALARM, currentTask.getId(),currentTask.getDescription());
+        Text messageShown = new Text(message);
+        messageShown.setFont(Font.font("Verdana"));
+        dialogVbox.getChildren().add(messageShown);
+        Scene dialogScene = new Scene(dialogVbox, 300, 100);
         dialog.setScene(dialogScene);
         dialog.show();
         logic.switchOffAlarm(currentTask);
