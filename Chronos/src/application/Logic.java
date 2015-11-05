@@ -6,6 +6,8 @@ public class Logic {
 	private static Storage _store;
 	private static Parser _parse;
 	private static Logic _theLogic = null;
+	private static final String ALARM_OFF = "off";
+	private static final String ALARM_OFF_COMMAND = "alarm %1$s, off";
 	
 	private Logic(){
 		_commandCreator = new CommandCreator();
@@ -40,5 +42,11 @@ public class Logic {
 
 	public static Instruction getCommandInstruction(String commandString) {
 		return CommandCreator.generateInstructions(commandString);
+	}
+	
+	public void switchOffAlarm(Task aTask){
+		aTask.setAlarm(ALARM_OFF);
+		String id = aTask.getId();
+		executeUserCommand(String.format(ALARM_OFF_COMMAND, id));
 	}
 }

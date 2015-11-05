@@ -29,6 +29,7 @@ public class DetailedViewController extends BorderPane {
 	private final String END_DATE = "Ending Time: %1$s ";
 	private final String PRIORITY = "Priority: %1$s ";
 	private final String CATEGORY = "Category: %1$s ";
+	private final String ALARM = "Alarm: %1$s";
 	private final String NOTES = "Notes: ";
 	private final String NOTE = "      %1$s.  %2$s";
 	private final int HOURS_PER_DAY = 24;
@@ -97,6 +98,7 @@ public class DetailedViewController extends BorderPane {
 			items.add(String.format(START_DATE, ((Event) taskToView).getStartDate()));
 		}
 		items.add(String.format(END_DATE, taskToView.getEndDate()));
+		items.add(String.format(ALARM, taskToView.getAlarm()));
 		items.add(String.format(PRIORITY, taskToView.getPriority()));
 		items.add(String.format(CATEGORY, taskToView.getCategory()));
 		items.add(String.format(NOTES));
