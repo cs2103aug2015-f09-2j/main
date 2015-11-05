@@ -43,8 +43,7 @@ public class GUI extends Application {
 	private static final String MESSAGE_WELCOME = "Welcome to Chronos V0.3! Where would you like Chronos to store your tasks and events?";
 	private static final String MESSAGE_LOADED = "Welcome to Chronos V0.3! Add a task to get started.";
 	private static final String ROOT_LAYOUT_FXML = "RootLayout.fxml";
-	private static final String DISPLAY = "d";
-
+	
 	private static final int DATA_FIRST = 0;
 	private static final int EXIT_NORMAL = 0;
 	
@@ -104,7 +103,7 @@ public class GUI extends Application {
 	private void checkNewUser() {
 		if (logic.isSavePresent()) {
 			_isNewUser = false;
-			updateFeedback(logic.executeUserCommand(DISPLAY));
+			updateFeedback(logic.updateDisplay());
 			commandBarController.displayFeedback(MESSAGE_LOADED);
 		} else {
 			_isNewUser = true;
@@ -281,7 +280,7 @@ public class GUI extends Application {
 			updateSummary(feedback.getData());
 		} else {
 			// update display
-			updateFeedback(logic.executeUserCommand(DISPLAY)); 
+			updateFeedback(logic.updateDisplay()); 
 		}
 		commandBarController.displayFeedback(feedback.getMessage());
 	}

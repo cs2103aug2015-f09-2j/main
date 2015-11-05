@@ -381,5 +381,10 @@ public class CommandCreator {
 		int itemIndex = _typedCommandStrings.size() - _commandIndex;
 		return (itemIndex >= 0) && (itemIndex < _typedCommandStrings.size());
 	}
+
+	public Feedback executeGUIDisplayCommand() {
+		GUIDisplayCommand aCommand = new GUIDisplayCommand();
+		return aCommand.execute();
+	}
 	
 }

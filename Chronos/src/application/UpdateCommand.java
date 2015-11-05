@@ -64,7 +64,7 @@ public class UpdateCommand extends Command {
 		for (int j=1; j<updateDetails.size();j++){
 			field = updateDetails.get(j);
 			value = updateDetails.get(++j);
-			if (field.equals(JSON_END_DATE)||field.equals(JSON_START_DATE)){
+			if (field.equals(JSON_END_DATE) || field.equals(JSON_START_DATE)){
 				aSpan = Chronic.parse(value);	
 				value = dateFormat.format(aSpan.getBeginCalendar().getTime());
 			}
