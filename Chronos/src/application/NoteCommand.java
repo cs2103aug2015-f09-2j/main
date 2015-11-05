@@ -1,5 +1,7 @@
 package application;
 
+import java.util.ArrayList;
+
 import org.json.simple.JSONObject;
 
 public class NoteCommand extends Command {
@@ -28,8 +30,20 @@ public class NoteCommand extends Command {
 			log.warning(LOG_NO_ID);
 			feedbackString = LOG_NO_ID;
 		}
+		ArrayList<Task> data = null;
+		if(_content != EMPTY) {
+			data = new ArrayList<Task>();
+			Task selectedTask = _parse.retrieveTask(noteDetails[0], _store.entries_);
+			data.add(selectedTask);
+		} else {
+			log.warning(LOG_NO_ID);
+			feedbackString = ERROR_NO_CONTENT;
+		}
 		
-		return new Feedback(feedbackString);
+		Feedback feedback = new Feedback(feedbackString, data);
+		feedback.setSummaryView(false);
+		return feedback;
+		
 	}
 
 	private int findEntry(String id) {
