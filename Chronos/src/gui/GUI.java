@@ -12,6 +12,7 @@ import application.Feedback;
 import application.Instruction;
 import application.Logic;
 import application.Task;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -22,6 +23,17 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
+import javafx.stage.WindowEvent;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.KeyCode;
+
+import java.awt.AWTException;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
+
+import javax.swing.ImageIcon;
 
 public class GUI extends Application {
 	
@@ -42,7 +54,15 @@ public class GUI extends Application {
 	private static final String MESSAGE_SUMMARY_FAIL = "Failed to set up Summary Pane";
 	private static final String MESSAGE_COMMAND_BAR_FAIL = "Failed to set up Command Bar Pane";
 	private static final String MESSAGE_FREE_TIME_DISPLAY_FAIL = "Failed to set up FreeTimeDisplay Pane";
+
+	private static final String MESSAGE_TRAYICON_FAIL = "Failed to set up tray icon in system tray";
+	
+	private static final String CLOSE_SYSTEM = "Exit";
+
+
 	private static final String MESSAGE_ALARM = "%1$s\n%2$s\nis due soon";
+
+
 	private BorderPane rootLayout;
 	protected static Logic logic;
 	private static CommandBarController commandBarController = null;
@@ -51,6 +71,7 @@ public class GUI extends Application {
 	private static FreeTimeDisplayController freeTimeDisplay = null;
 	private static Logger log = Logger.getLogger("GUILog");
 	private boolean setUp = false;
+	private TrayIcon trayIcon;
 
 	boolean isHandlingCommand = false;
 	private Instruction currentInstruction = null;
@@ -147,12 +168,64 @@ public class GUI extends Application {
 
 	private void initPrimaryStage(Stage primaryStage) {
 		primaryStage.setTitle(WINDOW_TITLE);
-
+		Platform.setImplicitExit(false);
 		Scene scene = new Scene(rootLayout);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		_stage = primaryStage;
+		createTray(primaryStage, scene);
 	}
+	
+	private void createTray(final Stage stage, final Scene scene) {
+		if(SystemTray.isSupported()) {
+			SystemTray tray = SystemTray.getSystemTray();
+			ImageIcon image = null;
+			image = new ImageIcon(getClass().getResource("/gui/logo.jpg"));
+	
+			trayIcon = new TrayIcon(image.getImage());
+			
+			try {
+				tray.add(trayIcon);
+			} catch (AWTException e) {
+				log.warning(MESSAGE_TRAYICON_FAIL);
+			}
+			
+			KeyBoardShortcuts(scene, stage);
+		}
+	}
+	
+	private void KeyBoardShortcuts(Scene scene, final Stage stage) {
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			public void handle(final KeyEvent key) {
+				if(key.getCode() == KeyCode.ESCAPE) {
+					hide(stage);
+				} else if(key.getCode() == KeyCode.CONTROL.N) {
+					start(new Stage());
+				} else if(key.getCode() == KeyCode.CONTROL.ENTER) {
+						stage.show();
+						stage.toFront();
+				}
+				
+			}
+		});
+	}
+
+
+
+    private void hide(final Stage stage) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                if (SystemTray.isSupported()) {
+                	stage.toBack();
+                } else {
+                	handleCommand(CLOSE_SYSTEM);
+                }
+            }
+        });
+	}
+
+
 
 	//this will be called by CommandBarController class if enter if detected and the command
 	//is passed to this method
