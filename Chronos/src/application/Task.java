@@ -145,7 +145,7 @@ public class Task {
 		return _alarm;
 	}
 	
-	void setAlarm(String alarm){
+	public void setAlarm(String alarm){
 		_alarm = alarm;
 	}
 	

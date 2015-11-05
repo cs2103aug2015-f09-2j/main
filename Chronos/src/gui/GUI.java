@@ -165,15 +165,16 @@ public class GUI extends Application {
 
 	}
 	
-	protected static void triggerAlarm(Task currentTast){
+	protected static void triggerAlarm(Task currentTask){
 		final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(_stage);
         VBox dialogVbox = new VBox(20);
-        dialogVbox.getChildren().add(new Text(currentTast.getDescription()+" is due soon"));
+        dialogVbox.getChildren().add(new Text(currentTask.getDescription()+" is due soon"));
         Scene dialogScene = new Scene(dialogVbox, 300, 200);
         dialog.setScene(dialogScene);
         dialog.show();
+        currentTask.setAlarm("off");
 	}
 
 	// get items arrayList from Logic and print them out
