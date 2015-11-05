@@ -239,4 +239,22 @@ public class GUI extends Application {
 		}
 	}
 
+	public void retrievePastCommand() {
+		String pastCommand = Logic.getPreviouslyTypedCommand();
+		try {
+			commandBarController.displayTypedCommand(pastCommand);
+		} catch (NullPointerException e) {
+			//do nothing
+		}
+	}
+
+	public void retrieveNextCommand() {
+		String pastCommand = Logic.getNextTypedCommand();
+		try {
+			commandBarController.displayTypedCommand(pastCommand);
+		} catch (NullPointerException e) {
+			//do nothing
+		}
+	}	
+	
 }

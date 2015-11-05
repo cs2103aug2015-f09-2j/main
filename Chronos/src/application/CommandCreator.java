@@ -1,5 +1,6 @@
 package application;
 
+import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
@@ -58,6 +59,7 @@ public class CommandCreator {
 	
 	private static Stack<Command> _pastCommands = new Stack<Command>();
 	private static Stack<Command> _undoneCommands = new Stack<Command>();
+	private static ArrayList<String> _typedCommandStrings = new ArrayList<String>();
 	
 	Feedback createAndExecuteCommand(String[] inputs) {
 		
@@ -133,6 +135,12 @@ public class CommandCreator {
 			default :
 				aCommand = new UnknownCommand(commandContent);
 				break;
+		}
+		
+		if (!(aCommand instanceof UnknownCommand)) {
+			//add to typed command stack
+			String commandString = inputs[COMMAND_INDEX_COMMAND] + " " +commandContent;
+			_typedCommandStrings.add(commandString);
 		}
 		
 		return aCommand.execute();
@@ -340,6 +348,19 @@ public class CommandCreator {
 		}
 		
 		return commandInstruction;
+	}
+	
+	public static String getTypedCommandString(int commandIndex) {
+		try {
+			return _typedCommandStrings.get(_typedCommandStrings.size()-commandIndex);
+		} catch (IndexOutOfBoundsException e) {
+			return null;
+		}
+	}
+
+	public static boolean isWithinRange(int _commandIndex) {
+		int itemIndex = _typedCommandStrings.size() - _commandIndex;
+		return (itemIndex >= 0) && (itemIndex < _typedCommandStrings.size());
 	}
 	
 }

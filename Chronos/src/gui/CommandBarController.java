@@ -55,13 +55,19 @@ public class CommandBarController extends BorderPane {
 				gui.handleCommandPattern(commandBar.getText().trim());
 			}
 		} else if (event.getCode() == KeyCode.COMMA) {
-			if(gui.isHandlingCommand) { //only execute if there is command is valid
+			if(gui.isHandlingCommand) {
 				hasAComma = true;
 				gui.handleCommandPattern();
 			} 
+		} else if (event.getCode() == KeyCode.UP) {
+			gui.isHandlingCommand = false;
+			gui.retrievePastCommand();
+		} else if (event.getCode() == KeyCode.DOWN) {
+			gui.isHandlingCommand = false;
+			gui.retrieveNextCommand();
 		}
 		
-		if(commandBar.getText().trim().equals("")) {
+		if(gui.isHandlingCommand && commandBar.getText().trim().equals("")) {
 			commandBar.clear();
 			gui.isHandlingCommand = false;
 		}
@@ -103,6 +109,10 @@ public class CommandBarController extends BorderPane {
 			}
 			commandBar.selectRange(startingRange,  startingRange + requiredField.length());
 		}
+	}
+	
+	public void displayTypedCommand(String pastCommand) {
+		commandBar.setText(pastCommand);
 	}
 
 }

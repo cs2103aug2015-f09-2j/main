@@ -8,6 +8,8 @@ public class Logic {
 	private static Logic _theLogic = null;
 	private static final String ALARM_OFF = "off";
 	private static final String ALARM_OFF_COMMAND = "alarm %1$s, off";
+	private static final int INDEX_DEFAULT = 0;
+	private static int _commandIndex;
 	
 	private Logic(){
 		_commandCreator = new CommandCreator();
@@ -16,6 +18,7 @@ public class Logic {
 	public static Logic getInstance() {
 		if (_theLogic == null) {
 			_theLogic = new Logic();
+			_commandIndex = INDEX_DEFAULT;
 		}
 		return _theLogic;
 	}
@@ -48,5 +51,25 @@ public class Logic {
 		aTask.setAlarm(ALARM_OFF);
 		String id = aTask.getId();
 		executeUserCommand(String.format(ALARM_OFF_COMMAND, id));
+	}
+	
+	public static String getPreviouslyTypedCommand() {
+		_commandIndex++;
+		if(CommandCreator.isWithinRange(_commandIndex)) {
+			return CommandCreator.getTypedCommandString(_commandIndex);
+		} else {
+			_commandIndex--;
+			return CommandCreator.getTypedCommandString(_commandIndex);
+		}
+	}
+
+	public static String getNextTypedCommand() {
+		_commandIndex--;
+		if(CommandCreator.isWithinRange(_commandIndex)) {
+			return CommandCreator.getTypedCommandString(_commandIndex);
+		} else {
+			_commandIndex++;
+			return CommandCreator.getTypedCommandString(_commandIndex);
+		}
 	}
 }
