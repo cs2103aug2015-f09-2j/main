@@ -29,6 +29,7 @@ public class CommandCreator {
 	private static final String COMMAND_UPDATE = "update";
 	private static final String COMMAND_UPDATE_U = "u";
 	private static final String COMMAND_VIEW = "view";
+	private static final String COMMAND_ALARM = "alarm";
 	
 	//Command Patterns
 	private static final String PATTERN_ADD = "add (description), (date), c:(category), p:(priority)";
@@ -43,10 +44,11 @@ public class CommandCreator {
 	private static final String PATTERN_REDO = "Redoes an undone action. Redoable actions: %1$s";
 	private static final String PATTERN_CD = "cd (directory)";
 	private static final String PATTERN_EXIT = "Closes Chronos";
+	private static final String PATTERN_ALARM = "alarm (task/event id), (number of hours prior OR off)";
 	private static final String PATTERN_UNKNOWN = "Error: Invalid command";
 		
 	enum COMMAND_TYPE {
-		ADD, CD, DELETE, DISPLAY, DONE, EXIT, NOTE, REDO, SEARCH, UNDO, UNKNOWN, UPDATE, VIEW  
+		ADD, CD, DELETE, DISPLAY, DONE, EXIT, NOTE, REDO, SEARCH, UNDO, UNKNOWN, UPDATE, VIEW , ALARM 
 	};
 	
 	//Strings for command creation
@@ -119,7 +121,12 @@ public class CommandCreator {
 			case EXIT : 
 				aCommand = new ExitCommand(commandContent);
 				break;
-			
+				
+			case ALARM:
+				aCommand = new AlarmCommand(commandContent);
+				_pastCommands.add(aCommand);
+				break;
+				
 			case UNKNOWN : 
 				//Fallthrough
 				
@@ -232,6 +239,9 @@ public class CommandCreator {
 				return COMMAND_TYPE.VIEW;
 				//break;
 				
+			case COMMAND_ALARM:
+				return COMMAND_TYPE.ALARM;
+				
 			default : 
 				return COMMAND_TYPE.UNKNOWN;
 				//break;
@@ -316,7 +326,11 @@ public class CommandCreator {
 			case EXIT : 
 				 commandInstruction.setCommandPattern(PATTERN_EXIT);
 				 break;
-			
+				 
+			case ALARM:
+				 commandInstruction.setCommandPattern(PATTERN_ALARM);
+				 break;
+		
 			case UNKNOWN : 
 				//Fallthrough
 				

@@ -1,7 +1,18 @@
 package gui;
 
+import java.awt.TextField;
 import java.io.IOException;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+
+
+
 
 import application.Logic;
 import application.Event;
@@ -10,12 +21,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 public class SummaryController extends StackPane {
@@ -28,6 +44,10 @@ public class SummaryController extends StackPane {
 	private static final String CLASH_STYLE = "clash";
 	private static final String HAVE_NOTES = "haveNotes";
 	private static final String NOTES_OVERDUE = "overdueHaveNotes";
+	private static final String ALARM = "alarm";
+	private static final String ALARM_OVERDUE = "alarmOverdue";
+	private static final String ALARM_NOTES = "alarmHaveNotes";
+	private static final String ALARM_OVERDUE_NOTES = "alarmOverdueHaveNotes";
 	private static final String HIGH_PRIORITY = "high";
 	private static final String MED_PRIORITY = "med";
 
@@ -179,8 +199,22 @@ public class SummaryController extends StackPane {
 		if(currentTask.getNotesNo()>0) {
 			currentRow.getStyleClass().add(HAVE_NOTES);
 		}
+		
+		if(currentTask.hasAlarm()){
+			currentRow.getStyleClass().add(ALARM);
+			checkAlarm(currentTask);
+		}
 		if(currentTask.isOverdue()&&currentTask.getNotesNo()>0) {
 			currentRow.getStyleClass().add(NOTES_OVERDUE);
+		}
+		if(currentTask.isOverdue()&&currentTask.hasAlarm()) {
+			currentRow.getStyleClass().add(ALARM_OVERDUE);
+		}
+		if(currentTask.hasAlarm()&&currentTask.getNotesNo()>0) {
+			currentRow.getStyleClass().add(ALARM_NOTES);
+		}
+		if(currentTask.isOverdue()&&currentTask.getNotesNo()>0&&currentTask.hasAlarm()) {
+			currentRow.getStyleClass().add(ALARM_OVERDUE_NOTES);
 		}
 		
 		//completed task
@@ -190,11 +224,25 @@ public class SummaryController extends StackPane {
 		}
 	}
 	
+	private void checkAlarm(Task currentTask){
+		Date alarm = currentTask.getAlarmDate();
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm aa"); 
+		Date now = new Date();
+		if (alarm.before(now)){
+			GUI.triggerAlarm(currentTask);
+		}
+	}
+	
+	
 	// clear any custom styles
 	private void cleanCurrentStyle(TableRow<?> tableRow) {
 		tableRow.getStyleClass().remove(HAVE_NOTES);
 		tableRow.getStyleClass().remove(NOTES_OVERDUE);
 		tableRow.getStyleClass().remove(OVERDUE_STYLE);
+		tableRow.getStyleClass().remove(ALARM);
+		tableRow.getStyleClass().remove(ALARM_NOTES);
+		tableRow.getStyleClass().remove(ALARM_OVERDUE);
+		tableRow.getStyleClass().remove(ALARM_OVERDUE_NOTES);
 	}
 
 	//add information to Task table

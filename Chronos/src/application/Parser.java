@@ -38,6 +38,7 @@ public class Parser {
 	static final String JSON_END_DATE = "due date";
 	static final String JSON_NOTES = "notes";
 	static final String JSON_COMPLETE = "complete";
+	static final String JSON_ALARM = "alarm";
 	
 	//Important constants for contents[]
 	private static final int CONTENT_DESC = 0;
@@ -100,6 +101,7 @@ public class Parser {
 		entry.put(JSON_DESC, createdTask.getDescription());
 		entry.put(JSON_PRIORITY, createdTask.getPriority());
 		entry.put(JSON_CATEGORY, createdTask.getCategory());
+		entry.put(JSON_ALARM, createdTask.getAlarm());
 		if (createdTask instanceof Event) {
 			Event createdEvent = (Event) createdTask;
 			entry.put(JSON_START_DATE, createdEvent.getStartDate());
@@ -163,15 +165,16 @@ public class Parser {
 		String endDate = anEntry.get(JSON_END_DATE).toString();
 		String priority = anEntry.get(JSON_PRIORITY).toString();
 		String category = anEntry.get(JSON_CATEGORY).toString();
+		String alarm = anEntry.get(JSON_ALARM).toString();
 		boolean completion = anEntry.get(JSON_COMPLETE).equals("true");
 		if (anEntry.containsKey(JSON_START_DATE)) {
-			Event convertedEvent = (Event) convertToEvent(anEntry, id, description, endDate, priority, category, completion);
+			Event convertedEvent = (Event) convertToEvent(anEntry, id, description, endDate, priority, category, completion,alarm);
 			if (anEntry.containsKey(JSON_NOTES)) {
 				convertedEvent = (Event) updatedTaskNotes(convertedEvent, anEntry);
 			}
 			return convertedEvent;
 		} else {
-			Task convertedTask = convertTask(id, description, endDate, priority, category, completion);
+			Task convertedTask = convertTask(id, description, endDate, priority, category, completion,alarm);
 			if(anEntry.containsKey(JSON_NOTES)){
 				convertedTask = updatedTaskNotes(convertedTask, anEntry);
 			}
@@ -180,15 +183,15 @@ public class Parser {
 		
 	}
 	
-	private Task convertToEvent(JSONObject anEntry, String id, String description, String endDate, String priority, String category, boolean completion) {
+	private Task convertToEvent(JSONObject anEntry, String id, String description, String endDate, String priority, String category, boolean completion, String alarm) {
 		String startDate = anEntry.get(JSON_START_DATE).toString();
-		Event convertedEvent = new Event(id, description, startDate, endDate, priority, category);
+		Event convertedEvent = new Event(id, description, startDate, endDate, priority, category, alarm);
 		convertedEvent.markTaskAsDone(completion);
 		return convertedEvent;
 	}
 	
-	private Task convertTask(String id, String description, String endDate, String priority, String category, boolean completion) {
-		Task convertedTask = new Task(id, description, endDate, priority, category);
+	private Task convertTask(String id, String description, String endDate, String priority, String category, boolean completion, String alarm) {
+		Task convertedTask = new Task(id, description, endDate, priority, category,alarm);
 		convertedTask.markTaskAsDone(completion);
 		return convertedTask;
 	}
@@ -216,6 +219,11 @@ public class Parser {
 		String[] details = updateString.split(CONTENT_SEPARATOR);
 		ArrayList<String> updateDetails = new ArrayList<String>();
 		return updateDetailsArray(details, updateDetails);
+	}
+	
+	//Used by the Alarm Command
+	public String[] parseAlarmString(String alarmString){
+		return alarmString.split(CONTENT_SEPARATOR);
 	}
 	
 	//note: for tasks only

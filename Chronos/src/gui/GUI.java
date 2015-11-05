@@ -12,9 +12,14 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class GUI extends Application {
+	
+	private static Stage _stage;
 
 	private static final String WINDOW_TITLE = "Chronos V0.3";
 	private static final String MESSAGE_WELCOME = "Welcome to Chronos V0.3! Where would you like Chronos to store your tasks and events?";
@@ -139,6 +144,7 @@ public class GUI extends Application {
 		Scene scene = new Scene(rootLayout);
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		_stage = primaryStage;
 	}
 
 	public void handleCommand(String text) {
@@ -157,6 +163,17 @@ public class GUI extends Application {
 			}
 		}
 
+	}
+	
+	protected static void triggerAlarm(Task currentTast){
+		final Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(_stage);
+        VBox dialogVbox = new VBox(20);
+        dialogVbox.getChildren().add(new Text(currentTast.getDescription()+" is due soon"));
+        Scene dialogScene = new Scene(dialogVbox, 300, 200);
+        dialog.setScene(dialogScene);
+        dialog.show();
 	}
 
 	// get items arrayList from Logic and print them out

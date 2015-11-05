@@ -15,6 +15,7 @@ public class Task {
 	String DEFAULT_PRIORITY = "med";
 	String DEFAULT_CATEGORY = "none";
 	String DEFAULT_STATUS = "false";
+	String DEFAULT_ALARM = "off";
 	private static final String ID_HEADER = "t";	
 	
 	protected String _id;
@@ -23,9 +24,12 @@ public class Task {
 	protected String _priority = DEFAULT_PRIORITY;
 	protected String _category = DEFAULT_CATEGORY;
 	protected String _status = DEFAULT_STATUS;
+	protected String _alarm = DEFAULT_ALARM;
 	protected boolean _isDone = false;
 	protected boolean _isClashing = false;
 	protected ArrayList<Note> _notes = new ArrayList<Note>();
+	
+	DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm aa"); 
 	
 	protected Task() {
 		
@@ -47,12 +51,12 @@ public class Task {
 	
 	protected String manipulateDate(Calendar theDate) throws ParseException {	
 		//set default time
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm a"); 
+		
 		
 		return dateFormat.format(theDate.getTime());
 	}
 
-	public Task(int id, String description, String endDate, String priority, String category) {
+	public Task(int id, String description, String endDate, String priority, String category, String alarm) {
 		_id = ID_HEADER + Integer.toString(id);
 		_description = description.trim();
 		if(!endDate.equals(null)){
@@ -64,9 +68,12 @@ public class Task {
 		if(!category.equals(null)){
 			setCategory(category);
 		}
+		if(!alarm.equals(null)){
+			setAlarm(alarm);
+		}
 	}
 	
-	public Task(String id, String description, String endDate, String priority, String category) {
+	public Task(String id, String description, String endDate, String priority, String category, String alarm) {
 		_id = id.trim();
 		_description = description.trim();
 		if(!endDate.equals(null)){
@@ -77,6 +84,9 @@ public class Task {
 		}
 		if(!category.equals(null)){
 			setCategory(category);
+		}
+		if(!alarm.equals(null)){
+			setAlarm(alarm);
 		}
 	}
 
@@ -131,6 +141,30 @@ public class Task {
 		}
 	}
 	
+	public String getAlarm(){
+		return _alarm;
+	}
+	
+	void setAlarm(String alarm){
+		_alarm = alarm;
+	}
+	
+	public boolean hasAlarm(){
+		if (_alarm.equals(DEFAULT_ALARM)){
+			return false;
+		}else{
+			return true;
+		}
+	}
+	
+	public Date getAlarmDate(){
+		assert(!_alarm.equals(DEFAULT_ALARM));
+		try {
+			return dateFormat.parse(_alarm);
+		} catch (ParseException e) {
+			return null;
+		}
+	}
 	@Override
 	public String toString() {
 		return _id + ". " + _description + " " + _endDate + " " + _priority + " " + _category;
@@ -158,7 +192,7 @@ public class Task {
 	}
 
 	public Task copy() {
-		Task copiedTask = new Task(_id, _description, _endDate, _priority, _category);
+		Task copiedTask = new Task(_id, _description, _endDate, _priority, _category, _alarm);
 		for(Note aNote:_notes){
 			copiedTask.addNote(aNote.toString());
 		}
@@ -166,7 +200,6 @@ public class Task {
 	}
 	
 	public boolean isOverdue() {
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm aa");
 		try {
 			Date dueDate;
 			Date currentDate = new Date();

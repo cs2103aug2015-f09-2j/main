@@ -14,16 +14,16 @@ import com.mdimension.jchronic.utils.Span;
 public class UpdateCommand extends Command {
 
 	//Unique attributes
-	private JSONObject _oldEntry;
-	private int _id;
+	protected JSONObject _oldEntry;
+	protected int _id;
 		
 	//Constant Strings
-	private static final String FEEDBACK_MESSAGE =  "Updated %1$s";
-	private static final String FEEDBACK_MESSAGE_UNDO =  "Restored %1$s";
+	protected static final String FEEDBACK_MESSAGE =  "Updated %1$s";
+	protected static final String FEEDBACK_MESSAGE_UNDO =  "Restored %1$s";
 	static final String JSON_START_DATE = "start date";
 	static final String JSON_END_DATE = "due date";
 	
-	private static final int LIMIT_ID = -1;
+	protected static final int LIMIT_ID = -1;
 	
 	public UpdateCommand(String content) {
 		super(content);
@@ -46,7 +46,7 @@ public class UpdateCommand extends Command {
 		}
 	}
 
-	private int findEntry(String id) {
+	protected int findEntry(String id) {
 		for (int i = 0; i < _store.entries_.size(); i++) {
 			JSONObject currentEntry = (JSONObject) _store.entries_.get(i);
 			if (currentEntry.get(Parser.JSON_ID).equals(id)) {

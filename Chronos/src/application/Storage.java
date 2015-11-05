@@ -26,7 +26,7 @@ public class Storage {
 	private static final String PREFS_EVENT_COUNT = "event count";
 	private static final String DEFAULT_DIRECTORY = "/chronos_storage.txt";
 	private static final String DEFAULT_PATH = "none";
-	private static final String[] ESSENTIAL_FIELDS = {"id","due date","description","priority","category","complete"};
+	private static final String[] ESSENTIAL_FIELDS = {"id","due date","description","priority","category","complete","alarm"};
 	private static final char TASK_PREFIX = 't';
 	private static final char EVENT_PREFIX = 'e';
 	private static final int ERROR_TYPE_ID = 0;

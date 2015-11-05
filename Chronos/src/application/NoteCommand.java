@@ -1,7 +1,5 @@
 package application;
 
-import java.util.ArrayList;
-
 import org.json.simple.JSONObject;
 
 public class NoteCommand extends Command {
