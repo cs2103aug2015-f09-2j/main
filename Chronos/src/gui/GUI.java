@@ -1,6 +1,11 @@
 //@@author A0115448E
 package gui;
 
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.NativeHookException;
+import org.jnativehook.keyboard.NativeKeyEvent;
+import org.jnativehook.keyboard.NativeKeyListener;
+
 import javafx.geometry.Insets;
 
 import java.io.IOException;
@@ -36,7 +41,7 @@ import java.awt.TrayIcon;
 
 import javax.swing.ImageIcon;
 
-public class GUI extends Application {
+public class GUI extends Application implements NativeKeyListener {
 
 	private static Stage _stage;
 
@@ -155,11 +160,24 @@ public class GUI extends Application {
 		primaryStage.setTitle(WINDOW_TITLE);
 		Platform.setImplicitExit(false);
 		Scene scene = new Scene(rootLayout);
-		primaryStage.setScene(scene);
-		primaryStage.show();
 		_stage = primaryStage;
 		createTray(primaryStage, scene);
+		primaryStage.setScene(scene);
+		primaryStage.show();
 	}
+
+	//@@author A0125424N
+	private void registerKeyboard() {
+		 try {
+	        	GlobalScreen.registerNativeHook();
+	        }
+	        catch (NativeHookException ex) {
+	           log.warning(ex.toString());
+	           handleCommand(CLOSE_SYSTEM);
+	        }
+
+	        GlobalScreen.addNativeKeyListener(new GUI());
+	    }
 
 	// @@author A0125424N
 	/**
@@ -182,31 +200,22 @@ public class GUI extends Application {
 			} catch (AWTException e) {
 				log.warning(MESSAGE_TRAYICON_FAIL);
 			}
-			KeyBoardShortcuts(scene, stage);
 		}
 	}
 
-	// @@author A0125424N
-	/**
-	 * This method implements the respective keyboard shortcuts.
-	 * 
-	 * @param scene
-	 * @param stage
-	 */
-	private void KeyBoardShortcuts(Scene scene, final Stage stage) {
-		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			public void handle(final KeyEvent key) {
-				if (key.getCode() == KeyCode.ESCAPE) {
-					hide(stage);
-				} else if (key.getCode() == KeyCode.CONTROL.N) {
-					start(new Stage());
-				} else if (key.getCode() == KeyCode.CONTROL.ENTER) {
-					stage.show();
-					stage.toFront();
+	//@@author A0125424N
+	public void nativeKeyPressed(final NativeKeyEvent e) {
+		Platform.runLater((new Runnable() {
+			@Override
+			public void run() {
+				if (e.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
+		            hide(_stage);
+		        }
+				if(e.getKeyCode() == NativeKeyEvent.VC_CONTROL_L) {
+					_stage.show();
 				}
-
-			}
-		});
+			}		
+		}));    
 	}
 
 	// @@author A0125424N
@@ -221,7 +230,7 @@ public class GUI extends Application {
 			@Override
 			public void run() {
 				if (SystemTray.isSupported()) {
-					stage.toBack();
+					stage.hide();
 				} else {
 					handleCommand(CLOSE_SYSTEM);
 				}
