@@ -29,7 +29,7 @@ public class Task {
 	protected boolean _isClashing = false;
 	protected ArrayList<Note> _notes = new ArrayList<Note>();
 	
-	DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm"); 
+	DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yy HH:mm"); 
 	
 	protected Task() {
 		
