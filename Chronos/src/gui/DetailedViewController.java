@@ -39,10 +39,6 @@ public class DetailedViewController extends BorderPane {
 	private final String OVERDUE = "Since";
 	private final String NOT_OVERDUE = "Until";
 	private final String DATE_FORMAT = "dd/MM/yy HH:mm";
-<<<<<<< HEAD
-=======
-	private final String INDICATOR_TIME = ":";
->>>>>>> 7b5ffbd7f0262631a6f7f988a2fd8c2a093bd098
 
 	// displayed items
 	@FXML
@@ -148,18 +144,6 @@ public class DetailedViewController extends BorderPane {
 			// Case: Someday
 			return 0;
 		}
-	}
-
-	//set specific time to be 23:59:59
-	private Date setSpecificTime(Date dueDate) {
-
-		Calendar assumedEndDate = Calendar.getInstance();
-		assumedEndDate.setTime(dueDate);
-		assumedEndDate.set(Calendar.HOUR_OF_DAY, 23);
-		assumedEndDate.set(Calendar.MINUTE, 59);
-		assumedEndDate.set(Calendar.SECOND, 59);
-		dueDate = assumedEndDate.getTime();
-		return dueDate;
 	}
 
 	//convert the integer hourDiff into presentable String
