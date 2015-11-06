@@ -12,12 +12,12 @@
 		<items>
 			<ScrollPane prefHeight="120.0" minHeight="0.0" vbarPolicy="ALWAYS">
 				<content>
-					<TableView fx:id="eventTable" prefHeight="500.0" editable="true" fixedCellSize="0.0">
+					<TableView fx:id="eventTable" prefHeight="500.0" editable="true">
 						<columns>
-							<TableColumn fx:id="EventIDCol" prefWidth="35.0" text="ID" />
+							<TableColumn fx:id="EventIDCol" prefWidth="40.0" text="ID" />
 							<TableColumn fx:id="EventTimeCol" prefWidth="110.0" text="start time" />
 							<TableColumn fx:id="EventEndTimeCol" prefWidth="110.0" text="end time" />
-							<TableColumn fx:id="EventTitleCol" prefWidth="250.0" text="title" />
+							<TableColumn fx:id="EventTitleCol" prefWidth="255.0" text="title" />
 							<TableColumn fx:id="EventCategoryCol" prefWidth="58.0" text="category" />
 							<TableColumn fx:id="EventPriorityCol" minWidth="0.0" prefWidth="0.0" text="priority" />
 						</columns>
@@ -27,11 +27,11 @@
 			
 			<ScrollPane  prefHeight="170.0" minHeight="0.0" vbarPolicy="ALWAYS">
 				<content>
-					<TableView fx:id="taskTable" prefHeight="700.0" editable="true" fixedCellSize="0.0" styleClass="table">
+					<TableView fx:id="taskTable" prefHeight="700.0" editable="true" styleClass="table">
 						<columns>
-							<TableColumn fx:id="TaskIDCol" prefWidth="35.0" text="ID" />
+							<TableColumn fx:id="TaskIDCol" prefWidth="40.0" text="ID" />
 							<TableColumn fx:id="TaskTimeCol" prefWidth="220.0" text="time" />
-							<TableColumn fx:id="TaskTitleCol" prefWidth="250.0" text="title" />
+							<TableColumn fx:id="TaskTitleCol" prefWidth="255.0" text="title" />
 							<TableColumn fx:id="TaskCategoryCol" prefWidth="60.0" text="category" />
 							<TableColumn fx:id="TaskPriorityCol" minWidth="0.0" prefWidth="0.0" text="priority" />
 						</columns>

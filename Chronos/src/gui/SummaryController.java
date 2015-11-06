@@ -51,6 +51,10 @@ public class SummaryController extends StackPane {
 	private static final String ALARM_OVERDUE_NOTES = "alarmOverdueHaveNotes";
 	private static final String HIGH_PRIORITY = "high";
 	private static final String MED_PRIORITY = "med";
+	private static final int MAX_ID_LENGTH = 4;
+	private static final int PIXEL_PER_LETTER = 6;
+	private static final int ID_COL_WIDTH = 40;
+	private static final int TITLE_COL_WIDTH = 255;
 
 	@FXML
 	private TableView<Task> taskTable;
@@ -107,6 +111,10 @@ public class SummaryController extends StackPane {
 	public void display(ArrayList<Task> eventList) {
 		ObservableList<Task> tasks = FXCollections.observableArrayList();
 		ObservableList<Event> events = FXCollections.observableArrayList();
+
+		eventTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		taskTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		
 		addTasksInList(eventList, tasks, events);
 		setTaskColumns(tasks);
 		setEventColumns(events);
@@ -114,14 +122,30 @@ public class SummaryController extends StackPane {
 		updateEventStyle(EventPriorityCol);
 	}
 
+	//categorise eventlists tasks into task and event and add into respective lists
 	private void addTasksInList(ArrayList<Task> eventList, ObservableList<Task> tasks, ObservableList<Event> events) {
+		int maxIdLen = 0;
 		for (int i = 0; i < eventList.size(); i++) {
 			if(eventList.get(i) instanceof Event) {
 				events.add((Event)eventList.get(i));
 			} else {
 				tasks.add((Task) eventList.get(i));
 			}
+			if(eventList.get(i).getId().length()>maxIdLen) {
+				maxIdLen = eventList.get(i).getId().length();
+			}
 		}
+		if(maxIdLen > MAX_ID_LENGTH) { //if task id is too long
+			updateColWidth(maxIdLen);
+		}
+	}
+
+	//display the full id and compensate the increase in ID column width in title column
+	private void updateColWidth(int maxIdLen) {
+		TaskIDCol.setPrefWidth(ID_COL_WIDTH + PIXEL_PER_LETTER * (maxIdLen- MAX_ID_LENGTH));
+		EventIDCol.setPrefWidth(ID_COL_WIDTH + PIXEL_PER_LETTER * (maxIdLen- MAX_ID_LENGTH));
+		TaskTitleCol.setPrefWidth(TITLE_COL_WIDTH - PIXEL_PER_LETTER * (maxIdLen- MAX_ID_LENGTH));
+		EventTitleCol.setPrefWidth(TITLE_COL_WIDTH - PIXEL_PER_LETTER * (maxIdLen- MAX_ID_LENGTH));
 	}
 
 	//update the style for task table
@@ -218,7 +242,7 @@ public class SummaryController extends StackPane {
 			currentRow.getStyleClass().add(ALARM_OVERDUE_NOTES);
 		}
 		
-		//completed task
+		//completed task should not have any other style
 		if (currentTask.isTaskComplete()) {
 			cleanCurrentStyle(currentRow);
 			currentRow.getStyleClass().add(COMPLETED_TASK_STYLE);
