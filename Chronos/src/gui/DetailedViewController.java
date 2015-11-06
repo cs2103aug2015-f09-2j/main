@@ -39,6 +39,10 @@ public class DetailedViewController extends BorderPane {
 	private final String OVERDUE = "Since";
 	private final String NOT_OVERDUE = "Until";
 	private final String DATE_FORMAT = "dd/MM/yy HH:mm";
+<<<<<<< HEAD
+=======
+	private final String INDICATOR_TIME = ":";
+>>>>>>> 7b5ffbd7f0262631a6f7f988a2fd8c2a093bd098
 
 	// displayed items
 	@FXML
