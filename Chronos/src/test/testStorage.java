@@ -23,13 +23,14 @@ public class testStorage {
 	static final String PREFS_PATH = "path";
 	static String path;
 
-	
 	@BeforeClass
+	//Store the file path in user preference before testing
 	public static void setUp(){
 		path = userPrefs.get(PREFS_PATH, DEFAULT_PATH);
 	}
 	
 	@AfterClass
+	//Restore the file path in user preference
 	public static void cleanUp(){
 		userPrefs.put(PREFS_PATH, path);
 	}
@@ -47,29 +48,31 @@ public class testStorage {
 		entries = store.entries_;
 		assertEquals(entries.size(), 0);
 	}
+	
 	@Test
 	//test boundary case of "some content" 
 	public void testReadSome() {	
 		creator.executeInitializeCommand("src/test/testFiles/testSome");
 		store = Storage.getInstance();
 		entries = store.entries_;
-		assertEquals(entries.size(), 4);
-		String expected = "{\"due date\":\"24\\/10\\/2015\",\"description\":\"buy milk\",\"id\":\"t3\",\"priority\":\"high\",\"category\":\"personal\",\"complete\":false}";
-		assertEquals(expected, entries.get(2).toString());
+		assertEquals(entries.size(), 5);
+		String expected = "{\"start date\":\"07\\/11\\/15 09:00\",\"due date\":\"07\\/11\\/15 10:00\",\"alarm\":\"off\",\"description\":\"meeting with boss\",\"id\":\"e1\",\"priority\":\"high\",\"category\":\"work\",\"complete\":false}";
+		assertEquals(expected, entries.get(1).toString());
 		JSONObject entry = (JSONObject) entries.get(3);
-		assertEquals("sleep", entry.get("description"));
+		assertEquals("walk the dog", entry.get("description"));
 	}
+	
 	@Test
 	//test boundary case of "lots of content"
 	public void testReadMany(){
 		creator.executeInitializeCommand("src/test/testFiles/testMany");
 		store = Storage.getInstance();
 		entries = store.entries_;
-		assertEquals(100, entries.size());
-		String expected = "{\"due date\":\"someday\",\"description\":\"sleep\",\"id\":\"t4\",\"priority\":\"high\",\"category\":\"none\",\"complete\":false}";
+		assertEquals(200, entries.size());
+		String expected = "{\"start date\":\"07\\/11\\/15 09:00\",\"due date\":\"07\\/11\\/15 10:00\",\"alarm\":\"off\",\"description\":\"meeting with boss\",\"id\":\"e1\",\"priority\":\"high\",\"category\":\"work\",\"complete\":false}";
 		assertEquals(expected, entries.get(60).toString());
 		JSONObject entry = (JSONObject) entries.get(40);
-		assertEquals("sleep", entry.get("description"));
+		assertEquals("meeting with boss", entry.get("description"));
 	}
 	
 	@Test
@@ -98,6 +101,4 @@ public class testStorage {
 		}
 		assertSame(org.json.simple.parser.ParseException.class,caught.getClass());	
 	}
-	
-
 }
