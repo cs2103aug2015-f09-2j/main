@@ -2,6 +2,7 @@ package application;
 
 import java.util.ArrayList;
 
+//@@author A0126223U
 /**
  * This class is for communication between the GUI and Logic classes.
  * It contains a String and data (ArrayList<Task>). 
@@ -9,7 +10,6 @@ import java.util.ArrayList;
  * 	- executeUserCommand()
  *  - setSavePath()
  */
-
 public class Feedback {
 
 	private String _feedbackString;
