@@ -1,6 +1,5 @@
 package application;
 
-//@@author A0126223U
 public class Note {
 	
 	private String _content = Command.EMPTY;

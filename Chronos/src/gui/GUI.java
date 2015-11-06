@@ -1,3 +1,4 @@
+//@@author A0115448E
 package gui;
 
 import javafx.geometry.Insets;
@@ -36,7 +37,7 @@ import java.awt.TrayIcon;
 import javax.swing.ImageIcon;
 
 public class GUI extends Application {
-	
+
 	private static Stage _stage;
 
 	private static final String WINDOW_TITLE = "Chronos V0.4";
@@ -54,7 +55,7 @@ public class GUI extends Application {
 	private static final String MESSAGE_COMMAND_BAR_FAIL = "Failed to set up Command Bar Pane";
 	private static final String MESSAGE_FREE_TIME_DISPLAY_FAIL = "Failed to set up FreeTimeDisplay Pane";
 	private static final String MESSAGE_TRAYICON_FAIL = "Failed to set up tray icon in system tray";
-	
+
 	private static final String CLOSE_SYSTEM = "Exit";
 
 	private static final String MESSAGE_ALARM = "%1$s\n%2$s\nis due soon";
@@ -64,7 +65,6 @@ public class GUI extends Application {
 	private static CommandBarController commandBarController = null;
 	private static SummaryController summary = null;
 	private static DetailedViewController detailView = null;
-	private static FreeTimeDisplayController freeTimeDisplay = null;
 	private static Logger log = Logger.getLogger("GUILog");
 	private boolean setUp = false;
 	private TrayIcon trayIcon;
@@ -146,16 +146,6 @@ public class GUI extends Application {
 		}
 	}
 
-	private void addFreeTimeDisplay() {
-		try {
-			freeTimeDisplay = new FreeTimeDisplayController();
-			rootLayout.setCenter(freeTimeDisplay);
-			freeTimeDisplay.display();
-		} catch (IOException e) {
-			log.warning(MESSAGE_FREE_TIME_DISPLAY_FAIL);
-		}
-	}
-
 	private void initRootLayout() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(ROOT_LAYOUT_FXML));
 		rootLayout = loader.load();
@@ -170,21 +160,23 @@ public class GUI extends Application {
 		_stage = primaryStage;
 		createTray(primaryStage, scene);
 	}
-	
-	//@@author A0125424N
+
+	// @@author A0125424N
 	/**
-	 * This method creates a tray and subsequently a tray icon for the application.
+	 * This method creates a tray and subsequently a tray icon for the
+	 * application.
+	 * 
 	 * @param stage
 	 * @param scene
 	 */
 	private void createTray(final Stage stage, final Scene scene) {
-		if(SystemTray.isSupported()) {
+		if (SystemTray.isSupported()) {
 			SystemTray tray = SystemTray.getSystemTray();
 			ImageIcon image = null;
 			image = new ImageIcon(getClass().getResource("/gui/logo.jpg"));
-	
+
 			trayIcon = new TrayIcon(image.getImage());
-			
+
 			try {
 				tray.add(trayIcon);
 			} catch (AWTException e) {
@@ -193,46 +185,48 @@ public class GUI extends Application {
 			KeyBoardShortcuts(scene, stage);
 		}
 	}
-	
-	//@@author A0125424N
+
+	// @@author A0125424N
 	/**
 	 * This method implements the respective keyboard shortcuts.
+	 * 
 	 * @param scene
 	 * @param stage
 	 */
 	private void KeyBoardShortcuts(Scene scene, final Stage stage) {
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(final KeyEvent key) {
-				if(key.getCode() == KeyCode.ESCAPE) {
+				if (key.getCode() == KeyCode.ESCAPE) {
 					hide(stage);
-				} else if(key.getCode() == KeyCode.CONTROL.N) {
+				} else if (key.getCode() == KeyCode.CONTROL.N) {
 					start(new Stage());
-				} else if(key.getCode() == KeyCode.CONTROL.ENTER) {
-						stage.show();
-						stage.toFront();
+				} else if (key.getCode() == KeyCode.CONTROL.ENTER) {
+					stage.show();
+					stage.toFront();
 				}
-				
+
 			}
 		});
 	}
-	
-	//@@author A0125424N
+
+	// @@author A0125424N
 	/**
-	 * This method brings the program to the back of other applications, 
-	 * and is run when called upon at any time.
+	 * This method brings the program to the back of other applications, and is
+	 * run when called upon at any time.
+	 * 
 	 * @param stage
 	 */
-    private void hide(final Stage stage) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                if (SystemTray.isSupported()) {
-                	stage.toBack();
-                } else {
-                	handleCommand(CLOSE_SYSTEM);
-                }
-            }
-        });
+	private void hide(final Stage stage) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				if (SystemTray.isSupported()) {
+					stage.toBack();
+				} else {
+					handleCommand(CLOSE_SYSTEM);
+				}
+			}
+		});
 	}
 
 	public void handleCommand(String text) {
@@ -241,33 +235,28 @@ public class GUI extends Application {
 			summary.setVisible(true);
 			_isNewUser = false;
 		} else {
-			
-			// TODO: change this
-			if (text.contains("free")) {
-				addFreeTimeDisplay();
-			} else {
-				Feedback commandFeedback = logic.executeUserCommand(text);
-				updateFeedback(commandFeedback);
-			}
+			Feedback commandFeedback = logic.executeUserCommand(text);
+			updateFeedback(commandFeedback);
+
 		}
 
 	}
-	
-	protected static void triggerAlarm(Task currentTask){
+
+	protected static void triggerAlarm(Task currentTask) {
 		final Stage dialog = new Stage();
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(_stage);
-        VBox dialogVbox = new VBox();
-        dialogVbox.alignmentProperty().set(Pos.CENTER);
-        String message = String.format(MESSAGE_ALARM, currentTask.getId(),currentTask.getDescription());
-        Text messageShown = new Text(message);
-        messageShown.setFont(Font.font("Verdana"));
-        messageShown.setTextAlignment(TextAlignment.CENTER);
-        dialogVbox.getChildren().add(messageShown);
-        Scene dialogScene = new Scene(dialogVbox, 300, 100);
-        dialog.setScene(dialogScene);
-        dialog.show();
-        logic.switchOffAlarm(currentTask);
+		dialog.initModality(Modality.APPLICATION_MODAL);
+		dialog.initOwner(_stage);
+		VBox dialogVbox = new VBox();
+		dialogVbox.alignmentProperty().set(Pos.CENTER);
+		String message = String.format(MESSAGE_ALARM, currentTask.getId(), currentTask.getDescription());
+		Text messageShown = new Text(message);
+		messageShown.setFont(Font.font("Verdana"));
+		messageShown.setTextAlignment(TextAlignment.CENTER);
+		dialogVbox.getChildren().add(messageShown);
+		Scene dialogScene = new Scene(dialogVbox, 300, 100);
+		dialog.setScene(dialogScene);
+		dialog.show();
+		logic.switchOffAlarm(currentTask);
 	}
 
 	// get items arrayList from Logic and print them out
@@ -289,30 +278,20 @@ public class GUI extends Application {
 			updateSummary(feedback.getData());
 		} else {
 			// update display
-			updateFeedback(logic.updateDisplay()); 
+			updateFeedback(logic.updateDisplay());
 		}
 		commandBarController.displayFeedback(feedback.getMessage());
 	}
 
-	//@@author A0126223U
-	/**
-	 * Retrieves command instructions based on the entered command
-	 *
-	 * @param enteredCommand   The command string
-	 */
-	public void handleCommandPattern(String enteredCommand) {
-		currentInstruction = Logic.getCommandInstruction(enteredCommand);
+	public void handleCommandPattern(String text) {
+		currentInstruction = Logic.getCommandInstruction(text);
 		isHandlingCommand = true;
 		handleCommandPattern();
 	}
 
-	//@@author A0126223U
-	/**
-	 * Displays and scrolls through instructions and command pattern to the user by 
-	 * updating the command bar and feedback string
-	 *
-	 */
 	public void handleCommandPattern() {
+		// assert Instruction != null
+
 		// display to feedback String
 		String feedbackString = currentInstruction.getCommandPattern();
 		if (currentInstruction.hasInstructions()) {
@@ -320,7 +299,7 @@ public class GUI extends Application {
 		}
 		commandBarController.displayFeedback(feedbackString);
 
-		// display command pattern to Command Bar 
+		// display command pattern to Command Bar (ideal)
 		commandBarController.updateCommandBar(currentInstruction.getNextRequiredField());
 
 		currentInstruction.nextStep();
@@ -331,32 +310,22 @@ public class GUI extends Application {
 		}
 	}
 
-	//@@author A0126223U
-	/**
-	 * Retrieves and displays a previously typed command
-	 *
-	 */
 	public void retrievePastCommand() {
 		String pastCommand = Logic.getPreviouslyTypedCommand();
 		try {
 			commandBarController.displayTypedCommand(pastCommand);
 		} catch (NullPointerException e) {
-			//do nothing
+			// do nothing
 		}
 	}
 
-	//@@author A0126223U
-	/**
-	 * Retrieves and displays the next typed command 
-	 *
-	 */
 	public void retrieveNextCommand() {
 		String pastCommand = Logic.getNextTypedCommand();
 		try {
 			commandBarController.displayTypedCommand(pastCommand);
 		} catch (NullPointerException e) {
-			//do nothing
+			// do nothing
 		}
-	}	
+	}
 
 }

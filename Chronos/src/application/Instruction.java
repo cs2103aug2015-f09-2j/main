@@ -2,7 +2,6 @@ package application;
 
 import java.util.ArrayList;
 
-//@@author A0126223U
 public class Instruction {
 
 	private int _numberOfSteps = 0;

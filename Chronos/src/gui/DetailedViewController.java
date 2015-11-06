@@ -1,3 +1,4 @@
+//@@author A0115448E
 package gui;
 
 import java.io.IOException;
@@ -38,7 +39,10 @@ public class DetailedViewController extends BorderPane {
 	private final String OVERDUE = "Since";
 	private final String NOT_OVERDUE = "Until";
 	private final String DATE_FORMAT = "dd/MM/yy HH:mm";
+<<<<<<< HEAD
+=======
 	private final String INDICATOR_TIME = ":";
+>>>>>>> 7b5ffbd7f0262631a6f7f988a2fd8c2a093bd098
 
 	// displayed items
 	@FXML
@@ -137,13 +141,7 @@ public class DetailedViewController extends BorderPane {
 		try {
 			Date dueDate;
 			Date currentDate = new Date();
-			if (endDate.toLowerCase().contains(INDICATOR_TIME)) { // if deadline has a specified time
-				//dateFormat = new SimpleDateFormat();
-				dueDate = dateFormat.parse(endDate);
-			} else { // if deadline has no specified time: put it at 11:59:59
-				dueDate = dateFormat.parse(endDate);
-				dueDate = setSpecificTime(dueDate);
-			}
+			dueDate = dateFormat.parse(endDate);
 			long diff = TimeUnit.MILLISECONDS.toHours(dueDate.getTime() - currentDate.getTime());
 			return (int) diff;
 		} catch (ParseException e) {

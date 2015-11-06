@@ -19,7 +19,6 @@ public class Event extends Task {
 	private static final String ID_DISPLAY = ". ";
 	private static final String MESSAGE_INVALID_END = "End date < start date";
 	
-	//@@author A0126223U
 	public Event(String[] contents) throws Exception {
 		super();
 		_description = contents[0];
