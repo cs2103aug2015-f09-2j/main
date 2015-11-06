@@ -80,7 +80,7 @@ public class UpdateCommand extends Command {
 			id = updateEntry(entry, field, value, id);
 		}
 		//update the alarm if there is a need to do so
-		if (isChanged){
+		if (isChanged&&offset != -1){
 			AlarmCommand setAlarm = new AlarmCommand(String.format(ALARM_COMMAND, id, offset));
 			setAlarm.execute();
 		}
