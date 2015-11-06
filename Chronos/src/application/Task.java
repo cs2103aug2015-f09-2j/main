@@ -51,6 +51,8 @@ public class Task {
 	
 	protected String manipulateDate(Calendar theDate) throws ParseException {	
 		//set default time
+		
+		
 		return dateFormat.format(theDate.getTime());
 	}
 

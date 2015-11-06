@@ -1,3 +1,4 @@
+//@@author A0115448E
 package gui;
 
 import java.io.IOException;
@@ -43,12 +44,7 @@ public class CommandBarController extends BorderPane {
 		displayDate();
 	}
 
-	//@@author A0126223U
-	/**
-	 * Facilitates outcomes once certain keys are pressed
-	 *
-	 * @param requiredField text that will appear on the command bar upon typing
-	 */
+	//Trigger when something is keyed in
 	public void onKeyPress(KeyEvent event) throws IOException {
 		commandBar.requestFocus();
 		commandBar.setEditable(true);
@@ -78,12 +74,6 @@ public class CommandBarController extends BorderPane {
 		}
 	}
 	
-	//@@author A0126223U
-	/**
-	 * Checks if the text in the command bar has one word
-	 *
-	 * @return whether or not the current input has only one word
-	 */
 	private boolean hasOnlyOneWord() {
 		String[] commands = commandBar.getText().split(" ");
 		return commands.length == ONE_WORD;
@@ -104,12 +94,6 @@ public class CommandBarController extends BorderPane {
 		return String.format(DATE, formatedDate.format(date));
 	}
 
-	//@@author A0126223U
-	/**
-	 * Adds required fields onto the command bar as the user types
-	 *
-	 * @param requiredField text that will appear on the command bar upon typing
-	 */
 	public void updateCommandBar(String requiredField) {
 		if (!requiredField.equals("")) { //add a required field
 			commandBar.requestFocus(); // get focus first
@@ -128,12 +112,6 @@ public class CommandBarController extends BorderPane {
 		}
 	}
 	
-	//@@author A0126223U
-	/**
-	 * Displays a previously typed command on the command bar
-	 *
-	 * @param pastCommand the previously typed command
-	 */
 	public void displayTypedCommand(String pastCommand) {
 		commandBar.setText(pastCommand);
 	}

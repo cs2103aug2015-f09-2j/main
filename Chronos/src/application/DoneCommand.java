@@ -19,7 +19,6 @@ public class DoneCommand extends Command {
 		super(content);
 	}
 
-	//@@author A0126223U
 	@Override
 	public Feedback execute() {
 		String feedbackString = null;

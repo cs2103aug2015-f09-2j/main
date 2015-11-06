@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
 
-//@@author A0126223U
 public class TaskComparator implements Comparator<Task> {
 	
 	private static final String DEFAULT_END_DATE = "someday";
