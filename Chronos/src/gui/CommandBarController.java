@@ -17,6 +17,8 @@ public class CommandBarController extends BorderPane {
 
 	private static final String COMMAND_BAR_LAYOUT_FXML = "CommandBarLayout.fxml";
 	private final String DATE = "TODAY: %1$s";
+	SimpleDateFormat formatedDate = 
+			new SimpleDateFormat ("E dd MMM yyyy");
 	private static final int ONE_WORD = 1;
 	private GUI gui;
 	boolean hasAComma = false;
@@ -89,8 +91,6 @@ public class CommandBarController extends BorderPane {
 	
 	private String getDate() {
 		Date date = new Date();
-		SimpleDateFormat formatedDate = 
-				new SimpleDateFormat ("E dd MMM yyyy");
 		return String.format(DATE, formatedDate.format(date));
 	}
 
