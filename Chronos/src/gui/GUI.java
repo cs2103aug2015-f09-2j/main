@@ -160,6 +160,7 @@ public class GUI extends Application implements NativeKeyListener {
 		primaryStage.setTitle(WINDOW_TITLE);
 		Platform.setImplicitExit(false);
 		Scene scene = new Scene(rootLayout);
+		registerKeyboard();
 		_stage = primaryStage;
 		createTray(primaryStage, scene);
 		primaryStage.setScene(scene);
@@ -335,6 +336,18 @@ public class GUI extends Application implements NativeKeyListener {
 		} catch (NullPointerException e) {
 			// do nothing
 		}
+	}
+
+	@Override
+	public void nativeKeyReleased(NativeKeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void nativeKeyTyped(NativeKeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
