@@ -58,7 +58,6 @@ public class GUI extends Application implements NativeKeyListener {
 	private static final String MESSAGE_DETAILED_VIEW_FAIL = "Failed to set up DetailedView Pane";
 	private static final String MESSAGE_SUMMARY_FAIL = "Failed to set up Summary Pane";
 	private static final String MESSAGE_COMMAND_BAR_FAIL = "Failed to set up Command Bar Pane";
-	private static final String MESSAGE_FREE_TIME_DISPLAY_FAIL = "Failed to set up FreeTimeDisplay Pane";
 	private static final String MESSAGE_TRAYICON_FAIL = "Failed to set up tray icon in system tray";
 
 	private static final String CLOSE_SYSTEM = "Exit";
@@ -95,6 +94,8 @@ public class GUI extends Application implements NativeKeyListener {
 			log.info(String.format(MESSAGE_SET_UP));
 
 			checkNewUser();
+			
+			primaryStage.setOnCloseRequest(e -> System.exit(EXIT_NORMAL));
 		} catch (IOException e) {
 			log.warning(MESSAGE_SET_UP_FAIL);
 			assert(setUp == false);
