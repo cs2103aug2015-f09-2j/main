@@ -17,9 +17,10 @@ import application.Logic;
 import application.Storage;
 import application.Task;
 
+//@@author A0131496A
 public class testCommands {
-	static //Remember to undo after testing CRUD commands
-	Logic logic = Logic.getInstance();
+	
+	static Logic logic = Logic.getInstance();
 	static Storage store;
 	JSONArray entries;
 	static CommandCreator creator = new CommandCreator();

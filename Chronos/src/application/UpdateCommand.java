@@ -68,13 +68,14 @@ public class UpdateCommand extends Command {
 		return -1;
 	}
 	
+	//@@author A0131496A
 	protected void updateEntry(JSONObject entry, ArrayList<String> updateDetails) {
 		String field,value;
 		Span aSpan;
 		DateFormat dateFormat = new SimpleDateFormat(Task.DATE_FORMAT);
-		String id = entry.get(_parse.JSON_ID).toString();
+		String id = entry.get(Parser.JSON_ID).toString();
 		boolean isChanged = false;
-		int offset = checkAlarmOffset(entry, dateFormat);
+		int hoursPrior = checkHoursPrior(entry, dateFormat);
 		for (int j=1; j<updateDetails.size();j++){
 			field = updateDetails.get(j);
 			value = updateDetails.get(++j);
@@ -87,8 +88,8 @@ public class UpdateCommand extends Command {
 			id = updateEntry(entry, field, value, id);
 		}
 		//update the alarm if there is a need to do so
-		if (isChanged && offset != -1){
-			AlarmCommand setAlarm = new AlarmCommand(String.format(ALARM_COMMAND, id, offset));
+		if (isChanged && hoursPrior != -1){
+			AlarmCommand setAlarm = new AlarmCommand(String.format(ALARM_COMMAND, id, hoursPrior));
 			setAlarm.execute();
 		}
 	}
@@ -108,21 +109,24 @@ public class UpdateCommand extends Command {
 		return id;
 	}
 
-	private int checkAlarmOffset(JSONObject entry, DateFormat dateFormat) {
+	//@@author A0131496A
+	private int checkHoursPrior(JSONObject entry, DateFormat dateFormat) {
 		try{
 			//check if the entry has alarm
 			if(entry.get(JSON_ALARM) != OFF_ALARM){
-				Date alarmFrom;
-				//if the entry has alarm, check how many hours prior the user wants the alarm to go off
+				Task aTask = _parse.convertToTask(entry);
+				String alarmOffset = aTask.getAlarmOffset();
+				Date alarmCalculatedFrom = dateFormat.parse(alarmOffset);
+				/*//if the entry has alarm, check how many hours prior the user wants the alarm to go off
 				if(entry.get(JSON_START_DATE)!=null){
 					//if it is event, calculate from the start of the event
 					alarmFrom = dateFormat.parse(entry.get(JSON_START_DATE).toString());
 				}else{
 					//if it is task, calculate from the end of the event
 					alarmFrom = dateFormat.parse(entry.get(JSON_END_DATE).toString());
-				}
+				}*/
 				Date alarm = dateFormat.parse(entry.get(JSON_ALARM).toString());
-				return (int)( alarmFrom.getTime() - alarm.getTime())/HOUR_TO_MILLI;
+				return (int)( alarmCalculatedFrom.getTime() - alarm.getTime())/HOUR_TO_MILLI;
 			}else{
 				return -1;
 			}

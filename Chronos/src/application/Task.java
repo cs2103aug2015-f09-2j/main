@@ -16,7 +16,7 @@ public class Task {
 	String DEFAULT_CATEGORY = "none";
 	String DEFAULT_STATUS = "false";
 	String DEFAULT_ALARM = "off";
-	private static final String ID_HEADER = "t";	
+	static final String ID_HEADER = "t";	
 	public static final String DATE_FORMAT = "dd MMM yyyy HH:mm";
 	
 	protected String _id;
@@ -155,6 +155,10 @@ public class Task {
 		}else{
 			return true;
 		}
+	}
+	
+	public String getAlarmOffset(){
+		return _endDate;
 	}
 	
 	public Date getAlarmDate(){

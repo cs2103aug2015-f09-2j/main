@@ -57,7 +57,7 @@ public class GUI extends Application implements NativeKeyListener {
 
 	private static final String CLOSE_SYSTEM = "Exit";
 
-	private static final String MESSAGE_ALARM = "%1$s\n%2$s\nis due soon";
+	private static final String MESSAGE_ALARM = "%1$s\n%2$s\n%3$s\nis due soon";
 
 	private BorderPane rootLayout;
 	protected static Logic logic;
@@ -259,21 +259,41 @@ public class GUI extends Application implements NativeKeyListener {
 
 	}
 
+	//@@author A0131496A
+	/**
+	 * This method produce a pop-up window as the alarm.
+	 * The pop-up contains the id and description of the task/event,
+	 * and the start time for event or the due time for task.
+	 * After the user closes the pop-up, the alarm is turned off.
+	 * @param currentTask
+	 */
 	protected static void triggerAlarm(Task currentTask) {
-		final Stage dialog = new Stage();
-		dialog.initModality(Modality.APPLICATION_MODAL);
+		Stage dialog = new Stage();
 		dialog.initOwner(_stage);
-		VBox dialogVbox = new VBox();
-		dialogVbox.alignmentProperty().set(Pos.CENTER);
-		String message = String.format(MESSAGE_ALARM, currentTask.getId(), currentTask.getDescription());
-		Text messageShown = new Text(message);
-		messageShown.setFont(Font.font("Verdana"));
-		messageShown.setTextAlignment(TextAlignment.CENTER);
-		dialogVbox.getChildren().add(messageShown);
+		VBox dialogVbox = createDialog(currentTask);
 		Scene dialogScene = new Scene(dialogVbox, 300, 100);
 		dialog.setScene(dialogScene);
 		dialog.show();
 		logic.switchOffAlarm(currentTask);
+	}
+
+	//@@author A0131496A
+	private static VBox createDialog(Task currentTask) {
+		VBox dialogVbox = new VBox();
+		dialogVbox.alignmentProperty().set(Pos.CENTER);
+		Text messageShown = getShownMessage(currentTask);
+		dialogVbox.getChildren().add(messageShown);
+		return dialogVbox;
+	}
+
+	//@@author A0131496A
+	private static Text getShownMessage(Task currentTask) {
+		String warnTime = logic.getAlarmOffset(currentTask);
+		String message = String.format(MESSAGE_ALARM, currentTask.getId(), warnTime,currentTask.getDescription());
+		Text messageShown = new Text(message);
+		messageShown.setFont(Font.font("Arial"));
+		messageShown.setTextAlignment(TextAlignment.CENTER);
+		return messageShown;
 	}
 
 	// get items arrayList from Logic and print them out

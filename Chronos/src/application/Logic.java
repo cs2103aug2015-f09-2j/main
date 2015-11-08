@@ -47,6 +47,10 @@ public class Logic {
 		return CommandCreator.generateInstructions(commandString);
 	}
 	
+	public String getAlarmOffset(Task aTask){
+		return aTask.getAlarmOffset();
+	}
+	
 	public void switchOffAlarm(Task aTask){
 		aTask.setAlarm(ALARM_OFF);
 		String id = aTask.getId();

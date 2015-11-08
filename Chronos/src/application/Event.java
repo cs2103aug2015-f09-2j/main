@@ -57,6 +57,11 @@ public class Event extends Task {
 		return  _id + ID_DISPLAY + _description + EMPTY_SPACE + _startDate+ DATE_SEPARATOR + _endDate + EMPTY_SPACE + _priority + EMPTY_SPACE + _category;
 	}
 	
+	@Override
+	public String getAlarmOffset(){
+		return _startDate;
+	}
+	
 	public String getStartDate() {
 		return _startDate;
 	}

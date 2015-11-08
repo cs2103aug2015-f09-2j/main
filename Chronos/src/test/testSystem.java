@@ -18,14 +18,16 @@ import application.CommandCreator;
 import application.Logic;
 import application.Storage;
 
+//@@author A0131496A
 //Fix the running order of the test methods
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 
 /**
- * This is 
- * Use a storage file with 20 entries at the start to do system testing
- *
- *
+ * This is a series of consecutive system testing. 
+ * Except for the first testInitialisation method where it confirms the file is read in correctly,
+ * all other test methods take in user commands as they are and run them in black box.
+ * The commands run consecutively to simulate a user's work flow.
+ * A storage file with 20 entries at the start is used for testing
  */
 public class testSystem {
 	
@@ -171,10 +173,5 @@ public class testSystem {
 		//alarm is set to be 1 hour before the due time
 		String expected = "{\"due date\":\"20\\/Nov\\/15 09:00\",\"alarm\":\"20\\/Nov\\/15 08:00\",\"description\":\"buy milk\",\"id\":\"t11\",\"priority\":\"high\",\"category\":\"personal\",\"complete\":false}";
 		assertEquals(expected, entries.get(19).toString());
-	}
-	
-	@Test
-	public void l_testSearch(){
-		
 	}
 }

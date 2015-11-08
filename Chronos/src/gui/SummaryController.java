@@ -249,10 +249,16 @@ public class SummaryController extends StackPane {
 		}
 	}
 	
+	//@@author A0131496A
+	/**
+	 * To be called when the currentTask has an alarm.
+	 * This method calls GUI to give alarm if the current time is later than the alarm the user set
+	 * @param currentTask
+	 */
 	private void checkAlarm(Task currentTask){
 		Date alarm = currentTask.getAlarmDate();
-		assert alarm!=null;
-		DateFormat dateFormat = new SimpleDateFormat(Task.DATE_FORMAT); 
+		//format the current time the same way as the alarm for easy comparison
+		new SimpleDateFormat(Task.DATE_FORMAT); 
 		Date now = new Date();
 		if (alarm.before(now)){
 			GUI.triggerAlarm(currentTask);
