@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 import application.Feedback;
 import application.Instruction;
