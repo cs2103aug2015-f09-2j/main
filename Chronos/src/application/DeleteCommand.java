@@ -14,7 +14,7 @@ public class DeleteCommand extends Command {
 	//Instructions
 	private static final String PATTERN = "delete (task/event id)";
 	private static final String INSTRUCTION_REQUIRED = "Type the task or event id that you want to delete.";
-	private static final String REQUIRED_FIELD_DESC = "(task/event id)";
+	private static final String REQUIRED_FIELD_ID = "(task/event id)";
 	
 	public DeleteCommand(String content) {
 		super(content);
@@ -61,7 +61,7 @@ public class DeleteCommand extends Command {
 		Instruction commandInstruction = new Instruction();
 		commandInstruction.setCommandPattern(PATTERN);
 	    commandInstruction.addToInstructions(INSTRUCTION_REQUIRED);
-	    commandInstruction.addToRequiredFields(REQUIRED_FIELD_DESC);
+	    commandInstruction.addToRequiredFields(REQUIRED_FIELD_ID);
 		return commandInstruction;
 	}
 

@@ -17,6 +17,12 @@ public class SearchCommand extends Command {
 	private static final String PRIORITY_HEADER = "p:";
 	private static final String CATEGORY_HEADER = "c:";
 	
+	//Instructions
+	private static final String PATTERN = "search (search term OR *), (date), c:(category), p:(priority)";
+	private static final String INSTRUCTION_REQUIRED = "Enter a search term, or * if no search term.";
+	private static final String INSTRUCTION_OPTIONAL = "Optional fields: date or a date range (ex. today to tomorrow), priority, category";
+	private static final String REQUIRED_FIELD_SEARCH = "(search term)";
+	
 	public SearchCommand(String content) {
 		super(content);
 	}
@@ -90,6 +96,15 @@ public class SearchCommand extends Command {
 	@Override
 	public Feedback undo() {
 		return null;
+	}
+	
+	public static Instruction generateInstruction() {
+		Instruction commandInstruction = new Instruction();
+		commandInstruction.setCommandPattern(PATTERN);
+	    commandInstruction.addToInstructions(INSTRUCTION_REQUIRED);
+	    commandInstruction.addToRequiredFields(REQUIRED_FIELD_SEARCH);
+	    commandInstruction.addToInstructions(INSTRUCTION_OPTIONAL);
+		return commandInstruction;
 	}
 	
 }

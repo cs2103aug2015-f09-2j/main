@@ -5,6 +5,11 @@ import java.util.ArrayList;
 public class ViewCommand extends Command {
 	
 	private static final String FEEDBACK_MESSAGE = "Retrieving Task: %1$s";
+	
+	//Instructions
+	private static final String PATTERN = "view (task/event id)";
+	private static final String INSTRUCTION_REQUIRED = "Enter the id of the item you want to view.";
+	private static final String REQUIRED_FIELD_ID = "(description)";
 
 	public ViewCommand(String content) {
 		super(content);
@@ -32,4 +37,14 @@ public class ViewCommand extends Command {
 	public Feedback undo() {
 		return null; //Alternative: return new DisplayCommand(null).execute();
 	}
+
+	public static Instruction generateInstruction() {
+		Instruction commandInstruction = new Instruction();
+		commandInstruction.setCommandPattern(PATTERN);
+	    commandInstruction.addToInstructions(INSTRUCTION_REQUIRED);
+	    commandInstruction.addToRequiredFields(REQUIRED_FIELD_ID);
+	    return commandInstruction;
+	}
+	
+	
 }

@@ -16,7 +16,7 @@ public class DoneCommand extends Command {
 	//Instructions
 	private static final String PATTERN = "done (task/event id)";
 	private static final String INSTRUCTION_REQUIRED = "Type the task or event id of the completed item.";
-	private static final String REQUIRED_FIELD_DESC = "(task/event id)";
+	private static final String REQUIRED_FIELD_ID = "(task/event id)";
 
 	
 	public DoneCommand(String content) {
@@ -55,7 +55,7 @@ public class DoneCommand extends Command {
 		Instruction commandInstruction = new Instruction();
 		commandInstruction.setCommandPattern(PATTERN);
 	    commandInstruction.addToInstructions(INSTRUCTION_REQUIRED);
-	    commandInstruction.addToRequiredFields(REQUIRED_FIELD_DESC);
+	    commandInstruction.addToRequiredFields(REQUIRED_FIELD_ID);
 		return commandInstruction;
 	}
 	

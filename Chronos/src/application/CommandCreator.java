@@ -34,12 +34,8 @@ public class CommandCreator {
 	private static final String COMMAND_EXTEND = "extend";
 	
 	//Command Patterns
-	private static final String PATTERN_UPDATE = "update (task id), (description), p:(priority), c:(category), e:(end date), b:(start date), s:(complete)"; 
-	private static final String PATTERN_SEARCH = "search (search term OR *), (date), c:(category), p:(priority)";
-	private static final String PATTERN_VIEW = "view (task/event id)";
 	private static final String PATTERN_UNDO = "Undoes a previous action. Undoable actions: %1$s";
 	private static final String PATTERN_REDO = "Redoes an undone action. Redoable actions: %1$s";
-	private static final String PATTERN_CD = "cd (directory)";
 	private static final String PATTERN_EXIT = "Closes Chronos";
 	private static final String PATTERN_ALARM = "alarm (task/event id), (number of hours prior OR off)";
 	private static final String PATTERN_UNKNOWN = "Error: Invalid command";
@@ -295,23 +291,15 @@ public class CommandCreator {
 				 break;
 	
 			case UPDATE :
-				 commandInstruction.setCommandPattern(PATTERN_UPDATE);
-			     commandInstruction.addToInstructions("Enter the id of the item you want to update.");
-			     commandInstruction.addToRequiredFields("(task/event id)");
-			     commandInstruction.addToInstructions("Enter one or more of the fields you want to update.");
+				 commandInstruction = UpdateCommand.generateInstruction();
 				 break;
 		
 			case SEARCH :
-				 commandInstruction.setCommandPattern(PATTERN_SEARCH);
-			     commandInstruction.addToInstructions("Enter a search term, or * if no search term.");
-			     commandInstruction.addToRequiredFields("(search term)");
-			     commandInstruction.addToInstructions("Optional fields: date or a date range (ex. today to tomorrow), priority, category");
+				 commandInstruction = SearchCommand.generateInstruction();
 				 break;
 		
 			case VIEW :
-				 commandInstruction.setCommandPattern(PATTERN_VIEW);
-			     commandInstruction.addToInstructions("Enter the id of the item you want to view.");
-			     commandInstruction.addToRequiredFields("(task/event id)");
+				 commandInstruction = ViewCommand.generateInstruction();
 				 break;
 			
 			case UNDO :
@@ -323,9 +311,7 @@ public class CommandCreator {
 				 break;
 			
 			case CD :
-				 commandInstruction.setCommandPattern(PATTERN_CD);
-			     commandInstruction.addToInstructions("Enter the directory you want to save to. (Ex. C:\\Users)");
-			     commandInstruction.addToRequiredFields("(directory)");
+				 commandInstruction = DirectoryCommand.generateInstruction();
 				 break;
 			
 			case EXIT : 
@@ -340,8 +326,8 @@ public class CommandCreator {
 				//Fallthrough
 				
 			default :
-				commandInstruction.setCommandPattern(PATTERN_UNKNOWN);
-				break;
+				 commandInstruction.setCommandPattern(PATTERN_UNKNOWN);
+				 break;
 		}
 		
 		return commandInstruction;
