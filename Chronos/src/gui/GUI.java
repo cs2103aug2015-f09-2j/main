@@ -60,7 +60,7 @@ public class GUI extends Application implements NativeKeyListener {
 	private static final String PATTERN_ADD = "add (description), (date), c:(category), p:(priority)";
 	private static final String CLOSE_SYSTEM = "Exit";
 
-	private static final String MESSAGE_ALARM = "%1$s\n%2$s\nis due soon";
+	private static final String MESSAGE_ALARM = "%1$s\n%2$s\n%3$s\nis due soon";
 
 
 	private BorderPane rootLayout;
