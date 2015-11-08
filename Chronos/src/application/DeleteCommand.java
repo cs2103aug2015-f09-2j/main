@@ -26,9 +26,8 @@ public class DeleteCommand extends Command {
 		String feedbackString = null;
 		if (_content != EMPTY) {
 			_store.storeTemp();
-			deleteItem();
+			feedbackString = deleteItem(); 
 			_store.storeChanges();
-			feedbackString = String.format(FEEDBACK_MESSAGE, _content);
 		} else {
 			assert _content == null;
 			log.warning(LOG_NO_ID);
@@ -36,19 +35,18 @@ public class DeleteCommand extends Command {
 		return new Feedback(feedbackString); 
 	}
 
-	private void deleteItem() {
-		//find the thing
-		//if its NULL Error Log no Id
-		//if its not found error invalid id
-		//if its found fucking delete the bitch
-		for (int i = 0; i < _store.entries_.size(); i++) {
-			JSONObject entry = (JSONObject) _store.entries_.get(i);
-			if (entry.get(_parse.JSON_ID).equals(_content)) {
-				_deletedEntry = (JSONObject) _store.entries_.remove(i);
-				break;
-			}
-		}	
+	private String deleteItem() {
+		int itemIndex = findEntry(_content);
+		if(itemIndex == Command.FIND_NO_ID) {
+			return ERROR_NO_ID;
+		} else if (itemIndex == Command.FIND_INVALID_ID) {
+			return ERROR_INVALID_ID;
+		} else {
+			_deletedEntry = (JSONObject) _store.entries_.remove(itemIndex);
+			return String.format(FEEDBACK_MESSAGE, _content);
+		}
 	}
+	
 	@Override
 	public Feedback undo() {
 		_store.storeTemp();
