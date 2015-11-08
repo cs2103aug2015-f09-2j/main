@@ -280,15 +280,20 @@ public class GUI extends Application implements NativeKeyListener {
 		dialog.initOwner(_stage);
 		VBox dialogVbox = new VBox();
 		dialogVbox.alignmentProperty().set(Pos.CENTER);
+		setDialogVBox(currentTask, dialogVbox);
+		Scene dialogScene = new Scene(dialogVbox, 300, 100);
+		dialog.setScene(dialogScene);
+		dialog.show();
+		logic.switchOffAlarm(currentTask);
+	}
+
+	//to show the task on the dialog box
+	private static void setDialogVBox(Task currentTask, VBox dialogVbox) { 
 		String message = String.format(MESSAGE_ALARM, currentTask.getId(), currentTask.getDescription());
 		Text messageShown = new Text(message);
 		messageShown.setFont(Font.font("Verdana"));
 		messageShown.setTextAlignment(TextAlignment.CENTER);
 		dialogVbox.getChildren().add(messageShown);
-		Scene dialogScene = new Scene(dialogVbox, 300, 100);
-		dialog.setScene(dialogScene);
-		dialog.show();
-		logic.switchOffAlarm(currentTask);
 	}
 
 	private void updateFeedback(Feedback feedback) {
