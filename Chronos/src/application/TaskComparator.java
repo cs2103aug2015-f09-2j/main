@@ -54,9 +54,10 @@ public class TaskComparator implements Comparator<Task> {
 
 	private Date getDate(String endDate) {
 		try {
-			DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yy HH:mm");
+			DateFormat dateFormat = new SimpleDateFormat(Task.DATE_FORMAT); 
 			return dateFormat.parse(endDate);
 		} catch (ParseException e) {
+			System.out.println("Parsing " + endDate + " returns a null date");
 			return null;
 		}
 	}

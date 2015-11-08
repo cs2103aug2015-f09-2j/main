@@ -1,15 +1,6 @@
 package application;
 
-import java.awt.Dimension;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 import org.json.simple.JSONObject;
 

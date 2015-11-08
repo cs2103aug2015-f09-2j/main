@@ -1,8 +1,6 @@
 package application;
 
-import java.text.ParseException;
 import java.util.Calendar;
-import java.util.Date;
 
 import com.mdimension.jchronic.Chronic;
 

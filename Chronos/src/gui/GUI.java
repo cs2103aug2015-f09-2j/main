@@ -152,7 +152,7 @@ public class GUI extends Application implements NativeKeyListener {
 		primaryStage.setTitle(WINDOW_TITLE);
 		Platform.setImplicitExit(false);
 		Scene scene = new Scene(rootLayout);
-		registerKeyboard();
+		//registerKeyboard();
 		_stage = primaryStage;
 		createTray(primaryStage, scene);
 		primaryStage.setScene(scene);

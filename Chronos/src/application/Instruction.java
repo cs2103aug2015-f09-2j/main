@@ -7,7 +7,7 @@ public class Instruction {
 	private int _numberOfSteps = 0;
 	private ArrayList<String> _instructions;
 	private ArrayList<String> _requiredFields;
-	private ArrayList<String> _optionalFields; //for V0.4
+	private ArrayList<String> _optionalFields; 
 	private String _commandPattern;	
 	
 	public Instruction() {

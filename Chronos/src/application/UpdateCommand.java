@@ -64,7 +64,7 @@ public class UpdateCommand extends Command {
 	protected void updateEntry(JSONObject entry, ArrayList<String> updateDetails) {
 		String field,value;
 		Span aSpan;
-		DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yy HH:mm");
+		DateFormat dateFormat = new SimpleDateFormat(Task.DATE_FORMAT);
 		String id = entry.get(_parse.JSON_ID).toString();
 		boolean isChanged = false;
 		int offset = checkAlarmOffset(entry, dateFormat);

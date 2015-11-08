@@ -366,7 +366,7 @@ public class Parser {
 
 	private boolean compareDates(Task taskToCheck, String endString) {
 		try {
-			DateFormat dateFormat = new SimpleDateFormat();
+			DateFormat dateFormat = new SimpleDateFormat(Task.DATE_FORMAT);
 			Date endDate = dateFormat.parse(endString);
 			if (taskToCheck instanceof Event) {
 				Date eventStart = dateFormat.parse(((Event) taskToCheck).getStartDate());
@@ -385,7 +385,7 @@ public class Parser {
 
 	private boolean compareDates(Task taskToCheck, String endString, String startString) {
 		try {
-			DateFormat dateFormat = new SimpleDateFormat();
+			DateFormat dateFormat = new SimpleDateFormat(Task.DATE_FORMAT);
 			Date endDate = dateFormat.parse(endString);
 			Date startDate = dateFormat.parse(startString);
 			if (taskToCheck instanceof Event) {

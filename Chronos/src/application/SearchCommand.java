@@ -58,7 +58,7 @@ public class SearchCommand extends Command {
 	}
 
 	private boolean searchDates(String dateString, Task entryItem) throws ParseException {		
-		DateFormat dateFormat = new SimpleDateFormat();
+		DateFormat dateFormat = new SimpleDateFormat(Task.DATE_FORMAT);
 		if (dateString.equalsIgnoreCase(entryItem.DEFAULT_END_DATE)) {
 			return dateString.equals(entryItem.getEndDate());
 		} else {

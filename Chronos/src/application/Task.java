@@ -17,6 +17,7 @@ public class Task {
 	String DEFAULT_STATUS = "false";
 	String DEFAULT_ALARM = "off";
 	private static final String ID_HEADER = "t";	
+	public static final String DATE_FORMAT = "dd MMM yyyy HH:mm";
 	
 	protected String _id;
 	protected String _description;
@@ -29,7 +30,7 @@ public class Task {
 	protected boolean _isClashing = false;
 	protected ArrayList<Note> _notes = new ArrayList<Note>();
 	
-	DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yy HH:mm"); 
+	DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT); 
 	
 	protected Task() {
 		
@@ -51,8 +52,6 @@ public class Task {
 	
 	protected String manipulateDate(Calendar theDate) throws ParseException {	
 		//set default time
-		
-		
 		return dateFormat.format(theDate.getTime());
 	}
 
@@ -207,7 +206,6 @@ public class Task {
 			Date dueDate;
 			Date currentDate = new Date();
 			if(_endDate.toLowerCase().contains(":")) { //if deadline has a specified time
-				//dateFormat = new SimpleDateFormat();
 				dueDate = dateFormat.parse(_endDate);
 			} else { //if deadline has no specified time: put it at 11:59:59
 				dueDate = dateFormat.parse(_endDate);
