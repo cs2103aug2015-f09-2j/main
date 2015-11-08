@@ -64,6 +64,7 @@ public class GUI extends Application implements NativeKeyListener {
 	private static SummaryController summary = null;
 	private static DetailedViewController detailView = null;
 	private static Logger log = Logger.getLogger("GUILog");
+	private static Logger keyboardLogger;
 	private boolean setUp = false;
 	private TrayIcon trayIcon;
 
@@ -178,8 +179,8 @@ public class GUI extends Application implements NativeKeyListener {
 
 	    private void turnOffKeyboardLog() {
 		LogManager.getLogManager().reset();
-    	keyboardlogger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
-    	logger.setLevel(Level.OFF);
+    	keyboardLogger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
+    	keyboardLogger.setLevel(Level.OFF);
 	}
 
 	// @@author A0125424N
