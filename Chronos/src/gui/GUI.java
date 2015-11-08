@@ -20,12 +20,13 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.scene.image.Image;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.application.Platform;
 import java.awt.AWTException;
@@ -59,10 +60,10 @@ public class GUI extends Application implements NativeKeyListener {
 	private static final String PATTERN_ADD = "add (description), (date), c:(category), p:(priority)";
 	private static final String CLOSE_SYSTEM = "Exit";
 
-	private static final String MESSAGE_ALARM = "%1$s\n%2$s\n%3$s\nis due soon";
+	private static final String MESSAGE_ALARM = "%1$s\n%2$s\nis due soon";
+
 
 	private BorderPane rootLayout;
-	
 	protected static Logic logic;
 	private static CommandBarController commandBarController = null;
 	private static SummaryController summary = null;
@@ -170,6 +171,7 @@ public class GUI extends Application implements NativeKeyListener {
 		primaryStage.show();
 	}
 
+
 	// get items arrayList from Logic and print them out
 	private void updateSummary(ArrayList<Task> eventList) {
 		summary.display(eventList);
@@ -211,7 +213,7 @@ public class GUI extends Application implements NativeKeyListener {
 			tray = SystemTray.getSystemTray();
 			ImageIcon image = null;
 			image = new ImageIcon(getClass().getResource("./logo.jpg"));
-			
+
 			trayIcon = new TrayIcon(image.getImage());
 			try {
 				tray.add(trayIcon);
@@ -220,6 +222,7 @@ public class GUI extends Application implements NativeKeyListener {
 			}
 		}
 	}
+
 
 	//@@author A0125424N
 	public void nativeKeyPressed(final NativeKeyEvent e) {
@@ -262,8 +265,6 @@ public class GUI extends Application implements NativeKeyListener {
 			updateFeedback(logic.setSavePath(text));
 			summary.setVisible(true);
 			_isNewUser = false;
-			commandBarController.prompText(PATTERN_ADD);
-	
 		} else {
 			Feedback commandFeedback = logic.executeUserCommand(text);
 			updateFeedback(commandFeedback);
@@ -309,11 +310,6 @@ public class GUI extends Application implements NativeKeyListener {
 		return messageShown;
 	}
 
-	// get items arrayList from Logic and print them out
-	private void updateSummary(ArrayList<Task> eventList) {
-		summary.display(eventList);
-	}
-
 	private void updateFeedback(Feedback feedback) {
 		if (feedback.isProgramExiting()) {
 			try {
@@ -337,25 +333,16 @@ public class GUI extends Application implements NativeKeyListener {
 		}
 		commandBarController.displayFeedback(feedback.getMessage());
 	}
-	
-	//@@author A0126223U
-	/**
-     * Retrieves command instructions based on the entered command
-     *
-     * @param enteredCommand   The command string
-     */
-	public void handleCommandPattern(String enteredCommand) {
-		currentInstruction = Logic.getCommandInstruction(enteredCommand);
+
+	public void handleCommandPattern(String text) {
+		currentInstruction = Logic.getCommandInstruction(text);
 		isHandlingCommand = true;
 		handleCommandPattern();
 	}
 
-    /**
-     * Displays and scrolls through instructions and command pattern to the user by 
-     * updating the command bar and feedback string
-     *
-     */
 	public void handleCommandPattern() {
+		// assert Instruction != null
+
 		// display to feedback String
 		String feedbackString = currentInstruction.getCommandPattern();
 		if (currentInstruction.hasInstructions()) {

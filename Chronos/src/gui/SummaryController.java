@@ -265,7 +265,7 @@ public class SummaryController extends StackPane {
 		}
 	}
 	
-	
+	//@@author A0115448E
 	// clear any custom styles
 	private void cleanCurrentStyle(TableRow<?> tableRow) {
 		tableRow.getStyleClass().remove(HAVE_NOTES);
