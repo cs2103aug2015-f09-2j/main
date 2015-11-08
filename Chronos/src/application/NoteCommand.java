@@ -12,7 +12,7 @@ public class NoteCommand extends Command {
 	
 	//Unique Attributes
 	private JSONObject _oldEntry;
-	private int _id;
+	private int _index;
 	
 	//Instructions
 	private static final String PATTERN = "note (task/event id), (note)";
@@ -30,55 +30,46 @@ public class NoteCommand extends Command {
 	public Feedback execute() {
 		String feedbackString = EMPTY;
 		String[] noteDetails = _content.split(Parser.CONTENT_SEPARATOR);
-		_id = findEntry(noteDetails[0]);
-		if (_id > -1) {
-			feedbackString = noteProcess(_id, noteDetails);
-		} else { 
-			assert _content == EMPTY;
+		
+		_index = findEntry(noteDetails[0]);
+		if (_index == Command.FIND_NO_ID) {
+			assert _content.equals(EMPTY);
 			log.warning(LOG_NO_ID);
-			feedbackString = LOG_NO_ID;
-		}
-		ArrayList<Task> data = null;
-		if(_content != EMPTY) {
-			data = new ArrayList<Task>();
-			Task selectedTask = _parse.retrieveTask(noteDetails[0], _store.entries_);
-			data.add(selectedTask);
+			return new Feedback(ERROR_NO_ID);
+		} else if (_index == Command.FIND_INVALID_ID) {
+			return new Feedback(ERROR_INVALID_ID);
 		} else {
-			log.warning(LOG_NO_ID);
-			feedbackString = ERROR_NO_CONTENT;
-		}
-		
-		Feedback feedback = new Feedback(feedbackString, data);
-		feedback.setSummaryView(false);
-		return feedback;
-		
-	}
-
-	private int findEntry(String id) {
-		for (int i = 0; i < _store.entries_.size(); i++) {
-			JSONObject currentEntry = (JSONObject) _store.entries_.get(i);
-			if (currentEntry.get(Parser.JSON_ID).equals(id)) {
-				_oldEntry = (JSONObject) currentEntry.clone();
-				return i;
+			if (noteDetails[1].equals(EMPTY)){
+				return new Feedback(ERROR_NO_CONTENT);
+			} else {
+				JSONObject entry = (JSONObject)_store.entries_.get(_index);
+				_oldEntry = (JSONObject) entry.clone();
+				return noteProcess(_index, noteDetails);				
 			}
 		}
-		return -1;
 	}
 	
-	private String noteProcess(int id, String[] noteDetails) {
+	private Feedback noteProcess(int id, String[] noteDetails) {
 		_store.storeTemp();
 		Task aTask = _parse.retrieveTask(noteDetails[0], _store.entries_);
-		aTask.addNote(noteDetails[1]); //defend this
-		_store.entries_.set(_id, _parse.convertToJSON(aTask));
+		aTask.addNote(noteDetails[1]); 
+		_store.entries_.set(_index, _parse.convertToJSON(aTask));
 		_store.storeChanges();
-		return String.format(FEEDBACK_MESSAGE, _content);
+		
+		String feedbackString = String.format(FEEDBACK_MESSAGE, _content);
+		ArrayList<Task> feedbackData = new ArrayList<Task>();
+		feedbackData.add(aTask);
+		
+		Feedback feedback = new Feedback(feedbackString, feedbackData);
+		feedback.setSummaryView(false);
+		return feedback;
 	}
 
 	@Override
 	public Feedback undo() {
 		_store.storeTemp();
-		JSONObject entry = (JSONObject) _store.entries_.get(_id);
-		_store.entries_.set(_id, _oldEntry);
+		JSONObject entry = (JSONObject) _store.entries_.get(_index);
+		_store.entries_.set(_index, _oldEntry);
 		_store.storeChanges();
 		String feedbackString = String.format(FEEDBACK_MESSAGE_UNDO, _content);
 		return new Feedback(feedbackString);
