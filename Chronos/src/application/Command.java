@@ -18,6 +18,7 @@ public abstract class Command {
 	protected Storage _store;
 	protected Parser _parse;
 	protected String _content;
+	public static Instruction commandInstruction;
 	
 	protected static Logger log = Logger.getLogger("CommandLog");
 	
@@ -30,7 +31,5 @@ public abstract class Command {
 	public abstract Feedback execute();
 	
 	public abstract Feedback undo();
-	
-	
 
 }
