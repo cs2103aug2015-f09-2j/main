@@ -57,7 +57,7 @@ public class UpdateCommand extends Command {
 		}
 	}
 
-	protected int findEntry(String id) {
+	public int findEntry(String id) {
 		for (int i = 0; i < _store.entries_.size(); i++) {
 			JSONObject currentEntry = (JSONObject) _store.entries_.get(i);
 			if (currentEntry.get(Parser.JSON_ID).equals(id)) {
