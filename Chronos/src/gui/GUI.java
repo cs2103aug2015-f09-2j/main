@@ -315,15 +315,24 @@ public class GUI extends Application implements NativeKeyListener {
 		commandBarController.displayFeedback(feedback.getMessage());
 	}
 
-	public void handleCommandPattern(String text) {
-		currentInstruction = Logic.getCommandInstruction(text);
+	//@@author A0126223U
+	/**
+     * Retrieves command instructions based on the entered command
+     *
+     * @param enteredCommand   The command string
+     */
+	public void handleCommandPattern(String enteredCommand) {
+		currentInstruction = Logic.getCommandInstruction(enteredCommand);
 		isHandlingCommand = true;
 		handleCommandPattern();
 	}
 
+    /**
+     * Displays and scrolls through instructions and command pattern to the user by 
+     * updating the command bar and feedback string
+     *
+     */
 	public void handleCommandPattern() {
-		// assert Instruction != null
-
 		// display to feedback String
 		String feedbackString = currentInstruction.getCommandPattern();
 		if (currentInstruction.hasInstructions()) {

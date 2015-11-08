@@ -55,7 +55,7 @@
 	-fx-background-image: url("./exclamation.png");
 	-fx-background-size: 20 25;
 	-fx-background-repeat: stretch; 
-	-fx-background-position: 260 center;
+	-fx-background-position: 290 center;
 }
 
 .overdue .text {
@@ -85,14 +85,14 @@
 	-fx-background-image: url("./exclamation.png"), url("./asterisk.png");
 	-fx-background-size: 20 25, 15 15;
 	-fx-background-repeat: stretch; 
-	-fx-background-position: 260 center, 485 center;
+	-fx-background-position: 290 center, 485 center;
 }
 
 .alarmOverdue{
 	-fx-background-image: url("./exclamation.png"), url("./alarm.png");
 	-fx-background-size: 20 25,15 15;
 	-fx-background-repeat: stretch; 
-	-fx-background-position: 260 center, 470 center;
+	-fx-background-position: 290 center, 470 center;
 }
 
 .alarmHaveNotes{
@@ -106,7 +106,7 @@
 	-fx-background-image: url("./exclamation.png"),url("./alarm.png"), url("./asterisk.png");
 	-fx-background-size: 20 25, 15 15, 15 15;
 	-fx-background-repeat: stretch; 
-	-fx-background-position: 260 center, 470 center, 485 center;
+	-fx-background-position: 290 center, 470 center, 485 center;
 }
 
 .countdown {

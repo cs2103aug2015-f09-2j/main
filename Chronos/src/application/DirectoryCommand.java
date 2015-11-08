@@ -11,6 +11,11 @@ public class DirectoryCommand extends Command {
 	protected static final String LOG_SAVED_NEW = "Saved new Directory";
 	protected static final String LOG_NO_DIRECTORY = "No Directory specified";
 	
+	//Instructions
+	private static final String PATTERN = "cd (directory)";
+	private static final String INSTRUCTION_REQUIRED = "Enter the directory you want to save to. (Ex. C:\\Users\\Folder)";
+	private static final String REQUIRED_FIELD_DIRECTORY = "(directory)";
+	
 	public DirectoryCommand(String content) {
 		super(content);
 	}
@@ -32,6 +37,14 @@ public class DirectoryCommand extends Command {
 	@Override
 	public Feedback undo() {
 		return new DirectoryCommand(_previousPath).execute();
+	}
+
+	public static Instruction generateInstruction() {
+		Instruction commandInstruction = new Instruction();
+		commandInstruction.setCommandPattern(PATTERN);
+	    commandInstruction.addToInstructions(INSTRUCTION_REQUIRED);
+	    commandInstruction.addToRequiredFields(REQUIRED_FIELD_DIRECTORY);
+	    return commandInstruction;
 	}
 	
 	

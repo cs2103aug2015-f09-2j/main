@@ -27,6 +27,13 @@ public class UpdateCommand extends Command {
 	static final String ERROR_PARSING_ALARM = "failed to parse dates for alarm";
 	static final int HOUR_TO_MILLI = 1000*60*60;
 	
+	//Instructions
+	private static final String PATTERN = "update (task id), (description), p:(priority), c:(category), e:(end date), b:(start date), s:(complete)"; 
+	private static final String INSTRUCTION_REQUIRED = "Enter the id of the item you want to update.";
+	private static final String INSTRUCTION_OPTIONAL = "Enter one or more of the fields you want to update.";
+	private static final String REQUIRED_FIELD_ID = "(task/event id)";
+
+	
 	protected static final int LIMIT_ID = -1;
 	
 	public UpdateCommand(String content) {
@@ -145,6 +152,15 @@ public class UpdateCommand extends Command {
 		_store.storeChanges();
 		String feedbackString = String.format(FEEDBACK_MESSAGE_UNDO, _content);
 		return new Feedback(feedbackString);
+	}
+	
+	public static Instruction generateInstruction() {
+		Instruction commandInstruction = new Instruction();
+		commandInstruction.setCommandPattern(PATTERN);
+	    commandInstruction.addToInstructions(INSTRUCTION_REQUIRED);
+	    commandInstruction.addToRequiredFields(REQUIRED_FIELD_ID);
+	    commandInstruction.addToInstructions(INSTRUCTION_OPTIONAL);
+		return commandInstruction;
 	}
 	
 }

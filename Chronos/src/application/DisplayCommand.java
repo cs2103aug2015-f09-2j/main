@@ -1,6 +1,7 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.json.simple.JSONObject;
 
@@ -11,6 +12,10 @@ public class DisplayCommand extends Command {
 	private static final String MESSAGE_DISPLAY_SELECTED = "Displayed selected items";
 	static final String CONTENT_SEPARATOR = ", ";
 	
+	//Instructions
+	private static final String PATTERN = "d OR da";
+	private static final String INSTRUCTION = "Displays all tasks";
+
 	public DisplayCommand(String content) {
 		super(content);
 	}
@@ -34,6 +39,7 @@ public class DisplayCommand extends Command {
 			String[] criteria = _content.split(CONTENT_SEPARATOR);
 			filteredTasks = displaySelectedItems(condition, criteria);
 		}
+		Collections.sort(filteredTasks, new TaskComparator());
 		Feedback feedback = new Feedback(feedbackString, filteredTasks);
 		feedback.setSummaryView(true);
 		return feedback; 
@@ -67,6 +73,13 @@ public class DisplayCommand extends Command {
 	@Override
 	public Feedback undo() {
 		return null;
+	}
+	
+	public static Instruction generateInstruction() {
+		Instruction commandInstruction = new Instruction();
+		commandInstruction.setCommandPattern(PATTERN);
+	    commandInstruction.addToInstructions(INSTRUCTION);
+		return commandInstruction;
 	}
 
 }

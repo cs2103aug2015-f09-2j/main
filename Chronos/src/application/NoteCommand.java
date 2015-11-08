@@ -14,10 +14,18 @@ public class NoteCommand extends Command {
 	private JSONObject _oldEntry;
 	private int _id;
 	
+	//Instructions
+	private static final String PATTERN = "note (task/event id), (note)";
+	private static final String INSTRUCTION_REQUIRED_TASK = "Type the task or event id of the item to add the note to.";
+	private static final String INSTRUCTION_REQUIRED_NOTE = "Type the contents of your note";
+	private static final String REQUIRED_FIELD_ID = "(task/event id)";
+	private static final String REQUIRED_FIELD_NOTE = "(note contents)";
+	
 	public NoteCommand(String content) {
 		super(content);
 	}
 
+	//@@author A0126223U
 	@Override
 	public Feedback execute() {
 		String feedbackString = EMPTY;
@@ -75,4 +83,15 @@ public class NoteCommand extends Command {
 		String feedbackString = String.format(FEEDBACK_MESSAGE_UNDO, _content);
 		return new Feedback(feedbackString);
 	}
+	
+	public static Instruction generateInstruction() {
+		Instruction commandInstruction = new Instruction();
+		commandInstruction.setCommandPattern(PATTERN);
+	    commandInstruction.addToInstructions(INSTRUCTION_REQUIRED_TASK);
+	    commandInstruction.addToRequiredFields(REQUIRED_FIELD_ID);
+	    commandInstruction.addToInstructions(INSTRUCTION_REQUIRED_NOTE);
+		commandInstruction.addToRequiredFields(REQUIRED_FIELD_NOTE);
+		return commandInstruction;
+	}
+	
 }

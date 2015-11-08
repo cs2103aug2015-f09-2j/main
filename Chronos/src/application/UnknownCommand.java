@@ -3,7 +3,7 @@ package application;
 public class UnknownCommand extends Command {
 
 	//Constant Strings
-	protected static final String FEEDBACK_MESSAGE =  "Invalid Command";
+	protected static final String FEEDBACK_MESSAGE =  "Error: Invalid Command";
 	
 	public UnknownCommand(String content) {
 		super(content);

@@ -1,7 +1,6 @@
 package application;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,6 +11,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+//@@author A0131496A
 public class Storage {
 
 	private final String MESSAGE_INVALID_FILE = "Invalid File.";
@@ -20,7 +21,6 @@ public class Storage {
 	private final String MESSAGE_FILE_SWAPPED = "content of %1$s moved to %2$s";
 	private final String MESSAGE_ERROR_DELETE = "old file %1$s not deleted";
 	private final String MESSAGE_TEMP_SWAPPED = "swapped entries_ with temp_entries";
-	//constants
 	private static final String PREFS_PATH = "path";
 	private static final String PREFS_TASK_COUNT = "task count";
 	private static final String PREFS_EVENT_COUNT = "event count";
@@ -36,39 +36,39 @@ public class Storage {
 	private static Logger log = Logger.getLogger("StorageLog");
 	
 	public JSONArray entries_;
-	private JSONArray temp_entries_;
-	private String temp_fileDirectory_;
+	private JSONArray tempEntries_;
+	private String tempFileDirectory_;
 	private String fileDirectory_;
-	private static Preferences _userPrefs;
-	private boolean isStoredTemp = false;
-	private boolean _isSavePresent = false;
+	private static Preferences userPrefs_;
+	private boolean isStoredTemp_ = false;
+	private boolean isSavePresent_ = false;
 	
-	private static Storage _theStorage;
+	private static Storage theStorage_;
 	
 	private Storage() { 
 		entries_ = new JSONArray();
-		_userPrefs = Preferences.userNodeForPackage(this.getClass());
-		String savedPath = _userPrefs.get(PREFS_PATH, DEFAULT_PATH);
+		userPrefs_ = Preferences.userNodeForPackage(this.getClass());
+		String savedPath = userPrefs_.get(PREFS_PATH, DEFAULT_PATH);
 		if (!savedPath.equals(DEFAULT_PATH)) { 
-			//There's a path, so open it.
+			//If user has specified where to save, just open it
 			getFile(savedPath);
-			_isSavePresent = true;
+			isSavePresent_ = true;
 		} 
 	}
 	
 	public static Storage getInstance() {
-		if (_theStorage == null) {
-			_theStorage = new Storage();
+		if (theStorage_ == null) {
+			theStorage_ = new Storage();
 		}
-		return _theStorage;
+		return theStorage_;
 	}
 	
 	void initialize(String path) { 
-		//Initialize prefs
-		_userPrefs.put(PREFS_PATH, path);
+		//store user specified directory into user preference
+		userPrefs_.put(PREFS_PATH, path);
 		//check if there's already chronos_storage in it and get the maximum id's
-		_userPrefs.putInt(PREFS_TASK_COUNT, DEFAULT_TASK_COUNT);
-		_userPrefs.putInt(PREFS_EVENT_COUNT, DEFAULT_EVENT_COUNT);
+		userPrefs_.putInt(PREFS_TASK_COUNT, DEFAULT_TASK_COUNT);
+		userPrefs_.putInt(PREFS_EVENT_COUNT, DEFAULT_EVENT_COUNT);
 		getFile(path);
 	}
 	
@@ -111,30 +111,36 @@ public class Storage {
 	}
 	
 	private void getMaxId() throws ParseException{
-		String id;
-		int taskId, eventId, maxTaskId = 0, maxEventId = 0;
+		String idString;
+		int maxTaskId = 0, maxEventId = 0;
 		JSONObject anEntry;
 		for (int i = 0; i<entries_.size();i++){
 			anEntry = (JSONObject)entries_.get(i);
-			id = (String) anEntry.get("id");
-			if (id.charAt(0)==TASK_PREFIX){
-				taskId = Integer.parseInt(id.substring(1));
-				if (taskId>maxTaskId){
-					maxTaskId = taskId;
-				}
-			}else if(id.charAt(0)==EVENT_PREFIX){
-				eventId = Integer.parseInt(id.substring(1));
-				if (eventId>maxEventId){
-					maxEventId = eventId;
-				}
-			}else{
-				throw new ParseException(ERROR_TYPE_ID);
+			idString = (String) anEntry.get("id");
+			switch (idString.charAt(0)){
+				case TASK_PREFIX:
+					maxTaskId = compareId(idString, maxTaskId);
+					break;
+				case EVENT_PREFIX:
+					maxEventId = compareId(idString, maxEventId);
+					break;
+				default:
+					throw new ParseException(ERROR_TYPE_ID);
 			}
 		}
 		DEFAULT_TASK_COUNT = maxTaskId;
 		DEFAULT_EVENT_COUNT = maxEventId;
-		_userPrefs.putInt(PREFS_TASK_COUNT, DEFAULT_TASK_COUNT);
-		_userPrefs.putInt(PREFS_EVENT_COUNT, DEFAULT_EVENT_COUNT);
+		userPrefs_.putInt(PREFS_TASK_COUNT, DEFAULT_TASK_COUNT);
+		userPrefs_.putInt(PREFS_EVENT_COUNT, DEFAULT_EVENT_COUNT);
+	}
+
+	private int compareId(String idString, int maxId) {
+		int id;
+		id = Integer.parseInt(idString.substring(1));
+		if (id>maxId){
+			maxId = id;
+		}
+		return maxId;
 	}
 	
 	//throws exception if the file is not in JSON format
@@ -143,44 +149,43 @@ public class Storage {
 		entries_ = (JSONArray)jsonParser.parse(new FileReader(fileDirectory+DEFAULT_DIRECTORY ));
 	}
 	
-	//to be called before an add, delete, update i.e. commands that will
-	//change the content of the file
+	//to be called before an add, delete, update i.e. commands that will change the content of the file
 	public void storeTemp(){
-		temp_entries_ = (JSONArray) entries_.clone();
-		isStoredTemp = true;
-		
+		tempEntries_ = (JSONArray) entries_.clone();
+		isStoredTemp_ = true;	
 	}
 	
 	//to be called after changes to the content of the file
 	public void storeChanges(){
 		//the entries have to be stored before making changes
-		assert isStoredTemp == true;
-		isStoredTemp = false;
+		assert isStoredTemp_ == true;
+		isStoredTemp_ = false;
 		writeToFile();
 	}
 	
 	//to be called by undo/redo commands that undo/redo add/delete/update commands
 	public void swapTemp(){
 		JSONArray placeHolder = entries_;
-		entries_ = temp_entries_;
-		temp_entries_ = placeHolder;
+		entries_ = tempEntries_;
+		tempEntries_ = placeHolder;
 		writeToFile();	
 		log.info(MESSAGE_TEMP_SWAPPED);
 	}
 	
 	public String changeDirectory(String newDirectory){
-		temp_fileDirectory_ = fileDirectory_;
+		tempFileDirectory_ = fileDirectory_;
 		fileDirectory_ = newDirectory;
 		writeToFile();
-		File oldFile = new File(temp_fileDirectory_+DEFAULT_DIRECTORY );
+		File oldFile = new File(tempFileDirectory_+DEFAULT_DIRECTORY );
 		//Check if file is deleted
 		if (!oldFile.delete()) {
-			log.warning(String.format(MESSAGE_ERROR_DELETE, temp_fileDirectory_));
+			log.warning(String.format(MESSAGE_ERROR_DELETE, tempFileDirectory_));
 		} else {
-			log.info(String.format(MESSAGE_FILE_SWAPPED, temp_fileDirectory_,fileDirectory_));
+			log.info(String.format(MESSAGE_FILE_SWAPPED, tempFileDirectory_,fileDirectory_));
 		}
-		_userPrefs.put(PREFS_PATH, newDirectory);
-		return temp_fileDirectory_;
+		//update user preference
+		userPrefs_.put(PREFS_PATH, newDirectory);
+		return tempFileDirectory_;
 	}
 	
 	
@@ -195,29 +200,29 @@ public class Storage {
 		}
 	}
 
-	public boolean isSavePresent() {
-		return _isSavePresent;
+	public boolean checkIsSavePresent() {
+		return isSavePresent_;
 	}
 
 	public int getTaskId() { 
-		int id = _userPrefs.getInt(PREFS_TASK_COUNT, DEFAULT_TASK_COUNT);
-		_userPrefs.putInt(PREFS_TASK_COUNT, ++id);
+		int id = userPrefs_.getInt(PREFS_TASK_COUNT, DEFAULT_TASK_COUNT);
+		userPrefs_.putInt(PREFS_TASK_COUNT, ++id);
 		return id;
 	}
 
 	void decreaseTaskID() {
-		int id = _userPrefs.getInt(PREFS_TASK_COUNT, DEFAULT_TASK_COUNT);
-		_userPrefs.putInt(PREFS_TASK_COUNT, --id);
+		int id = userPrefs_.getInt(PREFS_TASK_COUNT, DEFAULT_TASK_COUNT);
+		userPrefs_.putInt(PREFS_TASK_COUNT, --id);
 	}
 	
 	public int getEventId() { 
-		int id = _userPrefs.getInt(PREFS_EVENT_COUNT, DEFAULT_EVENT_COUNT);
-		_userPrefs.putInt(PREFS_EVENT_COUNT, ++id);
+		int id = userPrefs_.getInt(PREFS_EVENT_COUNT, DEFAULT_EVENT_COUNT);
+		userPrefs_.putInt(PREFS_EVENT_COUNT, ++id);
 		return id;
 	}
 
 	void decreaseEventID() {
-		int id = _userPrefs.getInt(PREFS_EVENT_COUNT, DEFAULT_EVENT_COUNT);
-		_userPrefs.putInt(PREFS_EVENT_COUNT, --id);
+		int id = userPrefs_.getInt(PREFS_EVENT_COUNT, DEFAULT_EVENT_COUNT);
+		userPrefs_.putInt(PREFS_EVENT_COUNT, --id);
 	}
 }

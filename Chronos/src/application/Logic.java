@@ -1,5 +1,6 @@
 package application;
 
+//@@author A0126223U
 public class Logic {
 	
 	private static CommandCreator _commandCreator;
@@ -26,7 +27,7 @@ public class Logic {
 	public boolean isSavePresent() {
 		_store = Storage.getInstance();
 		_parse = Parser.getInstance();
-		return _store.isSavePresent();
+		return _store.checkIsSavePresent();
 	}
 	
 	//happens if there's no save present

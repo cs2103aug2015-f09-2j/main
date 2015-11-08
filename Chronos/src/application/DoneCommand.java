@@ -13,10 +13,17 @@ public class DoneCommand extends Command {
 	private static final String LOG_MESSAGE = "Task %1$s marked as done.";
 	protected static final String UPDATE_STRING = ", s:";
 	
+	//Instructions
+	private static final String PATTERN = "done (task/event id)";
+	private static final String INSTRUCTION_REQUIRED = "Type the task or event id of the completed item.";
+	private static final String REQUIRED_FIELD_ID = "(task/event id)";
+
+	
 	public DoneCommand(String content) {
 		super(content);
 	}
 
+	//@@author A0126223U
 	@Override
 	public Feedback execute() {
 		String feedbackString = null;
@@ -44,5 +51,14 @@ public class DoneCommand extends Command {
 		Feedback feedback = new UpdateCommand(content).execute();
 		return feedback;
 	}
+	
+	public static Instruction generateInstruction() {
+		Instruction commandInstruction = new Instruction();
+		commandInstruction.setCommandPattern(PATTERN);
+	    commandInstruction.addToInstructions(INSTRUCTION_REQUIRED);
+	    commandInstruction.addToRequiredFields(REQUIRED_FIELD_ID);
+		return commandInstruction;
+	}
+	
 	
 }
