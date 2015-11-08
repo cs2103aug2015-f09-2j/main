@@ -6,13 +6,9 @@ import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
-import javafx.geometry.Insets;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
-
-import com.sun.prism.paint.Color;
 
 import application.Feedback;
 import application.Instruction;
@@ -30,11 +26,6 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
-import javafx.stage.WindowEvent;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.KeyCode;
-
 import java.awt.AWTException;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
