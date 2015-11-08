@@ -69,32 +69,44 @@ public class UpdateCommand extends Command {
 	}
 	
 	//@@author A0131496A
+	/**
+	 * This method allows multiple updates of the fields of the entry
+	 * @param entry
+	 * @param updateDetails
+	 */
 	protected void updateEntry(JSONObject entry, ArrayList<String> updateDetails) {
 		String field,value;
 		Span aSpan;
 		DateFormat dateFormat = new SimpleDateFormat(Task.DATE_FORMAT);
 		String id = entry.get(Parser.JSON_ID).toString();
-		boolean isChanged = false;
-		int hoursPrior = checkHoursPrior(entry, dateFormat);
+		boolean isAlarmChanged = false;
+		
 		for (int j=1; j<updateDetails.size();j++){
 			field = updateDetails.get(j);
 			value = updateDetails.get(++j);
 			if (field.equals(JSON_END_DATE)||field.equals(JSON_START_DATE)){
 				//if there is a change in dates, we have to update the alarm
-				isChanged = true;
+				isAlarmChanged = true;
 				aSpan = Chronic.parse(value);	
 				value = dateFormat.format(aSpan.getBeginCalendar().getTime());
 			}
-			id = updateEntry(entry, field, value, id);
+			id = updateField(entry, field, value, id);
 		}
-		//update the alarm if there is a need to do so
-		if (isChanged && hoursPrior != -1){
+		//alarm will be updated if there is a need to do so
+		updateAlarm(entry, dateFormat, id, isAlarmChanged);
+	}
+
+	//@@author A0131496A
+	private void updateAlarm(JSONObject entry, DateFormat dateFormat,
+			String id, boolean isAlarmChanged) {
+		int hoursPrior = checkHoursPrior(entry, dateFormat);
+		if (hoursPrior != -1 && isAlarmChanged){
 			AlarmCommand setAlarm = new AlarmCommand(String.format(ALARM_COMMAND, id, hoursPrior));
 			setAlarm.execute();
 		}
 	}
 
-	private String updateEntry(JSONObject entry, String field, String value,
+	private String updateField(JSONObject entry, String field, String value,
 			String id) {
 		if(entry.get(JSON_START_DATE) == null &&field.equals(JSON_START_DATE)) {//convert task to event
 				Event event = taskToEvent(entry, value);
@@ -117,15 +129,8 @@ public class UpdateCommand extends Command {
 				Task aTask = _parse.convertToTask(entry);
 				String alarmOffset = aTask.getAlarmOffset();
 				Date alarmCalculatedFrom = dateFormat.parse(alarmOffset);
-				/*//if the entry has alarm, check how many hours prior the user wants the alarm to go off
-				if(entry.get(JSON_START_DATE)!=null){
-					//if it is event, calculate from the start of the event
-					alarmFrom = dateFormat.parse(entry.get(JSON_START_DATE).toString());
-				}else{
-					//if it is task, calculate from the end of the event
-					alarmFrom = dateFormat.parse(entry.get(JSON_END_DATE).toString());
-				}*/
 				Date alarm = dateFormat.parse(entry.get(JSON_ALARM).toString());
+				//return the number of hours of difference between the alarm and the offset
 				return (int)( alarmCalculatedFrom.getTime() - alarm.getTime())/HOUR_TO_MILLI;
 			}else{
 				return -1;
