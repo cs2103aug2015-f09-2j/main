@@ -46,7 +46,12 @@ public class CommandBarController extends BorderPane {
 		displayDate();
 	}
 
-	//Trigger when something is keyed in
+	//@@author A0126223U
+	/**
+     * Facilitates outcomes once certain keys are pressed
+     *
+     * @param requiredField text that will appear on the command bar upon typing
+     */
 	public void onKeyPress(KeyEvent event) throws IOException {
 		commandBar.requestFocus();
 		commandBar.setEditable(true);
@@ -81,6 +86,7 @@ public class CommandBarController extends BorderPane {
 		return commands.length == ONE_WORD;
 	}
 
+	//@@author A0115448E
 	public void displayFeedback(String helpingText){
 		feedback.setText(helpingText);
 	}
@@ -94,6 +100,12 @@ public class CommandBarController extends BorderPane {
 		return String.format(DATE, formatedDate.format(date));
 	}
 
+	//@@author A0126223U
+	/**
+     * Adds required fields onto the command bar as the user types
+     *
+     * @param requiredField text that will appear on the command bar upon typing
+     */
 	public void updateCommandBar(String requiredField) {
 		if (!requiredField.equals("")) { //add a required field
 			commandBar.requestFocus(); // get focus first

@@ -9,6 +9,8 @@ import java.util.Date;
 
 import com.mdimension.jchronic.Chronic;
 import com.mdimension.jchronic.utils.Span;
+
+//@@author A0126223U
 public class Task {
 	
 	String DEFAULT_END_DATE = "someday";
@@ -16,7 +18,7 @@ public class Task {
 	String DEFAULT_CATEGORY = "none";
 	String DEFAULT_STATUS = "false";
 	String DEFAULT_ALARM = "off";
-	private static final String ID_HEADER = "t";	
+	static final String ID_HEADER = "t";	
 	public static final String DATE_FORMAT = "dd MMM yyyy HH:mm";
 	
 	protected String _id;
@@ -44,14 +46,17 @@ public class Task {
 			} else if (contents[i].contains("c:")) {
 				_category = contents[i].substring(2);
 			} else { //date manipulation
-				Span aSpan = Chronic.parse(contents[i]);	
-				_endDate = manipulateDate(aSpan.getBeginCalendar());
+				Span aSpan = Chronic.parse(contents[i]);
+				if(aSpan == null) {
+					throw new ParseException("JChronic unable to parse",0);
+				} else {
+					_endDate = manipulateDate(aSpan.getBeginCalendar());
+				}
 			}
 		}
 	}
 	
 	protected String manipulateDate(Calendar theDate) throws ParseException {	
-		//set default time
 		return dateFormat.format(theDate.getTime());
 	}
 
@@ -136,7 +141,7 @@ public class Task {
 	public int getNotesNo() {
 		try{
 			return _notes.size();
-		} catch (NullPointerException e) { //for when +notes is empty
+		} catch (NullPointerException e) {
 			return 0;
 		}
 	}

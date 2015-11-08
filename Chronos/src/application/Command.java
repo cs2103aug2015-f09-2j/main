@@ -2,6 +2,10 @@ package application;
 
 import java.util.logging.Logger;
 
+//@@author A0126223U
+/**
+ * This class is used as a format for several Command classes within the package.
+ */
 public abstract class Command {
 
 	//Messages

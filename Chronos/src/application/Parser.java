@@ -42,6 +42,7 @@ public class Parser {
 	
 	//Important constants for contents[]
 	private static final int CONTENT_DESC = 0;
+	private static final int CONTENT_NOT_FOUND = -1;
 	private static final String CONTENT_EVENT_STRING = " to ";
 	
 	private static Parser _theParser;
@@ -64,18 +65,17 @@ public class Parser {
 	 * which the user wants to add.
 	 * @param content	User input string
 	 * @return
-	 * @throws ParseException
 	 * @throws Exception
 	 */
-	public Task createItem(String content) throws ParseException,Exception {
-		String[] contents = getContentArray(content); 
-		if(contents[CONTENT_DESC] == CONTENT_EMPTY) {
+	public Task createItem(String content) throws ParseException, ArithmeticException, NullPointerException {
+		String[] contents = getContentArray(content);
+		if(contents[CONTENT_DESC].equals(CONTENT_EMPTY)) {
 			throw new NullPointerException(EXCEPTION_NO_DESC);
 		}
 		return createItem(contents);
 	}
 	
-	private Task createItem(String[] contents) throws ParseException,Exception {
+	private Task createItem(String[] contents) throws ParseException, ArithmeticException {
 		Task createdItem;
 		if (findEventString(contents) > 0) {
 			createdItem = new Event(contents);
@@ -105,7 +105,7 @@ public class Parser {
 				return i;
 			}
 		}
-		return CONTENT_DESC;
+		return CONTENT_NOT_FOUND;
 	}
 	
 	//Used by the Add and Note Commands

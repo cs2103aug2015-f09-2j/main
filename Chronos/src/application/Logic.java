@@ -1,5 +1,6 @@
 package application;
 
+//@@author A0126223U
 public class Logic {
 	
 	private static CommandCreator _commandCreator;
