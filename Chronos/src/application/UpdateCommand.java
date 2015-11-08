@@ -80,7 +80,7 @@ public class UpdateCommand extends Command {
 			id = updateEntry(entry, field, value, id);
 		}
 		//update the alarm if there is a need to do so
-		if (isChanged&&offset != -1){
+		if (isChanged && offset != -1){
 			AlarmCommand setAlarm = new AlarmCommand(String.format(ALARM_COMMAND, id, offset));
 			setAlarm.execute();
 		}
@@ -130,11 +130,8 @@ public class UpdateCommand extends Command {
 		String endDate = task.get(_parse.JSON_END_DATE).toString();
 		String priority = task.get(_parse.JSON_PRIORITY).toString();
 		String category = task.get(_parse.JSON_CATEGORY).toString();
-
-		//Event event = new Event(EMPTY, desc, EMPTY, endDate, priority, category, null);
-
 		String alarm = task.get(_parse.JSON_ALARM).toString();
-		Event event = new Event(EMPTY, desc, EMPTY, endDate, priority, category,alarm);
+		Event event = new Event(EMPTY, desc, EMPTY, endDate, priority, category, alarm);
 		event.setStartDate(value);
 		event.setId(_store.getEventId());
 		return event;

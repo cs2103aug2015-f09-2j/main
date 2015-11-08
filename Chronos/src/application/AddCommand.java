@@ -36,7 +36,6 @@ public class AddCommand extends Command {
 			feedbackString = FEEDBACK_MISSING_DESC;
 			return new Feedback(feedbackString);
 		} catch (ParseException e) {
-			
 			feedbackString = FEEDBACK_WRONG_DATE;
 			return new Feedback(feedbackString);
 		} catch (Exception e) {

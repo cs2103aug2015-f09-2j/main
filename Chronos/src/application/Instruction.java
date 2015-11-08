@@ -47,7 +47,7 @@ public class Instruction {
 		try {
 			return _requiredFields.get(_numberOfSteps);
 		} catch (IndexOutOfBoundsException e) {
-			return "";
+			return Command.EMPTY;
 		}
 	}
 	

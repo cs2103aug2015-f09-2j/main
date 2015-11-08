@@ -165,7 +165,7 @@ public class GUI extends Application implements NativeKeyListener {
 		primaryStage.show();
 	}
 
-	//@@author A0125424N
+	//@@author A0125424N-reused
 	private void registerKeyboard() {
 		 try {
 	        	GlobalScreen.registerNativeHook();
@@ -179,13 +179,14 @@ public class GUI extends Application implements NativeKeyListener {
 	        GlobalScreen.addNativeKeyListener(new GUI());
 	    }
 
-	    private void turnOffKeyboardLog() {
-	    	LogManager.getLogManager().reset();
-	    	keyboardLogger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
-	    	keyboardLogger.setLevel(Level.OFF);
+	//@@author A0125424N-reused
+    private void turnOffKeyboardLog() {
+    	LogManager.getLogManager().reset();
+    	keyboardLogger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
+    	keyboardLogger.setLevel(Level.OFF);
 	}
 
-	// @@author A0125424N
+	// @@author A0125424N-reused
 	/**
 	 * This method creates a tray and subsequently a tray icon for the
 	 * application.

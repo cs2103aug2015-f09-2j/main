@@ -25,7 +25,7 @@ public class DoneCommand extends Command {
 			feedbackString = String.format(FEEDBACK_MESSAGE, _content);
 			_completedTask = _parse.retrieveTask(_content, _store.entries_);
 			_completedTask.markTaskAsDone(true);
-			String content = _completedTask.getId()+ UPDATE_STRING + _completedTask.isTaskComplete();
+			String content = _completedTask.getId() + UPDATE_STRING + _completedTask.isTaskComplete();
 			feedback = new UpdateCommand(content).execute(); //_store.Temp done in Update Command
 			feedback.setMessage(feedbackString);
 			log.info(String.format(LOG_MESSAGE, _content));
