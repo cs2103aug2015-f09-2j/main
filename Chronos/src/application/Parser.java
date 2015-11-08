@@ -407,9 +407,9 @@ public class Parser {
 	public ArrayList<String> parseExtendString(String extendString) {
 		String[] details = extendString.split(CONTENT_SEPARATOR);
 		ArrayList<String> extendDetails = new ArrayList<String>();
-		extendDetails.add(details[0]);
-		extendDetails.add(JSON_END_DATE);
-		extendDetails.add(details[1]);
+		for (String detail:details) {
+			extendDetails.add(detail);
+		}
 		return extendDetails;
 	}
 }
