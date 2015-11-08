@@ -9,6 +9,9 @@ import org.jnativehook.keyboard.NativeKeyListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import application.Feedback;
 import application.Instruction;
@@ -152,9 +155,9 @@ public class GUI extends Application implements NativeKeyListener {
 		primaryStage.setTitle(WINDOW_TITLE);
 		Platform.setImplicitExit(false);
 		Scene scene = new Scene(rootLayout);
-		//registerKeyboard();
+		registerKeyboard();
 		_stage = primaryStage;
-		createTray(primaryStage, scene);
+		createTray();
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
@@ -163,6 +166,7 @@ public class GUI extends Application implements NativeKeyListener {
 	private void registerKeyboard() {
 		 try {
 	        	GlobalScreen.registerNativeHook();
+	        	turnOffKeyboardLog();
 	        }
 	        catch (NativeHookException ex) {
 	           log.warning(ex.toString());
@@ -172,6 +176,12 @@ public class GUI extends Application implements NativeKeyListener {
 	        GlobalScreen.addNativeKeyListener(new GUI());
 	    }
 
+	    private void turnOffKeyboardLog() {
+		LogManager.getLogManager().reset();
+    	keyboardlogger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
+    	logger.setLevel(Level.OFF);
+	}
+
 	// @@author A0125424N
 	/**
 	 * This method creates a tray and subsequently a tray icon for the
@@ -180,7 +190,7 @@ public class GUI extends Application implements NativeKeyListener {
 	 * @param stage
 	 * @param scene
 	 */
-	private void createTray(final Stage stage, final Scene scene) {
+	private void createTray() {
 		if (SystemTray.isSupported()) {
 			SystemTray tray = SystemTray.getSystemTray();
 			ImageIcon image = null;
@@ -206,6 +216,7 @@ public class GUI extends Application implements NativeKeyListener {
 		        }
 				if(e.getKeyCode() == NativeKeyEvent.VC_CONTROL_L) {
 					_stage.show();
+					_stage.toFront();
 				}
 			}		
 		}));    
@@ -332,14 +343,12 @@ public class GUI extends Application implements NativeKeyListener {
 
 	@Override
 	public void nativeKeyReleased(NativeKeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		// To do nothing
 	}
 
 	@Override
 	public void nativeKeyTyped(NativeKeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		// To do nothing
 	}
 
 }
