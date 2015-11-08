@@ -53,6 +53,8 @@ public class GUI extends Application implements NativeKeyListener {
 	private static final String MESSAGE_SUMMARY_FAIL = "Failed to set up Summary Pane";
 	private static final String MESSAGE_COMMAND_BAR_FAIL = "Failed to set up Command Bar Pane";
 	private static final String MESSAGE_TRAYICON_FAIL = "Failed to set up tray icon in system tray";
+	private static final String MESSAGE_REGISTER_NATIVEHOOK_FAIL = "Failed to register nativehook";
+	private static final String MESSAGE_UNREGISTER_NATIVEHOOK_FAIL = "Failed to unregister nativehook";
 
 	private static final String CLOSE_SYSTEM = "Exit";
 
@@ -67,6 +69,7 @@ public class GUI extends Application implements NativeKeyListener {
 	private static Logger keyboardLogger;
 	private boolean setUp = false;
 	private TrayIcon trayIcon;
+	private SystemTray tray;
 
 	boolean isHandlingCommand = false;
 	private Instruction currentInstruction = null;
@@ -170,7 +173,7 @@ public class GUI extends Application implements NativeKeyListener {
 	        	turnOffKeyboardLog();
 	        }
 	        catch (NativeHookException ex) {
-	           log.warning(ex.toString());
+	           log.warning(MESSAGE_REGISTER_NATIVEHOOK_FAIL);
 	           handleCommand(CLOSE_SYSTEM);
 	        }
 
@@ -178,9 +181,9 @@ public class GUI extends Application implements NativeKeyListener {
 	    }
 
 	    private void turnOffKeyboardLog() {
-		LogManager.getLogManager().reset();
-    	keyboardLogger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
-    	keyboardLogger.setLevel(Level.OFF);
+	    	LogManager.getLogManager().reset();
+	    	keyboardLogger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
+	    	keyboardLogger.setLevel(Level.OFF);
 	}
 
 	// @@author A0125424N
@@ -193,7 +196,7 @@ public class GUI extends Application implements NativeKeyListener {
 	 */
 	private void createTray() {
 		if (SystemTray.isSupported()) {
-			SystemTray tray = SystemTray.getSystemTray();
+			tray = SystemTray.getSystemTray();
 			ImageIcon image = null;
 			image = new ImageIcon(getClass().getResource("/gui/logo.jpg"));
 
@@ -280,6 +283,11 @@ public class GUI extends Application implements NativeKeyListener {
 
 	private void updateFeedback(Feedback feedback) {
 		if (feedback.isProgramExiting()) {
+			try {
+				GlobalScreen.unregisterNativeHook();
+			} catch (NativeHookException e) {
+				log.warning(MESSAGE_UNREGISTER_NATIVEHOOK_FAIL);
+			}
 			System.exit(EXIT_NORMAL);
 		}
 		// choose between summary or detail view
