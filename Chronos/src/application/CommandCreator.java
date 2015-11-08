@@ -53,6 +53,7 @@ public class CommandCreator {
 	private static Stack<Command> _undoneCommands = new Stack<Command>();
 	private static ArrayList<String> _typedCommandStrings = new ArrayList<String>();
 	
+	//@@author A0126223U
 	Feedback createAndExecuteCommand(String[] inputs) {
 		
 		COMMAND_TYPE commandType = determineCommandType(inputs[COMMAND_INDEX_COMMAND]);

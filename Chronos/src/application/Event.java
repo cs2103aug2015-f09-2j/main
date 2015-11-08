@@ -1,5 +1,6 @@
 package application;
 
+import java.text.ParseException;
 import java.util.Calendar;
 
 import com.mdimension.jchronic.Chronic;
@@ -17,7 +18,8 @@ public class Event extends Task {
 	private static final String ID_DISPLAY = ". ";
 	private static final String MESSAGE_INVALID_END = "End date < start date";
 	
-	public Event(String[] contents) throws Exception {
+	//@@author A0126223U
+	public Event(String[] contents) throws ArithmeticException, ParseException {
 		super();
 		_description = contents[0];
 		for (int i = 1; i < contents.length; i++) {
@@ -30,7 +32,7 @@ public class Event extends Task {
 				Calendar start = Chronic.parse(dates[0]).getBeginCalendar();
 				Calendar end = Chronic.parse(dates[1]).getEndCalendar();
 				if (end.getTime().compareTo(start.getTime())<0){
-					throw new Exception(MESSAGE_INVALID_END);
+					throw new ArithmeticException(MESSAGE_INVALID_END);
 				}
 				_startDate = manipulateDate(start);
 				_endDate = manipulateDate(end);
