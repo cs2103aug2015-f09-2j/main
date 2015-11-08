@@ -54,8 +54,10 @@ public class ExtendCommand extends UpdateCommand {
 				if(_oldEntry.get(JSON_END_DATE).equals("someday")) {
 					return new Feedback(ERROR_CANT_EXTEND);
 				} else {
+					_store.storeTemp();
 					Task taskToExtend = extendTask(taskID, extendDetails);
 					_store.entries_.set(_index, _parse.convertToJSON(taskToExtend));
+					_store.storeChanges();
 					String feedbackString = String.format(FEEDBACK_MESSAGE, _content);
 					return new Feedback(feedbackString);
 				}
@@ -69,8 +71,8 @@ public class ExtendCommand extends UpdateCommand {
 			taskToExtend.setEndDate("someday");
 		} else {
 			Calendar endDate = Calendar.getInstance();
+			endDate.setTime(getTaskEndDate(taskToExtend));
 			for(String extendDetail:extendDetails){
-				endDate.setTime(getTaskEndDate(taskToExtend));
 				String[] details = extendDetail.split(":");
 				int field = determineField(details[0]);
 				int amount = Integer.parseInt(details[1]);
