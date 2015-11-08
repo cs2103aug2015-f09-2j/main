@@ -127,3 +127,7 @@
 	 -fx-font-weight: bold;
 	-fx-font-family: 'Brush Script MT', cursive;
 }
+
+.text-field {
+	-fx-prompt-text-fill: derive(-fx-control-inner-background,-30%); 
+}

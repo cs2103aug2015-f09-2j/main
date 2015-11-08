@@ -44,6 +44,9 @@ public class CommandBarController extends BorderPane {
 			throw e;
 		}
 		displayDate();
+		commandBar.requestFocus(); // get focus first
+		System.out.println("ok");
+		
 	}
 
 	//Trigger when something is keyed in
@@ -114,6 +117,10 @@ public class CommandBarController extends BorderPane {
 	
 	public void displayTypedCommand(String pastCommand) {
 		commandBar.setText(pastCommand);
+	}
+	
+	public void prompText (String text) {
+		commandBar.setPromptText(text);
 	}
 
 }

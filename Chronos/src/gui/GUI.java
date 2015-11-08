@@ -20,6 +20,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -38,9 +39,9 @@ public class GUI extends Application implements NativeKeyListener {
 
 	private static Stage _stage;
 
-	private static final String WINDOW_TITLE = "Chronos V0.4";
-	private static final String MESSAGE_WELCOME = "Welcome to Chronos V0.4! Where would you like Chronos to store your tasks and events?";
-	private static final String MESSAGE_LOADED = "Welcome to Chronos V0.4! Add a task to get started.";
+	private static final String WINDOW_TITLE = "Chronos V0.5";
+	private static final String MESSAGE_WELCOME = "Welcome to Chronos V0.5! Where would you like Chronos to store your tasks and events?";
+	private static final String MESSAGE_LOADED = "Welcome to Chronos V0.5! Add a task to get started.";
 	private static final String ROOT_LAYOUT_FXML = "RootLayout.fxml";
 
 	private static final int DATA_FIRST = 0;
@@ -55,9 +56,12 @@ public class GUI extends Application implements NativeKeyListener {
 	private static final String MESSAGE_REGISTER_NATIVEHOOK_FAIL = "Failed to register nativehook";
 	private static final String MESSAGE_UNREGISTER_NATIVEHOOK_FAIL = "Failed to unregister nativehook";
 
+	private static final String MESSAGE_DIRECTORY = "Type the directory here";
+	private static final String PATTERN_ADD = "add (description), (date), c:(category), p:(priority)";
 	private static final String CLOSE_SYSTEM = "Exit";
 
 	private static final String MESSAGE_ALARM = "%1$s\n%2$s\nis due soon";
+
 
 	private BorderPane rootLayout;
 	protected static Logic logic;
@@ -104,6 +108,7 @@ public class GUI extends Application implements NativeKeyListener {
 		if (logic.isSavePresent()) {
 			_isNewUser = false;
 			updateFeedback(logic.updateDisplay());
+			commandBarController.prompText(PATTERN_ADD);
 			commandBarController.displayFeedback(MESSAGE_LOADED);
 		} else {
 			_isNewUser = true;
@@ -112,6 +117,7 @@ public class GUI extends Application implements NativeKeyListener {
 	}
 
 	private void initNewUser() {
+		commandBarController.prompText(MESSAGE_DIRECTORY);
 		commandBarController.displayFeedback(MESSAGE_WELCOME);
 		summary.setVisible(false);
 	}
@@ -160,11 +166,17 @@ public class GUI extends Application implements NativeKeyListener {
 		Scene scene = new Scene(rootLayout);
 		registerKeyboard();
 		_stage = primaryStage;
-		createTray();
+		createTray(primaryStage);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 
+
+	// get items arrayList from Logic and print them out
+	private void updateSummary(ArrayList<Task> eventList) {
+		summary.display(eventList);
+	}
+	
 	//@@author A0125424N-reused
 	private void registerKeyboard() {
 		 try {
@@ -190,18 +202,19 @@ public class GUI extends Application implements NativeKeyListener {
 	/**
 	 * This method creates a tray and subsequently a tray icon for the
 	 * application.
+	 * @param primaryStage 
 	 * 
 	 * @param stage
 	 * @param scene
 	 */
-	private void createTray() {
+	private void createTray(Stage primaryStage) {
 		if (SystemTray.isSupported()) {
+			primaryStage.getIcons().add(new Image("gui/logo.jpg"));
 			tray = SystemTray.getSystemTray();
 			ImageIcon image = null;
-			image = new ImageIcon(getClass().getResource("/gui/logo.jpg"));
+			image = new ImageIcon(getClass().getResource("./logo.jpg"));
 
 			trayIcon = new TrayIcon(image.getImage());
-
 			try {
 				tray.add(trayIcon);
 			} catch (AWTException e) {
@@ -251,6 +264,8 @@ public class GUI extends Application implements NativeKeyListener {
 			updateFeedback(logic.setSavePath(text));
 			summary.setVisible(true);
 			_isNewUser = false;
+			commandBarController.prompText(PATTERN_ADD);
+			
 		} else {
 			Feedback commandFeedback = logic.executeUserCommand(text);
 			updateFeedback(commandFeedback);
@@ -274,11 +289,6 @@ public class GUI extends Application implements NativeKeyListener {
 		dialog.setScene(dialogScene);
 		dialog.show();
 		logic.switchOffAlarm(currentTask);
-	}
-
-	// get items arrayList from Logic and print them out
-	private void updateSummary(ArrayList<Task> eventList) {
-		summary.display(eventList);
 	}
 
 	private void updateFeedback(Feedback feedback) {
