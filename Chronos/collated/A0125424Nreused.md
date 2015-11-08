@@ -29,18 +29,19 @@
 	/**
 	 * This method creates a tray and subsequently a tray icon for the
 	 * application.
+	 * @param primaryStage 
 	 * 
 	 * @param stage
 	 * @param scene
 	 */
-	private void createTray() {
+	private void createTray(Stage primaryStage) {
 		if (SystemTray.isSupported()) {
+			primaryStage.getIcons().add(new Image("gui/logo.jpg"));
 			tray = SystemTray.getSystemTray();
 			ImageIcon image = null;
-			image = new ImageIcon(getClass().getResource("/gui/logo.jpg"));
+			image = new ImageIcon(getClass().getResource("./logo.jpg"));
 
 			trayIcon = new TrayIcon(image.getImage());
-
 			try {
 				tray.add(trayIcon);
 			} catch (AWTException e) {

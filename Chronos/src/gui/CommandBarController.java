@@ -44,8 +44,6 @@ public class CommandBarController extends BorderPane {
 			throw e;
 		}
 		displayDate();
-		commandBar.requestFocus(); // get focus first
-		System.out.println("ok");
 		
 	}
 
