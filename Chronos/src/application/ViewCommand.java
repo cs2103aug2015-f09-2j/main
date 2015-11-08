@@ -18,25 +18,27 @@ public class ViewCommand extends Command {
 	//@@author A0126223U
 	@Override
 	public Feedback execute() {
-		ArrayList<Task> data = null;
-		String feedbackString = EMPTY;
-		if(_content != EMPTY) {
-			data = new ArrayList<Task>();
-			Task selectedTask = _parse.retrieveTask(_content, _store.entries_);
-			data.add(selectedTask);
-			feedbackString = String.format(FEEDBACK_MESSAGE, _content);
-		} else {
+		int index = findEntry(_content);
+		if (index == Command.FIND_NO_ID) {
+			assert _content.equals(EMPTY);
 			log.warning(LOG_NO_ID);
-			feedbackString = ERROR_NO_CONTENT;
+			return new Feedback(ERROR_NO_ID);
+		} else if (index == Command.FIND_INVALID_ID) {
+			return new Feedback(ERROR_INVALID_ID);
+		} else {
+			Task selectedTask = _parse.retrieveTask(_content, _store.entries_);
+			ArrayList<Task> data = new ArrayList<Task>();
+			data.add(selectedTask);
+			String feedbackString = String.format(FEEDBACK_MESSAGE, _content);
+			Feedback feedback = new Feedback(feedbackString, data);
+			feedback.setSummaryView(false);
+			return feedback;
 		}
-		Feedback feedback = new Feedback(feedbackString, data);
-		feedback.setSummaryView(false);
-		return feedback;
 	}
 
 	@Override
 	public Feedback undo() {
-		return null; //Alternative: return new DisplayCommand(null).execute();
+		return null; 
 	}
 
 	public static Instruction generateInstruction() {

@@ -37,8 +37,8 @@ public class AlarmCommand extends UpdateCommand {
 		}
 		String taskID = alarmDetails[0];
 		//call parent method
-		_id = findEntry(taskID);
-		if (_id > LIMIT_ID) {
+		_index = findEntry(taskID);
+		if (_index > LIMIT_ID) {
 			performUpdate(alarmDetails);
 			String feedbackString = String.format(FEEDBACK_MESSAGE, _content);
 			return new Feedback(feedbackString);
@@ -52,7 +52,7 @@ public class AlarmCommand extends UpdateCommand {
 
 	private void performUpdate(String[] alarmDetails) throws ParseException {
 		_store.storeTemp();
-		JSONObject entry = (JSONObject) _store.entries_.get(_id);
+		JSONObject entry = (JSONObject) _store.entries_.get(_index);
 		updateAlarm(entry, alarmDetails);
 		_store.storeChanges();
 	}

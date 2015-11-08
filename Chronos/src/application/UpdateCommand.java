@@ -14,7 +14,7 @@ public class UpdateCommand extends Command {
 
 	//Unique attributes
 	protected JSONObject _oldEntry;
-	protected int _id;
+	protected int _index;
 		
 	//Constant Strings
 	protected static final String FEEDBACK_MESSAGE =  "Updated %1$s";
@@ -44,28 +44,23 @@ public class UpdateCommand extends Command {
 	public Feedback execute() { 
 		ArrayList<String> updateDetails = _parse.parseUpdateString(_content);
 		String taskID = updateDetails.get(0);
-		_id = findEntry(taskID);
-		if (_id > LIMIT_ID) {
+		_index = findEntry(taskID);
+		
+		if (_index == Command.FIND_NO_ID) {
+			assert _content.equals(EMPTY);
+			log.warning(LOG_NO_ID);
+			return new Feedback(ERROR_NO_ID);
+		} else if (_index == Command.FIND_INVALID_ID) {
+			return new Feedback(ERROR_INVALID_ID);
+		} else {
 			_store.storeTemp();
-			JSONObject entry = (JSONObject) _store.entries_.get(_id);
+			JSONObject entry = (JSONObject) _store.entries_.get(_index);
+			_oldEntry = (JSONObject) entry.clone();
 			updateEntry(entry, updateDetails);
 			_store.storeChanges();
 			String feedbackString = String.format(FEEDBACK_MESSAGE, _content);
 			return new Feedback(feedbackString);
-		} else {
-			return new Feedback(ERROR_INVALID_ID);
 		}
-	}
-
-	public int findEntry(String id) {
-		for (int i = 0; i < _store.entries_.size(); i++) {
-			JSONObject currentEntry = (JSONObject) _store.entries_.get(i);
-			if (currentEntry.get(Parser.JSON_ID).equals(id)) {
-				_oldEntry = (JSONObject) currentEntry.clone();
-				return i;
-			}
-		}
-		return -1;
 	}
 	
 	//@@author A0131496A
@@ -116,7 +111,7 @@ public class UpdateCommand extends Command {
 				_store.entries_.add(_parse.convertToJSON(event));
 		}else {			//for event and  updating task as usual
 			entry.replace(field,value);
-			_store.entries_.set(_id, entry);
+			_store.entries_.set(_index, entry);
 		}
 		return id;
 	}
@@ -156,8 +151,8 @@ public class UpdateCommand extends Command {
 	@Override
 	public Feedback undo() {
 		_store.storeTemp();
-		JSONObject entry = (JSONObject) _store.entries_.get(_id);
-		_store.entries_.set(_id, _oldEntry);
+		JSONObject entry = (JSONObject) _store.entries_.get(_index);
+		_store.entries_.set(_index, _oldEntry);
 		_store.storeChanges();
 		String feedbackString = String.format(FEEDBACK_MESSAGE_UNDO, _content);
 		return new Feedback(feedbackString);
