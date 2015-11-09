@@ -21,6 +21,9 @@ import application.CommandCreator;
 import application.Event;
 import application.Logic;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.ArrayList;
 
@@ -36,7 +39,7 @@ public class TestParser {
 	static Preferences userPrefs = Preferences.userNodeForPackage(Storage.class);
 	static final String DEFAULT_PATH = "none";
 	static final String PREFS_PATH = "path";
-	static final String TEST_FILE = "src/test/testFiles/testParser";
+	static final String TEST_FILE = "src/test/testFiles/testParser/chronos_storage.txt";
 	static String path;
 	static CommandCreator creator = new CommandCreator();
 	
@@ -53,6 +56,15 @@ public class TestParser {
 	@AfterClass
 	public static void cleanUp(){
 		userPrefs.put(PREFS_PATH, path);
+		File storageFile = new File(TEST_FILE);
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter(storageFile);
+			writer.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
