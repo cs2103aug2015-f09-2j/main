@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
+import java.awt.AWTException;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
 
 import application.Feedback;
 import application.Instruction;
@@ -28,9 +31,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.application.Platform;
-import java.awt.AWTException;
-import java.awt.SystemTray;
-import java.awt.TrayIcon;
 
 import javax.swing.ImageIcon;
 
@@ -54,13 +54,10 @@ public class GUI extends Application implements NativeKeyListener {
 	private static final String MESSAGE_TRAYICON_FAIL = "Failed to set up tray icon in system tray";
 	private static final String MESSAGE_REGISTER_NATIVEHOOK_FAIL = "Failed to register nativehook";
 	private static final String MESSAGE_UNREGISTER_NATIVEHOOK_FAIL = "Failed to unregister nativehook";
-
 	private static final String MESSAGE_DIRECTORY = "Type the directory here";
 	private static final String PATTERN_ADD = "add (description), (date), c:(category), p:(priority)";
 	private static final String CLOSE_SYSTEM = "Exit";
-
 	private static final String MESSAGE_ALARM = "%1$s\n%2$s\n%3$s\nis due soon";
-
 
 	private BorderPane rootLayout;
 	protected static Logic logic;
@@ -87,16 +84,10 @@ public class GUI extends Application implements NativeKeyListener {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			initRootLayout();
-			initPrimaryStage(primaryStage);
-			initLogic();
-
-			addCommandBar(this);
-			addSummary();
+			setUpBasicFrams(primaryStage);
 			log.info(String.format(MESSAGE_SET_UP));
-
 			checkNewUser();
-			
+			//perform proper closing of program
 			primaryStage.setOnCloseRequest(e -> System.exit(EXIT_NORMAL));
 		} catch (IOException e) {
 			log.warning(MESSAGE_SET_UP_FAIL);
@@ -104,7 +95,16 @@ public class GUI extends Application implements NativeKeyListener {
 		}
 	}
 
-	// check if save file exists
+	private void setUpBasicFrams(Stage primaryStage) throws IOException {
+		initRootLayout();
+		initPrimaryStage(primaryStage);
+		initLogic();
+
+		addCommandBar(this);
+		addSummary();
+	}
+
+	// check if save file exists and display instruction depending on whether isNewUser
 	private void checkNewUser() {
 		if (logic.isSavePresent()) {
 			_isNewUser = false;
@@ -117,6 +117,7 @@ public class GUI extends Application implements NativeKeyListener {
 		}
 	}
 
+	//if newUser, set up the directory first
 	private void initNewUser() {
 		commandBarController.prompText(MESSAGE_DIRECTORY);
 		commandBarController.displayFeedback(MESSAGE_WELCOME);
@@ -171,7 +172,6 @@ public class GUI extends Application implements NativeKeyListener {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
-
 
 	// get items arrayList from Logic and print them out
 	private void updateSummary(ArrayList<Task> eventList) {
