@@ -255,6 +255,6 @@ public class Task {
 	}
 
 	public void updateNote(int noteID, String string) {
-		_notes.set(noteID-1, new Note(string));		
+		_notes.set(noteID - 1, new Note(string));		
 	}
 }
