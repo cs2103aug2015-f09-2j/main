@@ -60,9 +60,9 @@ public class AddCommand extends Command {
 	}
 
 	@Override
-	public Feedback undo() { //edit this
+	public Feedback undo() { 
 		DeleteCommand undoAdd = new DeleteCommand(_createdItemID);
-		if (_createdItemID.contains(Event.ID_HEADER)){
+		if (_createdItemID.contains(Event.ID_HEADER)) {
 			_store.decreaseEventID();
 		} else {
 			_store.decreaseTaskID();

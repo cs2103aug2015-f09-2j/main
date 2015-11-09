@@ -1,5 +1,4 @@
 package application;
-import org.json.simple.JSONObject;
 
 import application.Command;
 import application.Feedback;
@@ -12,6 +11,7 @@ public class DoneCommand extends Command {
 
 	//Constant Strings
 	private static final String FEEDBACK_MESSAGE =  "Marked %1$s as done.";
+	private static final String FEEDBACK_MESSAGE_UNDO = "Marked %1$s as not done";
 	private static final String FEEDBACK_ALREADY_DONE = "Error: %1$s is already done.";
 	private static final String LOG_MESSAGE = "Task %1$s marked as done.";
 	protected static final String UPDATE_STRING = ", s:";
@@ -37,19 +37,22 @@ public class DoneCommand extends Command {
 		} else if (index == Command.FIND_INVALID_ID) {
 			return new Feedback(ERROR_INVALID_ID);
 		} else {
-			String feedbackString = String.format(FEEDBACK_MESSAGE, _content);
 			_completedTask = _parse.retrieveTask(_content, _store.entries_);
 			if (_completedTask.isTaskComplete()) {
 				return new Feedback(String.format(FEEDBACK_ALREADY_DONE, _content));
 			} else {
-				_completedTask.markTaskAsDone(true);
-				String content = _completedTask.getId() + UPDATE_STRING + _completedTask.isTaskComplete();
-				Feedback feedback = new UpdateCommand(content).execute();
-				_isSuccessful = true;
-				feedback.setMessage(feedbackString);
-				return feedback;
+				return markAsDone();
 			}
 		}
+	}
+
+	private Feedback markAsDone() {
+		_completedTask.markTaskAsDone(true);
+		String content = _completedTask.getId() + UPDATE_STRING + _completedTask.isTaskComplete();
+		Feedback feedback = new UpdateCommand(content).execute();
+		_isSuccessful = true;
+		feedback.setMessage(String.format(FEEDBACK_MESSAGE, _content));
+		return feedback;
 	}
 
 	@Override
@@ -57,6 +60,7 @@ public class DoneCommand extends Command {
 		_completedTask.markTaskAsDone(false); 
 		String content = _completedTask.getId() + UPDATE_STRING + _completedTask.isTaskComplete();
 		Feedback feedback = new UpdateCommand(content).execute();
+		feedback.setMessage(String.format(FEEDBACK_MESSAGE_UNDO, _completedTask.getId()));
 		return feedback;
 	}
 	

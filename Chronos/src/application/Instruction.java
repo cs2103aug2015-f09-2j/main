@@ -5,10 +5,11 @@ import java.util.ArrayList;
 //@@author A0126223U
 public class Instruction {
 
-	private int _numberOfSteps = 0;
+	private static final int ZERO = 0;
+	
+	private int _numberOfSteps = ZERO;
 	private ArrayList<String> _instructions;
 	private ArrayList<String> _requiredFields;
-	private ArrayList<String> _optionalFields; 
 	private String _commandPattern;	
 	
 	public Instruction() {
@@ -31,7 +32,7 @@ public class Instruction {
 	}
 	
 	public void previousStep() {
-		if(_numberOfSteps >= 0) {
+		if(_numberOfSteps >= ZERO) {
 			_numberOfSteps--;
 		}
 	}
@@ -61,7 +62,7 @@ public class Instruction {
 	}
 
 	public boolean hasInstructions() {
-		return _instructions.size() > 0;
+		return _instructions.size() > ZERO;
 	}
 	
 	

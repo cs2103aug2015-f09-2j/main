@@ -45,26 +45,51 @@ public class SearchCommand extends Command {
 	}
 
 	private boolean isMatchingEntry(Task entryItem, String[] searchCriteria) {
-		if (entryItem.getDescription().contains(searchCriteria[0]) && !searchCriteria[0].equals("*")) {
-			return true;
+		//If it's not a star and doesnt have the description, boot it out
+		String keyword = searchCriteria[0];
+		if(!keyword.equals("*") && !entryItem.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
+			return false;
 		}
-		for (int i = 1; i < searchCriteria.length; i++) {
-			if (searchCriteria[i].contains(PRIORITY_HEADER)) {
-				return entryItem.getPriority().equals(searchCriteria[i].substring(2));
-			} else if (searchCriteria[i].contains(CATEGORY_HEADER)) {
-				return entryItem.getCategory().contains(searchCriteria[i].substring(2));
-			} else { 
-				try {
-					return searchDates(searchCriteria[i], entryItem);
-				} catch (ParseException e) {
-					return false;
-				}
+		
+		for(int i = 1; i < searchCriteria.length; i++) {
+			String searchHeader = searchCriteria[i].substring(0, 2);
+			String searchContent = searchCriteria[i].substring(2);
+			
+			if (searchHeader.equals(PRIORITY_HEADER) && !isSamePriority(entryItem, searchContent)) {
+				return false;
+			} 
+			
+			if (searchHeader.equals(CATEGORY_HEADER) && !isSameCategory(entryItem, searchContent)) {
+				return false;
+			}
+			
+			if(!(searchHeader.equals(PRIORITY_HEADER)||(searchHeader.equals(CATEGORY_HEADER))) && !isDateFound(entryItem, searchCriteria[i])) {
+				return false;
 			}
 		}
-		return false;
+		
+		return true;
 	}
 
-	private boolean searchDates(String dateString, Task entryItem) throws ParseException {		
+	private boolean isDateFound(Task entryItem, String searchDate) {
+		try {
+			return searchDates(searchDate, entryItem);
+		} catch (ParseException e) {
+			return false;
+		} 
+	}
+
+	private boolean isSameCategory(Task entryItem, String searchContent) {
+		return entryItem.getCategory().equalsIgnoreCase(searchContent);
+	}
+
+	private boolean isSamePriority(Task entryItem, String searchContent) {
+		return entryItem.getPriority().equalsIgnoreCase(searchContent);
+	}
+	
+	
+
+	private boolean searchDates(String dateString, Task entryItem) throws ParseException, NullPointerException {		
 		DateFormat dateFormat = new SimpleDateFormat(Task.DATE_FORMAT);
 		if (dateString.equalsIgnoreCase(entryItem.DEFAULT_END_DATE)) {
 			return dateString.equals(entryItem.getEndDate());
@@ -80,7 +105,6 @@ public class SearchCommand extends Command {
 				} else if (entryItem instanceof Event) {
 					Calendar startDate = Calendar.getInstance();
 					startDate.setTime(dateFormat.parse(((Event) entryItem).getStartDate()));
-					//Calendar startDate = Chronic.parse(((Event) entryItem).getStartDate()).getBeginCalendar();
 					return isSameDay(searchEndDate, startDate);
 				} else {
 					return false;

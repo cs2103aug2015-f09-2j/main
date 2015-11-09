@@ -7,6 +7,8 @@ public class GUIDisplayCommand extends DisplayCommand {
 
 	private static final String MESSAGE_DISPLAY_GUI = "Displayed 30 most urgent items";
 	
+	private static final int TASK_LIMIT = 30;
+	
 	public GUIDisplayCommand() {
 		super(EMPTY);
 	}
@@ -23,8 +25,8 @@ public class GUIDisplayCommand extends DisplayCommand {
 	
 	private ArrayList<Task> moderateTasks(ArrayList<Task> tasks) {
 		Collections.sort(tasks, new TaskComparator());
-		while (tasks.size() > 30) {
-			tasks.remove(tasks.size()-1);
+		while (tasks.size() > TASK_LIMIT) {
+			tasks.remove(tasks.size() - 1); //remove the last element
 		}
 		return tasks;
 	}

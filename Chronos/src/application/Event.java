@@ -50,7 +50,7 @@ public class Event extends Task {
 		_alarm = alarm;
 	}
 
-	public Task toTask(int id) { //get id from storage
+	public Task toTask(int id) { 
 		return new Task(id, _description, _endDate, _priority, _category, _alarm);
 	}
 	

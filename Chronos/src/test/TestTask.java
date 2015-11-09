@@ -16,17 +16,14 @@ import com.mdimension.jchronic.utils.Span;
 
 import application.Task;
 
+//@@author A0126223U
 public class TestTask {
-
-	//Variables needed for testing	
-	private final ByteArrayOutputStream _console = new ByteArrayOutputStream();
 	
 	@Before
 	public void setUp() {
-	    System.setOut(new PrintStream(_console));
 	}
 	
-	@Test //Partition: Custom description, default deadline, category, priority
+	@Test //Partition: No Deadline
 	public void testOnlyDescription() throws ParseException {
 		String[] contents = {"buy milk"};
 		Task testTask = new Task(contents);
@@ -40,7 +37,7 @@ public class TestTask {
 		assertEquals(expectedPriority, testTask.getPriority());
 	}
 	
-	@Test //Partition: Custom description, deadline:"today", default category, priority
+	@Test //Partition: deadline - "today"
 	public void testWithToday() throws ParseException {
 		String[] contents = {"buy milk", "today"};
 		Task testTask = new Task(contents);
@@ -56,7 +53,7 @@ public class TestTask {
 		assertEquals(expectedPriority, testTask.getPriority());
 	}
 	
-	@Test //Partition: Custom description, deadline:"tomorrow", default category, priority
+	@Test //Partition: deadline - "tomorrow"
 	public void testWithTomorrow() throws ParseException {
 		String[] contents = {"buy milk", "tomorrow"};
 		Task testTask = new Task(contents);
@@ -72,7 +69,7 @@ public class TestTask {
 		assertEquals(expectedPriority, testTask.getPriority());
 	}
 	
-	@Test //Partition: Custom description and date, default category, priority
+	@Test //Partition: deadline - specified date
 	public void testWithDate() throws ParseException {
 		String[] contents = {"buy milk", "25/12/2015"};
 		Task testTask = new Task(contents);
@@ -86,7 +83,7 @@ public class TestTask {
 		assertEquals(expectedPriority, testTask.getPriority());
 	}
 	
-	@Test //Partition: Custom description and date with time, default category, priority
+	@Test //Partition: deadline - specified date and time
 	public void testWithDateAndTime() throws ParseException {
 		String[] contents = {"buy milk", "25/12/2015 5:00 am"};
 		Task testTask = new Task(contents);
@@ -100,7 +97,7 @@ public class TestTask {
 		assertEquals(expectedPriority, testTask.getPriority());
 	}
 	
-	@Test(expected = ParseException.class) //Partition: invalid date
+	@Test(expected = ParseException.class) //Partition: deadline - invalid date
 	public void testWithInvalidDate() throws ParseException {
 		String[] contents = {"buy milk", "bluh"};
 		Task testTask = new Task(contents);
@@ -138,7 +135,6 @@ public class TestTask {
 	
 	@After
 	public void tearDown() { 
-	    System.setOut(null);
 	}
 	
 }

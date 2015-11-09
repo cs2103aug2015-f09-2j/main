@@ -60,7 +60,7 @@ public class Logic {
 	
 	public static String getPreviouslyTypedCommand() {
 		_commandIndex++;
-		if(CommandCreator.isWithinRange(_commandIndex)) {
+		if (CommandCreator.isWithinRange(_commandIndex)) {
 			return CommandCreator.getTypedCommandString(_commandIndex);
 		} else {
 			_commandIndex--;
@@ -70,7 +70,7 @@ public class Logic {
 
 	public static String getNextTypedCommand() {
 		_commandIndex--;
-		if(CommandCreator.isWithinRange(_commandIndex)) {
+		if (CommandCreator.isWithinRange(_commandIndex)) {
 			return CommandCreator.getTypedCommandString(_commandIndex);
 		} else {
 			_commandIndex++;

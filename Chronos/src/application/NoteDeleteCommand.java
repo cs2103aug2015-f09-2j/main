@@ -79,14 +79,13 @@ public class NoteDeleteCommand extends Command {
 	@Override
 	public Feedback undo() {
 		_store.storeTemp();
-		JSONObject entry = (JSONObject) _store.entries_.get(_index);
 		_store.entries_.set(_index, _oldEntry);
 		_store.storeChanges();
 		String feedbackString = String.format(FEEDBACK_MESSAGE_UNDO, _content);
 		ArrayList<Task> feedbackData = new ArrayList<Task>();
-		Task aTask = _parse.convertToTask(entry);
+		Task aTask = _parse.convertToTask(_oldEntry);
 		feedbackData.add(aTask);
-		Feedback feedback =  new Feedback(feedbackString);
+		Feedback feedback =  new Feedback(feedbackString, feedbackData);
 		feedback.setSummaryView(false);
 		return feedback;
 	}

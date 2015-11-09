@@ -37,7 +37,7 @@ public class DeleteCommand extends Command {
 
 	private String deleteItem() {
 		int itemIndex = findEntry(_content);
-		if(itemIndex == Command.FIND_NO_ID) {
+		if (itemIndex == Command.FIND_NO_ID) {
 			return ERROR_NO_ID;
 		} else if (itemIndex == Command.FIND_INVALID_ID) {
 			return ERROR_INVALID_ID;
