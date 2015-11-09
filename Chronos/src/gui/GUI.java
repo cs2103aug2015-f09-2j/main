@@ -213,7 +213,7 @@ public class GUI extends Application implements NativeKeyListener {
 			primaryStage.getIcons().add(new Image("gui/logo.jpg"));
 			tray = SystemTray.getSystemTray();
 			ImageIcon image = null;
-			image = new ImageIcon(getClass().getResource("./logo.jpg"));
+			image = new ImageIcon(getClass().getResource("logo.jpg"));
 
 			trayIcon = new TrayIcon(image.getImage());
 			try {
