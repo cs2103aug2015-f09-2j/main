@@ -7,8 +7,6 @@ import java.io.PrintStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +16,7 @@ import com.mdimension.jchronic.utils.Span;
 
 import application.Task;
 
-public class testTask {
+public class TestTask {
 
 	//Variables needed for testing	
 	private final ByteArrayOutputStream _console = new ByteArrayOutputStream();

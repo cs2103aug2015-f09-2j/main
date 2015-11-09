@@ -30,15 +30,15 @@ public class Parser {
 	private static final int INPUT_ARG_COUNT = 2;
 	
 	//Strings for the JSONObjects
-	static final String JSON_ID = "id";
-	static final String JSON_DESC = "description";
-	static final String JSON_PRIORITY = "priority";
-	static final String JSON_CATEGORY = "category";
-	static final String JSON_START_DATE = "start date";
-	static final String JSON_END_DATE = "due date";
-	static final String JSON_NOTES = "notes";
-	static final String JSON_COMPLETE = "complete";
-	static final String JSON_ALARM = "alarm";
+	public static final String JSON_ID = "id";
+	public static final String JSON_DESC = "description";
+	public static final String JSON_PRIORITY = "priority";
+	public static final String JSON_CATEGORY = "category";
+	public static final String JSON_START_DATE = "start date";
+	public static final String JSON_END_DATE = "due date";
+	public static final String JSON_NOTES = "notes";
+	public static final String JSON_COMPLETE = "complete";
+	public static final String JSON_ALARM = "alarm";
 	
 	//Important constants for contents[]
 	private static final int CONTENT_DESC = 0;
@@ -69,7 +69,7 @@ public class Parser {
 	 */
 	public Task createItem(String content) throws ParseException, ArithmeticException, NullPointerException {
 		String[] contents = getContentArray(content);
-		if(contents[CONTENT_DESC].equals(CONTENT_EMPTY)) {
+		if(contents[CONTENT_DESC].trim().equals(CONTENT_EMPTY)) {
 			throw new NullPointerException(EXCEPTION_NO_DESC);
 		}
 		return createItem(contents);

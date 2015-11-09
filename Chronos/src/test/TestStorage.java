@@ -15,7 +15,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 
-public class testStorage {
+public class TestStorage {
 	
 	Storage store;
 	JSONArray entries;

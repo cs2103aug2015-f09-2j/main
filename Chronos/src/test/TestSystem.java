@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import application.CommandCreator;
+import application.Feedback;
 import application.Logic;
 import application.Storage;
 
@@ -29,20 +30,23 @@ import application.Storage;
  * The commands run consecutively to simulate a user's work flow.
  * A storage file with 20 entries at the start is used for testing
  */
-public class testSystem {
+public class TestSystem {
 	
 	static Storage store;
 	static Logic logic = Logic.getInstance();
 	static JSONArray entries;
 	static CommandCreator creator = new CommandCreator();
 	static Preferences userPrefs = Preferences.userNodeForPackage(Storage.class);
+	static String path;
+	
 	static final String DEFAULT_PATH= "none";
 	static final String PREFS_PATH = "path";
 	static final String TEST_DIR = "src/test/testFiles/testSystem";
 	static final String TEST_FILE = "src/test/testFiles/testSystem/chronos_storage.txt";
 	//Backup file is a copy of the original test file
 	static final String BACKUP_FILE = "src/test/testFiles/temp/testSystem.txt";
-	static String path;
+	static final String MESSAGE_INVALID = "Error: Invalid Command";
+
 
 	@BeforeClass
 	//Store the file path in user preference
@@ -173,5 +177,11 @@ public class testSystem {
 		//alarm is set to be 1 hour before the due time
 		String expected = "{\"due date\":\"20 Nov 2015 09:00\",\"alarm\":\"20 Nov 2015 08:00\",\"description\":\"buy milk\",\"id\":\"t11\",\"priority\":\"high\",\"category\":\"personal\",\"complete\":false}";
 		assertEquals(expected, entries.get(19).toString());
+	}
+	
+	@Test
+	public void l_testInvalid(){
+		Feedback msg = logic.executeUserCommand("this is an invalid command");
+		assertEquals(MESSAGE_INVALID, msg.getMessage());
 	}
 }
