@@ -15,7 +15,7 @@ public class NoteCommand extends Command {
 	private int _index;
 	
 	//Instructions
-	private static final String PATTERN = "note (task/event id), (note)";
+	private static final String PATTERN = "+note (task/event id), (note)";
 	private static final String INSTRUCTION_REQUIRED_TASK = "Type the task or event id of the item to add the note to.";
 	private static final String INSTRUCTION_REQUIRED_NOTE = "Type the contents of your note";
 	private static final String REQUIRED_FIELD_ID = "(task/event id)";

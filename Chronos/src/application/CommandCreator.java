@@ -20,7 +20,9 @@ public class CommandCreator {
 	private static final String COMMAND_DISPLAY_ALL = "da";
 	private static final String COMMAND_DONE = "done";
 	private static final String COMMAND_EXIT = "exit";
-	private static final String COMMAND_NOTE = "note";
+	private static final String COMMAND_NOTE_ADD = "+note";
+	private static final String COMMAND_NOTE_DELETE = "-note";
+	private static final String COMMAND_NOTE_UPDATE = "unote";
 	private static final String COMMAND_REDO = "redo";
 	private static final String COMMAND_REDO_ARROW = ">";
 	private static final String COMMAND_SEARCH = "search";
@@ -41,7 +43,7 @@ public class CommandCreator {
 	private static final String PATTERN_UNKNOWN = "Error: Invalid command";
 		
 	enum COMMAND_TYPE {
-		ADD, CD, DELETE, DISPLAY, DONE, EXIT, EXTEND, NOTE, REDO, SEARCH, UNDO, UNKNOWN, UPDATE, VIEW , ALARM 
+		ADD, CD, DELETE, DISPLAY, DONE, EXIT, EXTEND, NOTE_ADD, NOTE_UPDATE, NOTE_DELETE, REDO, SEARCH, UNDO, UNKNOWN, UPDATE, VIEW , ALARM 
 	};
 	
 	//Strings for command creation
@@ -64,12 +66,10 @@ public class CommandCreator {
 		
 			case ADD :
 			     aCommand = new AddCommand(commandContent);
-			     updateStacks(aCommand);
 			     break;
 		
 			case DELETE :  
 				aCommand = new DeleteCommand(commandContent);
-				updateStacks(aCommand);
 				break;
 		
 			case DISPLAY : 
@@ -78,22 +78,27 @@ public class CommandCreator {
 			
 			case DONE :
 				aCommand = new DoneCommand(commandContent);
-				updateStacks(aCommand);
 				break;
 				
 			case EXTEND :
 				aCommand = new ExtendCommand(commandContent);
-				updateStacks(aCommand);
 				break;
 			
-			case NOTE : 
+			case NOTE_ADD : 
 				aCommand = new NoteCommand(commandContent);
+				break;
+				
+			case NOTE_DELETE : 
+				aCommand = new NoteDeleteCommand(commandContent);
+				break;
+			
+			/*case NOTE_UPDATE : 
+				aCommand = new NoteUpdateCommand(commandContent);
 				updateStacks(aCommand);
 				break;
-
+*/
 			case UPDATE :
 				aCommand = new UpdateCommand(commandContent);
-				updateStacks(aCommand);
 				break;
 		
 			case SEARCH :
@@ -114,7 +119,6 @@ public class CommandCreator {
 			
 			case CD :
 				aCommand = new DirectoryCommand(commandContent);
-				updateStacks(aCommand);
 				break;
 			
 			case EXIT : 
@@ -123,7 +127,6 @@ public class CommandCreator {
 				
 			case ALARM:
 				aCommand = new AlarmCommand(commandContent);
-				updateStacks(aCommand);
 				break;
 				
 			case UNKNOWN : 
@@ -139,7 +142,9 @@ public class CommandCreator {
 			_typedCommandStrings.add(commandString);
 		}
 		
-		return aCommand.execute();
+		Feedback feedback = aCommand.execute();
+		updateStacks(aCommand);
+		return feedback;
 	}
 	
 	private void updateStacks(Command aCommand) {
@@ -218,8 +223,16 @@ public class CommandCreator {
 				return COMMAND_TYPE.EXTEND;
 				//break;
 			
-			case COMMAND_NOTE : 
-				return COMMAND_TYPE.NOTE;
+			case COMMAND_NOTE_ADD : 
+				return COMMAND_TYPE.NOTE_ADD;
+				//break;
+				
+			case COMMAND_NOTE_DELETE : 
+				return COMMAND_TYPE.NOTE_DELETE;
+				//break;
+			
+			case COMMAND_NOTE_UPDATE : 
+				return COMMAND_TYPE.NOTE_UPDATE;
 				//break;
 			
 			case COMMAND_REDO_ARROW :
@@ -292,8 +305,16 @@ public class CommandCreator {
 				 commandInstruction = ExtendCommand.generateInstruction();
 				 break;
 			
-			case NOTE : 
+			case NOTE_ADD : 
 				 commandInstruction = NoteCommand.generateInstruction();
+				 break;
+				 
+			case NOTE_UPDATE : 
+				 //commandInstruction = NoteUpdateCommand.generateInstruction();
+				 break;
+			
+			case NOTE_DELETE : 
+				 commandInstruction = NoteDeleteCommand.generateInstruction();
 				 break;
 	
 			case UPDATE :

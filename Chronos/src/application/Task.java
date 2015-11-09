@@ -239,4 +239,18 @@ public class Task {
 	public boolean isClashing() {
 		return _isClashing;
 	}
+
+	public boolean hasNote(int noteID) {
+		if(_notes.isEmpty()) {
+			return false;
+		} else if (noteID > 0 && noteID <= _notes.size() ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public void deleteNote(int noteID) {
+		_notes.remove(noteID - 1);
+	}
 }
