@@ -9,16 +9,16 @@
 
 <fx:root type="BorderPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 	<top>
-		<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="50.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+		<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="50.0" prefWidth="630.0" BorderPane.alignment="CENTER">
 			<children>
-				<TextFlow fx:id="eventTitle" focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="580.0" styleClass="txtFlow" />
+				<TextFlow fx:id="eventTitle" focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="630.0" styleClass="txtFlow" />
 			</children>
 		</AnchorPane>
 	</top>
 	<center>
 				<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="260.0" prefWidth="380.0">
 					<children>
-						<ListView fx:id="details" minHeight="0.0" prefHeight="260.0" prefWidth="380.0" styleClass="listView" />
+						<ListView fx:id="details" minHeight="0.0" prefHeight="260.0" prefWidth="430.0" styleClass="listView" />
 					</children>
 				</AnchorPane>
 	</center>
