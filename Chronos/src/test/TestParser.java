@@ -7,10 +7,11 @@ import java.util.prefs.Preferences;
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
-
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.runners.MethodSorters;
 
 import application.Parser;
 import application.Task;
@@ -19,9 +20,11 @@ import application.AddCommand;
 import application.CommandCreator;
 import application.Event;
 import application.Logic;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 //@@author A0125424N
 public class TestParser {
 	static final String CONTENT_SEPARATOR = ", ";
@@ -61,7 +64,7 @@ public class TestParser {
 	 * @throws Exception 
 	 */
 	@Test
-	public void testCreateItem() throws Exception {
+	public void a_testCreateItem() throws Exception {
 		int item = 0;
 		Task task;
 		ArrayList<Task> taskArr = new ArrayList<Task>();
@@ -87,7 +90,7 @@ public class TestParser {
 	
 	
 	@Test
-	public void testConvertToJSON() throws Exception {
+	public void b_testConvertToJSON() throws Exception {
 		Task task;
 		JSONObject entry = new JSONObject();
 		task = parser.createItem("buy paper, 11/11/2015 12:00 PM, c:Work, p:MED");
@@ -106,7 +109,7 @@ public class TestParser {
 	
 	
 	@Test
-	public void testConvertToTaskArray() throws ArithmeticException, NullPointerException, ParseException {
+	public void c_testConvertToTaskArray() throws ArithmeticException, NullPointerException, ParseException {
 		ArrayList<Task> taskArr = new ArrayList<Task>();
 		add = new AddCommand("buy paper, 11/11/2015 12:00 PM, c:personal, p:MED");
 		add.execute();
@@ -131,7 +134,7 @@ public class TestParser {
 	
 	
 	@Test
-	public void testRetrieveTask() {
+	public void d_testRetrieveTask() {
 		String taskId;
 		Task task;
 		ArrayList<Task> taskArr = new ArrayList<Task>();
@@ -161,7 +164,7 @@ public class TestParser {
 	}
 	
 	@Test
-	public void testConvertToTask() {
+	public void e_testConvertToTask() {
 		JSONObject entry = new JSONObject();
 		String taskId;
 		Task task;
@@ -200,7 +203,7 @@ public class TestParser {
 	 *  Boundary Values: Non-empty String, a String of at least length of one.
 	 */
 	@Test
-	public void testParseUpdateString() {
+	public void f_testParseUpdateString() {
 		String taskId, updatedStr;
 		ArrayList<Task> taskArr = new ArrayList<Task>();
 		ArrayList<String> updatedTask;
@@ -232,7 +235,7 @@ public class TestParser {
 	 *  Boundary Values: Non-empty String, a String of at least length of one.
 	 */
 	@Test
-	public void testIsExistingId() {
+	public void g_testIsExistingId() {
 		add = new AddCommand("buy paper, 11/06/2015 12:00 PM, c:Work, p:MED");
 		add.execute();
 		assertEquals(false, parser.isExistingId("0", entries));
@@ -240,7 +243,7 @@ public class TestParser {
 	}
 	
 	@Test
-	public void testCheckForClashes() {
+	public void h_testCheckForClashes() {
 		add = new AddCommand("buy paper, 11/11/2015 12:00 PM, c:Work, p:MED");
 		add.execute();
 		add = new AddCommand("buy milk, 11/11/2015 12:00 PM, c:Personal, p:MED");
@@ -253,7 +256,7 @@ public class TestParser {
 	}
 	
 	@Test
-	public void testParseExtendString() {
+	public void i_testParseExtendString() {
 		ArrayList<String> extend = new ArrayList<String>();
 		add = new AddCommand("buy paper, 11/11/2015 12:00 PM, c:Work, p:MED");
 		add.execute();
