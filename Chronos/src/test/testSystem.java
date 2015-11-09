@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import application.CommandCreator;
+import application.Feedback;
 import application.Logic;
 import application.Storage;
 
@@ -36,13 +37,16 @@ public class testSystem {
 	static JSONArray entries;
 	static CommandCreator creator = new CommandCreator();
 	static Preferences userPrefs = Preferences.userNodeForPackage(Storage.class);
+	static String path;
+	
 	static final String DEFAULT_PATH= "none";
 	static final String PREFS_PATH = "path";
 	static final String TEST_DIR = "src/test/testFiles/testSystem";
 	static final String TEST_FILE = "src/test/testFiles/testSystem/chronos_storage.txt";
 	//Backup file is a copy of the original test file
 	static final String BACKUP_FILE = "src/test/testFiles/temp/testSystem.txt";
-	static String path;
+	static final String MESSAGE_INVALID = "Error: Invalid Command";
+
 
 	@BeforeClass
 	//Store the file path in user preference
@@ -173,5 +177,11 @@ public class testSystem {
 		//alarm is set to be 1 hour before the due time
 		String expected = "{\"due date\":\"20 Nov 2015 09:00\",\"alarm\":\"20 Nov 2015 08:00\",\"description\":\"buy milk\",\"id\":\"t11\",\"priority\":\"high\",\"category\":\"personal\",\"complete\":false}";
 		assertEquals(expected, entries.get(19).toString());
+	}
+	
+	@Test
+	public void l_testInvalid(){
+		Feedback msg = logic.executeUserCommand("this is an invalid command");
+		assertEquals(MESSAGE_INVALID, msg.getMessage());
 	}
 }

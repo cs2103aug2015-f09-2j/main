@@ -38,6 +38,8 @@ public class AlarmCommand extends UpdateCommand {
 		String taskID = alarmDetails[0];
 		//call parent method
 		_index = findEntry(taskID);
+		JSONObject entry = (JSONObject) _store.entries_.get(_index);
+		_oldEntry = (JSONObject) entry.clone();
 		if (_index > LIMIT_ID) {
 			performUpdate(alarmDetails);
 			_isSuccessful = true;
