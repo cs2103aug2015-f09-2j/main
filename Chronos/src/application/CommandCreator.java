@@ -92,11 +92,10 @@ public class CommandCreator {
 				aCommand = new NoteDeleteCommand(commandContent);
 				break;
 			
-			/*case NOTE_UPDATE : 
+			case NOTE_UPDATE : 
 				aCommand = new NoteUpdateCommand(commandContent);
-				updateStacks(aCommand);
 				break;
-*/
+
 			case UPDATE :
 				aCommand = new UpdateCommand(commandContent);
 				break;
@@ -149,7 +148,7 @@ public class CommandCreator {
 	
 	private void updateStacks(Command aCommand) {
 		if(aCommand.isSuccessful()) {
-			_pastCommands.add(aCommand);
+			_pastCommands.push(aCommand);
 			_undoneCommands.clear();
 		}
 	}
@@ -310,7 +309,7 @@ public class CommandCreator {
 				 break;
 				 
 			case NOTE_UPDATE : 
-				 //commandInstruction = NoteUpdateCommand.generateInstruction();
+				 commandInstruction = NoteUpdateCommand.generateInstruction();
 				 break;
 			
 			case NOTE_DELETE : 

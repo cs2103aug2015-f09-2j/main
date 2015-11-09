@@ -253,4 +253,8 @@ public class Task {
 	public void deleteNote(int noteID) {
 		_notes.remove(noteID - 1);
 	}
+
+	public void updateNote(int noteID, String string) {
+		_notes.set(noteID, new Note(string));		
+	}
 }
