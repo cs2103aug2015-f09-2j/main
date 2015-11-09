@@ -137,14 +137,14 @@ public class testSystem {
 	public void g_testUpdate(){
 		logic.executeUserCommand("update e1, b:Nov 10 10am");
 		//Start date is updated;alarm is also changed since it is set to be 2 hours before the start date
-		String expected = "{\"start date\":\"10 Nov 2015 10:00\",\"due date\":\"10 Nov 2015 11:00\",\"alarm\":\"10 Nov 2015 09:00\",\"description\":\"meeting with boss\",\"id\":\"e1\",\"priority\":\"high\",\"category\":\"work\",\"complete\":false}";
+		String expected = "{\"start date\":\"10 Nov 2015 10:00\",\"due date\":\"10 Nov 2015 11:00\",\"alarm\":\"10 Nov 2015 08:00\",\"description\":\"meeting with boss\",\"id\":\"e1\",\"priority\":\"high\",\"category\":\"work\",\"complete\":false}";
 		assertEquals(expected, entries.get(0).toString());
 	}
 	
 	@Test
 	public void h_testDone(){
 		logic.executeUserCommand("done e1");
-		String expected = "{\"start date\":\"10 Nov 2015 10:00\",\"due date\":\"10 Nov 2015 11:00\",\"alarm\":\"10 Nov 2015 09:00\",\"description\":\"meeting with boss\",\"id\":\"e1\",\"priority\":\"high\",\"category\":\"work\",\"complete\":\"true\"}";
+		String expected = "{\"start date\":\"10 Nov 2015 10:00\",\"due date\":\"10 Nov 2015 11:00\",\"alarm\":\"10 Nov 2015 08:00\",\"description\":\"meeting with boss\",\"id\":\"e1\",\"priority\":\"high\",\"category\":\"work\",\"complete\":\"true\"}";
 		assertEquals(expected, entries.get(0).toString());
 	}
 	
