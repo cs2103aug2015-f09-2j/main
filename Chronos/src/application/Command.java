@@ -13,9 +13,9 @@ public abstract class Command {
 	//Messages
 	protected static String FEEDBACK_MESSAGE;
 		
-	protected static final String ERROR_NO_CONTENT = "Error: No content entered.";
-	protected static final String ERROR_INVALID_ID = "Error: Invalid ID entered.";
-	protected static final String ERROR_NO_ID = "Error: No ID entered.";
+	public static final String ERROR_NO_CONTENT = "Error: No content entered.";
+	public static final String ERROR_INVALID_ID = "Error: Invalid ID entered.";
+	public static final String ERROR_NO_ID = "Error: No ID entered.";
 		
 	protected static final String LOG_NO_ID = "No id specified";
 	
