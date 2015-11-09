@@ -54,11 +54,9 @@ public class AddCommand extends Command {
 		Task createdItem = _parse.createItem(_content);
 		if (createdItem instanceof Event) {
 			createdItem.setId(_store.getEventId());
-		} else if (createdItem instanceof Task){
-			createdItem.setId(_store.getTaskId());
 		} else {
-			createdItem.setId(0);
-		}
+			createdItem.setId(_store.getTaskId());
+		} 
 		return createdItem;
 	}
 
@@ -67,10 +65,8 @@ public class AddCommand extends Command {
 		DeleteCommand undoAdd = new DeleteCommand(_createdItemID);
 		if (_createdItemID.contains(Event.ID_HEADER)){
 			_store.decreaseEventID();
-		} else if (_createdItemID.contains(Task.ID_HEADER)){
-			_store.decreaseTaskID();
 		} else {
-			//do something
+			_store.decreaseTaskID();
 		}
 		return undoAdd.execute();
 	}

@@ -43,6 +43,7 @@ public class DeleteCommand extends Command {
 			return ERROR_INVALID_ID;
 		} else {
 			_deletedEntry = (JSONObject) _store.entries_.remove(itemIndex);
+			_isSuccessful = true;
 			return String.format(FEEDBACK_MESSAGE, _content);
 		}
 	}
