@@ -69,7 +69,7 @@ public class Parser {
 	 */
 	public Task createItem(String content) throws ParseException, ArithmeticException, NullPointerException {
 		String[] contents = getContentArray(content);
-		if(contents[CONTENT_DESC].equals(CONTENT_EMPTY)) {
+		if(contents[CONTENT_DESC].trim().equals(CONTENT_EMPTY)) {
 			throw new NullPointerException(EXCEPTION_NO_DESC);
 		}
 		return createItem(contents);
