@@ -34,16 +34,23 @@ public class AddCommand extends Command {
 			_createdTask = createTaskOrEvent();
 			_createdItemID = _createdTask.getId();
 			_store.entries_.add(_parse.convertToJSON(_createdTask));
+			_isSuccessful = true;
 			_store.storeChanges();
 			feedbackString = String.format(FEEDBACK_MESSAGE, _content);
 			return new Feedback(feedbackString);
-		} catch (Exception e) {
+		} catch (ArithmeticException e) {
+			feedbackString = FEEDBACK_WRONG_END_DATE;
+			return new Feedback(feedbackString);
+		} catch (NullPointerException e) {
+			feedbackString = FEEDBACK_MISSING_DESC;
+			return new Feedback(feedbackString);
+		} catch (ParseException e) {
 			feedbackString = FEEDBACK_WRONG_DATE;
 			return new Feedback(feedbackString);
-		}
+		} 
 	}
 	
-	private Task createTaskOrEvent() throws Exception {
+	private Task createTaskOrEvent() throws ParseException, ArithmeticException, NullPointerException {
 		Task createdItem = _parse.createItem(_content);
 		if (createdItem instanceof Event) {
 			createdItem.setId(_store.getEventId());
