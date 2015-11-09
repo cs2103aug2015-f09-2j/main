@@ -125,6 +125,7 @@ public class CommandBarController extends BorderPane {
 		}
 	}
 	
+	//@@author A0115448E
 	public void displayTypedCommand(String pastCommand) {
 		commandBar.setText(pastCommand);
 	}

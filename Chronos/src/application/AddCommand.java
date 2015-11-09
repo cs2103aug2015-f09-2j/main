@@ -13,7 +13,6 @@ public class AddCommand extends Command {
 	public static final String FEEDBACK_MISSING_DESC = "Error: A task needs a description";
 	public static final String FEEDBACK_WRONG_DATE = "Error: Invalid Date";
 	public static final String FEEDBACK_WRONG_END_DATE = "Error: end cannot be earlier than start";
-	public static final String MESSAGE_INVALID_END = "End date < start date";
 
 	//Instructions
 	private static final String PATTERN = "add (description), (date), c:(category), p:(priority)";
