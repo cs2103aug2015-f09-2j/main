@@ -71,12 +71,12 @@ public class testSystem {
 		entries = store.entries_;
 		logic.isSavePresent();
 		assertEquals(20,entries.size());
-		String expected = "{\"due date\":\"08\\/Nov\\/15 22:00\",\"alarm\":\"off\",\"description\":\"call mom\",\"id\":\"t9\",\"priority\":\"high\",\"category\":\"none\",\"complete\":false}";
+		String expected = "{\"due date\":\"08 Nov 2015 22:00\",\"alarm\":\"off\",\"description\":\"call mom\",\"id\":\"t9\",\"priority\":\"high\",\"category\":\"none\",\"complete\":false}";
 		assertEquals(expected, entries.get(14).toString());
 		JSONObject entry = (JSONObject) entries.get(2);
 		assertEquals("walk the dog", entry.get("description"));
 		entry = (JSONObject) entries.get(7);
-		assertEquals("15/Nov/15 22:00", entry.get("due date"));
+		assertEquals("15 Nov 2015 22:00", entry.get("due date"));
 		entry = (JSONObject) entries.get(19);
 		assertEquals("none", entry.get("category"));
 		entry = (JSONObject) entries.get(0);
@@ -84,7 +84,7 @@ public class testSystem {
 		entry = (JSONObject) entries.get(5);
 		assertEquals("low", entry.get("priority"));
 		entry = (JSONObject) entries.get(12);
-		assertEquals("09/Nov/15 19:00", entry.get("start date"));
+		assertEquals("09 Nov 2015 19:00", entry.get("start date"));
 	}
 	
 	@Test
@@ -92,7 +92,7 @@ public class testSystem {
 		logic.executeUserCommand("add buy milk, november 20 9am, p:high, c:personal");
 		//check if an entry is added
 		assertEquals(21,entries.size());
-		String expected = "{\"due date\":\"20\\/Nov\\/15 09:00\",\"alarm\":\"off\",\"description\":\"buy milk\",\"id\":\"t11\",\"priority\":\"high\",\"category\":\"personal\",\"complete\":false}";
+		String expected = "{\"due date\":\"20 Nov 2015 09:00\",\"alarm\":\"off\",\"description\":\"buy milk\",\"id\":\"t11\",\"priority\":\"high\",\"category\":\"personal\",\"complete\":false}";
 		//check if the added entry is the correct one
 		assertEquals(expected, entries.get(20).toString());
 	}
@@ -101,7 +101,7 @@ public class testSystem {
 	@Test
 	public void c_testAddEvent(){
 		logic.executeUserCommand("+ go shopping, Nov 21 3pm to Nov 21 5pm, p:high, c:personal");
-		String expected = "{\"start date\":\"21\\/Nov\\/15 15:00\",\"due date\":\"21\\/Nov\\/15 17:00\",\"alarm\":\"off\",\"description\":\"go shopping\",\"id\":\"e11\",\"priority\":\"high\",\"category\":\"personal\",\"complete\":false}";
+		String expected = "{\"start date\":\"21 Nov 2015 15:00\",\"due date\":\"21 Nov 2015 17:00\",\"alarm\":\"off\",\"description\":\"go shopping\",\"id\":\"e11\",\"priority\":\"high\",\"category\":\"personal\",\"complete\":false}";
 		assertEquals(22,entries.size());
 		assertEquals(expected, entries.get(21).toString());
 	}
@@ -111,7 +111,7 @@ public class testSystem {
 		logic.executeUserCommand("delete t8");
 		assertEquals(21,entries.size());
 		//t8 was originally entries[13]. After its deletion, t9 should now be entries[13].
-		String expected = "{\"due date\":\"08\\/Nov\\/15 22:00\",\"alarm\":\"off\",\"description\":\"call mom\",\"id\":\"t9\",\"priority\":\"high\",\"category\":\"none\",\"complete\":false}";
+		String expected = "{\"due date\":\"08 Nov 2015 22:00\",\"alarm\":\"off\",\"description\":\"call mom\",\"id\":\"t9\",\"priority\":\"high\",\"category\":\"none\",\"complete\":false}";
 		assertEquals(expected, entries.get(13).toString());
 	}
 	
@@ -119,7 +119,7 @@ public class testSystem {
 	public void e_testUndo(){
 		logic.executeUserCommand("undo");
 		assertEquals(22,entries.size());
-		String expected = "{\"due date\":\"11\\/Nov\\/15 12:00\",\"alarm\":\"off\",\"description\":\"submit report\",\"id\":\"t8\",\"priority\":\"high\",\"category\":\"none\",\"complete\":false}";
+		String expected = "{\"due date\":\"11 Nov 2015 12:00\",\"alarm\":\"off\",\"description\":\"submit report\",\"id\":\"t8\",\"priority\":\"high\",\"category\":\"none\",\"complete\":false}";
 		//t8 is re-inserted into the JSONArray at the end
 		assertEquals(expected, entries.get(21).toString());
 	}
@@ -128,7 +128,7 @@ public class testSystem {
 	public void f_testRedo(){
 		logic.executeUserCommand("redo");
 		assertEquals(21,entries.size());
-		String expected = "{\"start date\":\"21\\/Nov\\/15 15:00\",\"due date\":\"21\\/Nov\\/15 17:00\",\"alarm\":\"off\",\"description\":\"go shopping\",\"id\":\"e11\",\"priority\":\"high\",\"category\":\"personal\",\"complete\":false}";
+		String expected = "{\"start date\":\"21 Nov 2015 15:00\",\"due date\":\"21 Nov 2015 17:00\",\"alarm\":\"off\",\"description\":\"go shopping\",\"id\":\"e11\",\"priority\":\"high\",\"category\":\"personal\",\"complete\":false}";
 		//t8 is re-deleted, so the last entry should be e11
 		assertEquals(expected, entries.get(20).toString());
 	}
@@ -137,14 +137,14 @@ public class testSystem {
 	public void g_testUpdate(){
 		logic.executeUserCommand("update e1, b:Nov 10 10am");
 		//Start date is updated;alarm is also changed since it is set to be 2 hours before the start date
-		String expected = "{\"start date\":\"10\\/Nov\\/15 10:00\",\"due date\":\"10\\/Nov\\/15 11:00\",\"alarm\":\"10\\/Nov\\/15 09:00\",\"description\":\"meeting with boss\",\"id\":\"e1\",\"priority\":\"high\",\"category\":\"work\",\"complete\":false}";
+		String expected = "{\"start date\":\"10 Nov 2015 10:00\",\"due date\":\"10 Nov 2015 11:00\",\"alarm\":\"10 Nov 2015 09:00\",\"description\":\"meeting with boss\",\"id\":\"e1\",\"priority\":\"high\",\"category\":\"work\",\"complete\":false}";
 		assertEquals(expected, entries.get(0).toString());
 	}
 	
 	@Test
 	public void h_testDone(){
 		logic.executeUserCommand("done e1");
-		String expected = "{\"start date\":\"10\\/Nov\\/15 10:00\",\"due date\":\"10\\/Nov\\/15 11:00\",\"alarm\":\"10\\/Nov\\/15 09:00\",\"description\":\"meeting with boss\",\"id\":\"e1\",\"priority\":\"high\",\"category\":\"work\",\"complete\":\"true\"}";
+		String expected = "{\"start date\":\"10 Nov 2015 10:00\",\"due date\":\"10 Nov 2015 11:00\",\"alarm\":\"10 Nov 2015 09:00\",\"description\":\"meeting with boss\",\"id\":\"e1\",\"priority\":\"high\",\"category\":\"work\",\"complete\":\"true\"}";
 		assertEquals(expected, entries.get(0).toString());
 	}
 	
@@ -163,7 +163,7 @@ public class testSystem {
 	@Test
 	public void j_testNote(){
 		logic.executeUserCommand("note t9, tell her the good news");
-		String expected = "{\"due date\":\"08\\/Nov\\/15 22:00\",\"notes\":[{\"note\":\"tell her the good news\"}],\"alarm\":\"off\",\"description\":\"call mom\",\"id\":\"t9\",\"priority\":\"high\",\"category\":\"none\",\"complete\":false}";
+		String expected = "{\"due date\":\"08 Nov 2015 22:00\",\"notes\":[{\"note\":\"tell her the good news\"}],\"alarm\":\"off\",\"description\":\"call mom\",\"id\":\"t9\",\"priority\":\"high\",\"category\":\"none\",\"complete\":false}";
 		assertEquals(expected, entries.get(13).toString());
 	}
 	
@@ -171,7 +171,7 @@ public class testSystem {
 	public void k_testAlarm(){
 		logic.executeUserCommand("alarm t11, 1");
 		//alarm is set to be 1 hour before the due time
-		String expected = "{\"due date\":\"20\\/Nov\\/15 09:00\",\"alarm\":\"20\\/Nov\\/15 08:00\",\"description\":\"buy milk\",\"id\":\"t11\",\"priority\":\"high\",\"category\":\"personal\",\"complete\":false}";
+		String expected = "{\"due date\":\"20 Nov 2015 09:00\",\"alarm\":\"20 Nov 2015 08:00\",\"description\":\"buy milk\",\"id\":\"t11\",\"priority\":\"high\",\"category\":\"personal\",\"complete\":false}";
 		assertEquals(expected, entries.get(19).toString());
 	}
 }
