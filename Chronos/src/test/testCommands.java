@@ -11,21 +11,24 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import application.AddCommand;
+import application.Command;
 import application.CommandCreator;
 import application.Feedback;
 import application.Logic;
 import application.Storage;
 import application.Task;
+import application.UpdateCommand;
 
 //@@author A0131496A
 public class testCommands {
 	
 	static Logic logic = Logic.getInstance();
 	static Storage store;
-	JSONArray entries;
 	static CommandCreator creator = new CommandCreator();
 	static final String DEFAULT_PATH= "none";
 	static final String PREFS_PATH = "path";
+	static final String TEST_FILE = "src/test/testFiles/testSome";
 	static String path;
 	static Preferences userPrefs = Preferences.userNodeForPackage(Storage.class);
 
@@ -34,7 +37,7 @@ public class testCommands {
 	public static void setUp(){
 		path = userPrefs.get(PREFS_PATH, DEFAULT_PATH);
 		logic.isSavePresent();
-		creator.executeInitializeCommand("src/test/testFiles/testCommands");
+		creator.executeInitializeCommand(TEST_FILE);
 		store = Storage.getInstance();
 	}
 	
@@ -45,23 +48,23 @@ public class testCommands {
 
 	@Test
 	public void testAdd() {
-		logic.executeUserCommand("add buy milk, p:high, c:personal, today");
-		entries = store.entries_;
-		JSONObject entry = (JSONObject) entries.get(5);
+		Command addCmd = new AddCommand("buy milk, Nov 12 10am, p:high, c:personal");
+		addCmd.execute();
+		JSONObject entry = (JSONObject)store.entries_.get(5);
 		assertEquals("buy milk",entry.get("description").toString() );
-		logic.executeUserCommand("undo");
+		addCmd.undo();
 	}
 	
 	@Test
 	public void testUpdate(){
-		logic.executeUserCommand("update t4, p:high");
-		entries = store.entries_;
-		JSONObject entry = (JSONObject) entries.get(2);
-		assertEquals("high", entry.get("priority") );
-		logic.executeUserCommand("undo");
+		Command updateCmd = new UpdateCommand("e2, c:pet");
+		updateCmd.execute();
+		JSONObject entry = (JSONObject) store.entries_.get(3);
+		assertEquals("pet", entry.get("category") );
+		updateCmd.undo();
 	}
 
-	
+	/*
 	@Test
 	public void testSearch(){
 		Feedback actual=logic.executeUserCommand("search laundry");
@@ -69,5 +72,5 @@ public class testCommands {
 		expected.add(new Task("t5", "do laundry", "someday", "med", "personal","off"));
 		assertEquals(expected.toString(), actual.getData().toString());
 	}
-	
+*/	
 }

@@ -16,12 +16,19 @@ import org.junit.Test;
 
 
 public class testStorage {
+	
 	Storage store;
 	JSONArray entries;
 	CommandCreator creator = new CommandCreator();
 	static Preferences userPrefs = Preferences.userNodeForPackage(Storage.class);
 	static final String DEFAULT_PATH= "none";
 	static final String PREFS_PATH = "path";
+	static final String TEST_FILE_EMPTY = "src/test/testFiles/testEmpty";
+	static final String TEST_FILE_SOME = "src/test/testFiles/testSome";
+	static final String TEST_FILE_MANY = "src/test/testFiles/testMany";
+	static final String TEST_FILE_NOT_JSON = "src/test/testFiles/testInvalid";
+	static final String TEST_FILE_WRONG_JASON = "src/test/testFiles/testIncorrect";
+	
 	static String path;
 
 	@BeforeClass
@@ -44,7 +51,7 @@ public class testStorage {
 	@Test
 	//test boundary case of "no content" 
 	public void testReadEmpty(){
-		creator.executeInitializeCommand("src/test/testFiles/testEmpty");
+		creator.executeInitializeCommand(TEST_FILE_EMPTY);
 		store = Storage.getInstance();
 		entries = store.entries_;
 		assertEquals(entries.size(), 0);
@@ -53,7 +60,7 @@ public class testStorage {
 	@Test
 	//test boundary case of "some content" 
 	public void testReadSome() {	
-		creator.executeInitializeCommand("src/test/testFiles/testSome");
+		creator.executeInitializeCommand(TEST_FILE_SOME);
 		store = Storage.getInstance();
 		entries = store.entries_;
 		assertEquals(entries.size(), 5);
@@ -66,7 +73,7 @@ public class testStorage {
 	@Test
 	//test boundary case of "lots of content"
 	public void testReadMany(){
-		creator.executeInitializeCommand("src/test/testFiles/testMany");
+		creator.executeInitializeCommand(TEST_FILE_MANY);
 		store = Storage.getInstance();
 		entries = store.entries_;
 		assertEquals(200, entries.size());
@@ -82,7 +89,7 @@ public class testStorage {
 		Throwable caught = null;
 		store = Storage.getInstance();
 		try {
-			store.getContent("src/test/testFiles/testInvalid");
+			store.getContent(TEST_FILE_NOT_JSON);
 		} catch (Throwable e) {
 			caught = e;
 		}
@@ -95,7 +102,7 @@ public class testStorage {
 		Throwable caught = null;
 		store = Storage.getInstance();
 		try {
-			store.getContent("src/test/testFiles/testIncorrect");
+			store.getContent(TEST_FILE_WRONG_JASON);
 			store.checkValidFormat();
 		} catch (Throwable e) {
 			caught = e;

@@ -162,7 +162,7 @@ public class testSystem {
 	
 	@Test
 	public void j_testNote(){
-		logic.executeUserCommand("note t9, tell her the good news");
+		logic.executeUserCommand("+note t9, tell her the good news");
 		String expected = "{\"due date\":\"08 Nov 2015 22:00\",\"notes\":[{\"note\":\"tell her the good news\"}],\"alarm\":\"off\",\"description\":\"call mom\",\"id\":\"t9\",\"priority\":\"high\",\"category\":\"none\",\"complete\":false}";
 		assertEquals(expected, entries.get(13).toString());
 	}
