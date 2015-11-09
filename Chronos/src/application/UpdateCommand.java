@@ -58,6 +58,7 @@ public class UpdateCommand extends Command {
 			_oldEntry = (JSONObject) entry.clone();
 			updateEntry(entry, updateDetails);
 			_store.storeChanges();
+			_isSuccessful = true;
 			String feedbackString = String.format(FEEDBACK_MESSAGE, _content);
 			return new Feedback(feedbackString);
 		}

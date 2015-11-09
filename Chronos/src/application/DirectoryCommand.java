@@ -27,6 +27,7 @@ public class DirectoryCommand extends Command {
 			_previousPath = _store.changeDirectory(_content); 
 			log.info(LOG_SAVED_NEW);
 			feedbackString = String.format(FEEDBACK_MESSAGE, _content); 
+			_isSuccessful = true;
 		} else {
 			log.warning(LOG_NO_DIRECTORY );
 			feedbackString = ERROR_NO_CONTENT;

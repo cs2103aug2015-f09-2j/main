@@ -58,6 +58,7 @@ public class ExtendCommand extends UpdateCommand {
 					Task taskToExtend = extendTask(taskID, extendDetails);
 					_store.entries_.set(_index, _parse.convertToJSON(taskToExtend));
 					_store.storeChanges();
+					_isSuccessful = true;
 					String feedbackString = String.format(FEEDBACK_MESSAGE, _content);
 					return new Feedback(feedbackString);
 				}

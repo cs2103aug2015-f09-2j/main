@@ -45,6 +45,7 @@ public class DoneCommand extends Command {
 				_completedTask.markTaskAsDone(true);
 				String content = _completedTask.getId() + UPDATE_STRING + _completedTask.isTaskComplete();
 				Feedback feedback = new UpdateCommand(content).execute();
+				_isSuccessful = true;
 				feedback.setMessage(feedbackString);
 				return feedback;
 			}
