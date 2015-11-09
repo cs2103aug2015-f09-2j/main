@@ -39,7 +39,7 @@ public class TestParser {
 	static Preferences userPrefs = Preferences.userNodeForPackage(Storage.class);
 	static final String DEFAULT_PATH = "none";
 	static final String PREFS_PATH = "path";
-	static final String TEST_FILE = "src/test/testFiles/testParser/chronos_storage.txt";
+	static final String TEST_FILE = "src/test/testFiles/testParser";
 	static String path;
 	static CommandCreator creator = new CommandCreator();
 	
@@ -49,14 +49,14 @@ public class TestParser {
 		path = userPrefs.get(PREFS_PATH, DEFAULT_PATH);
 		logic.isSavePresent();
 		creator.executeInitializeCommand(TEST_FILE);
-		
+		store = Storage.getInstance();
 	}
 	
 	
 	@AfterClass
 	public static void cleanUp(){
 		userPrefs.put(PREFS_PATH, path);
-		File storageFile = new File(TEST_FILE);
+		File storageFile = new File(TEST_FILE+"chronos_storage.txt");
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter(storageFile);
