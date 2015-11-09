@@ -22,7 +22,6 @@ import application.Logic;
 import java.text.ParseException;
 import java.util.ArrayList;
 
-
 //@@author A0125424N
 public class TestParser {
 	static final String CONTENT_SEPARATOR = ", ";
