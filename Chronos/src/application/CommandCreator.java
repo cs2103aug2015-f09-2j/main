@@ -49,6 +49,7 @@ public class CommandCreator {
 	//Strings for command creation
 	public static final int COMMAND_INDEX_COMMAND = 0;
 	private static final int COMMAND_INDEX_CONTENT = 1;
+	private static final String COMMAND_SEPARATOR = " ";
 	private static final String CONTENT_EMPTY = "";
 	
 	private static Stack<Command> _pastCommands = new Stack<Command>();
@@ -137,7 +138,7 @@ public class CommandCreator {
 		}
 		
 		if (!(aCommand instanceof UnknownCommand)) {
-			String commandString = inputs[COMMAND_INDEX_COMMAND] + " " +commandContent;
+			String commandString = inputs[COMMAND_INDEX_COMMAND] + COMMAND_SEPARATOR +commandContent;
 			_typedCommandStrings.add(commandString);
 		}
 		
@@ -147,7 +148,7 @@ public class CommandCreator {
 	}
 	
 	private void updateStacks(Command aCommand) {
-		if(aCommand.isSuccessful()) {
+		if (aCommand.isSuccessful()) {
 			_pastCommands.push(aCommand);
 			_undoneCommands.clear();
 		}
@@ -282,7 +283,7 @@ public class CommandCreator {
 	public static Instruction generateInstructions(String commandString) {
 		COMMAND_TYPE commandType = determineCommandType(commandString);
 		Instruction commandInstruction = new Instruction();
-		switch (commandType) {
+		switch(commandType) {
 			
 			case ADD :
 			     commandInstruction = AddCommand.generateInstruction();
@@ -361,7 +362,7 @@ public class CommandCreator {
 	
 	public static String getTypedCommandString(int commandIndex) {
 		try {
-			return _typedCommandStrings.get(_typedCommandStrings.size()-commandIndex);
+			return _typedCommandStrings.get(_typedCommandStrings.size() - commandIndex);
 		} catch (IndexOutOfBoundsException e) {
 			return null;
 		}
