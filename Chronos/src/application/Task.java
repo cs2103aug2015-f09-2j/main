@@ -13,13 +13,26 @@ import com.mdimension.jchronic.utils.Span;
 //@@author A0126223U
 public class Task {
 	
-	String DEFAULT_END_DATE = "someday";
-	String DEFAULT_PRIORITY = "low";
-	String DEFAULT_CATEGORY = "none";
-	String DEFAULT_STATUS = "false";
-	String DEFAULT_ALARM = "off";
+	final String DEFAULT_END_DATE = "someday";
+	final String DEFAULT_PRIORITY = "low";
+	final String DEFAULT_CATEGORY = "none";
+	final String DEFAULT_STATUS = "false";
+	final String DEFAULT_ALARM = "off";
+	final String PRIORITY_LOW = "low";
+	final String PRIORITY_MED = "med";
+	final String PRIORITY_HIGH = "high";
+	
 	static final String ID_HEADER = "t";	
 	public static final String DATE_FORMAT = "dd MMM yyyy HH:mm";
+	
+	//Constant strings
+	protected static final String PRIORITY_HEADER = "p:";
+	protected static final String CATEGORY_HEADER = "c:";
+	protected static final String EMPTY = null;
+	protected static final String EMPTY_SPACE = " ";
+	protected static final String ID_DISPLAY = ". ";
+	
+	private static final String ERROR_PARSE = "JChronic is unable to parse date";
 	
 	protected String _id;
 	protected String _description;
@@ -41,14 +54,14 @@ public class Task {
 	public Task(String[] contents) throws ParseException {
 		_description = contents[0];
 		for (int i = 1; i<contents.length; i++) {
-			if (contents[i].contains("p:")) {
-				_priority = contents[i].substring(2).toLowerCase();
-			} else if (contents[i].contains("c:")) {
-				_category = contents[i].substring(2);
+			if (contents[i].contains(PRIORITY_HEADER)) {
+				_priority = processPriority(contents[i]);
+			} else if (contents[i].contains(CATEGORY_HEADER)) {
+				_category = contents[i].substring(CATEGORY_HEADER.length());
 			} else { //date manipulation
 				Span aSpan = Chronic.parse(contents[i]);
 				if(aSpan == null) {
-					throw new ParseException("JChronic unable to parse",0);
+					throw new ParseException(ERROR_PARSE,0);
 				} else {
 					_endDate = manipulateDate(aSpan.getBeginCalendar());
 				}
@@ -56,6 +69,28 @@ public class Task {
 		}
 	}
 	
+	private String processPriority(String priorityString) {
+		priorityString = priorityString.substring(PRIORITY_HEADER.length()).toLowerCase();
+		switch(priorityString) {
+		
+			case PRIORITY_HIGH : 
+				 return PRIORITY_HIGH;
+				 //break;
+			
+			case PRIORITY_MED :
+				 return PRIORITY_MED;
+				 //break;
+			
+			case PRIORITY_LOW :
+				 return PRIORITY_LOW;
+				 //break;
+				 
+			default :
+				 return DEFAULT_PRIORITY;
+				 //break;
+		}
+	}
+
 	protected String manipulateDate(Calendar theDate) throws ParseException {	
 		return dateFormat.format(theDate.getTime());
 	}
@@ -63,16 +98,16 @@ public class Task {
 	public Task(int id, String description, String endDate, String priority, String category, String alarm) {
 		_id = ID_HEADER + Integer.toString(id);
 		_description = description.trim();
-		if(!endDate.equals(null)){
+		if (!endDate.equals(EMPTY)) {
 			setEndDate(endDate);
 		}
-		if(!priority.equals(null)){
+		if (!priority.equals(EMPTY)) {
 			setPriority(priority);
 		}
-		if(!category.equals(null)){
+		if (!category.equals(EMPTY)) {
 			setCategory(category);
 		}
-		if(!alarm.equals(null)){
+		if (!alarm.equals(EMPTY)) {
 			setAlarm(alarm);
 		}
 	}
@@ -80,16 +115,16 @@ public class Task {
 	public Task(String id, String description, String endDate, String priority, String category, String alarm) {
 		_id = id.trim();
 		_description = description.trim();
-		if(!endDate.equals(null)){
+		if (!endDate.equals(EMPTY)){
 			setEndDate(endDate);
 		}
-		if(!priority.equals(null)){
+		if (!priority.equals(EMPTY)){
 			setPriority(priority);
 		}
-		if(!category.equals(null)){
+		if (!category.equals(EMPTY)){
 			setCategory(category);
 		}
-		if(!alarm.equals(null)){
+		if (!alarm.equals(EMPTY)){
 			setAlarm(alarm);
 		}
 	}
@@ -177,7 +212,8 @@ public class Task {
 	@Override
 	public String toString() {
 
-		return _id + ". " + _description + " " + _endDate + " "+ _alarm+" "+ _priority + " " + _category+" "+_isDone;
+		return _id + ID_DISPLAY + _description + EMPTY_SPACE + _endDate + EMPTY_SPACE 
+				+ _alarm + EMPTY_SPACE + _priority + EMPTY_SPACE + _category + EMPTY_SPACE +_isDone;
 
 	}
 	

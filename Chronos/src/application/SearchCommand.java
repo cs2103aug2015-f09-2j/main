@@ -16,6 +16,7 @@ public class SearchCommand extends Command {
 	protected static final String FEEDBACK_MESSAGE = "Searching for: %1$s";
 	private static final String PRIORITY_HEADER = "p:";
 	private static final String CATEGORY_HEADER = "c:";
+	private static final String WILD_CARD = "*";
 	
 	//Instructions
 	private static final String PATTERN = "search (search term OR *), (date), c:(category), p:(priority)";
@@ -47,7 +48,7 @@ public class SearchCommand extends Command {
 	private boolean isMatchingEntry(Task entryItem, String[] searchCriteria) {
 		//If it's not a star and doesnt have the description, boot it out
 		String keyword = searchCriteria[0];
-		if(!keyword.equals("*") && !entryItem.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
+		if(!keyword.equals(WILD_CARD) && !entryItem.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
 			return false;
 		}
 		

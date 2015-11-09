@@ -12,10 +12,6 @@ public class Event extends Task {
 	private String _startDate;
 	
 	private static final String DATE_SEPARATOR = " to ";
-	private static final String PRIORITY_HEADER = "p:";
-	private static final String CATEGORY_HEADER = "c:";
-	private static final String EMPTY_SPACE = " ";
-	private static final String ID_DISPLAY = ". ";
 	private static final String MESSAGE_INVALID_END = "End date < start date";
 	
 	//@@author A0126223U
@@ -56,7 +52,8 @@ public class Event extends Task {
 	
 	@Override
 	public String toString(){
-		return  _id + ID_DISPLAY + _description + EMPTY_SPACE + _startDate+ DATE_SEPARATOR + _endDate + EMPTY_SPACE + _priority + EMPTY_SPACE + _category;
+		return  _id + ID_DISPLAY + _description + EMPTY_SPACE + _startDate + DATE_SEPARATOR 
+				+ _endDate + EMPTY_SPACE + _priority + EMPTY_SPACE + _category;
 	}
 	
 	@Override
