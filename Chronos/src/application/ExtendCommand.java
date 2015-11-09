@@ -11,9 +11,9 @@ import org.json.simple.JSONObject;
 
 public class ExtendCommand extends UpdateCommand {
 	
-	protected static final String FEEDBACK_MESSAGE =  "Extended %1$s";
-	protected static final String ERROR_NO_EXTENSION =  "Error: No duration entered";
-	protected static final String ERROR_CANT_EXTEND =  "Error: Floating tasks can't be extended";
+	public static final String FEEDBACK_MESSAGE =  "Extended %1$s";
+	public static final String ERROR_NO_EXTENSION =  "Error: No duration entered";
+	public static final String ERROR_CANT_EXTEND =  "Error: Floating tasks can't be extended";
 	
 	private static final String FIELD_YEAR = "yr";
 	private static final String FIELD_MONTH = "mo";
