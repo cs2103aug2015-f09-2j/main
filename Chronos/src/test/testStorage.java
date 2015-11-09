@@ -64,7 +64,7 @@ public class testStorage {
 		store = Storage.getInstance();
 		entries = store.entries_;
 		assertEquals(entries.size(), 5);
-		String expected = "{\"start date\":\"07 11 2015 09:00\",\"due date\":\"07 11 2015 10:00\",\"alarm\":\"off\",\"description\":\"meeting with boss\",\"id\":\"e1\",\"priority\":\"high\",\"category\":\"work\",\"complete\":false}";
+		String expected = "{\"start date\":\"07 Nov 2015 09:00\",\"due date\":\"07 Nov 2015 10:00\",\"alarm\":\"off\",\"description\":\"meeting with boss\",\"id\":\"e1\",\"priority\":\"high\",\"category\":\"work\",\"complete\":false}";
 		assertEquals(expected, entries.get(1).toString());
 		JSONObject entry = (JSONObject) entries.get(3);
 		assertEquals("walk the dog", entry.get("description"));
@@ -77,7 +77,7 @@ public class testStorage {
 		store = Storage.getInstance();
 		entries = store.entries_;
 		assertEquals(200, entries.size());
-		String expected = "{\"start date\":\"07 11 2015 09:00\",\"due date\":\"07 11 2015 10:00\",\"alarm\":\"off\",\"description\":\"meeting with boss\",\"id\":\"e1\",\"priority\":\"high\",\"category\":\"work\",\"complete\":false}";
+		String expected = "{\"start date\":\"07 Nov 2015 09:00\",\"due date\":\"07 Nov 2015 10:00\",\"alarm\":\"off\",\"description\":\"meeting with boss\",\"id\":\"e1\",\"priority\":\"high\",\"category\":\"work\",\"complete\":false}";
 		assertEquals(expected, entries.get(60).toString());
 		JSONObject entry = (JSONObject) entries.get(40);
 		assertEquals("meeting with boss", entry.get("description"));
