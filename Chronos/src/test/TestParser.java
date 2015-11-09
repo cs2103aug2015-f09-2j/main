@@ -215,7 +215,7 @@ public class TestParser {
 		updatedTask = parser.parseUpdateString(taskId + ", d:tomorrow");
 		assertEquals("buy paper", (taskId), updatedTask.get(item));
 		assertEquals("buy paper", ("description"), updatedTask.get(++item));
-		assertEquals("buy paper", ("11/06/2015 12:00 PM"), updatedTask.get(++item));
+		assertEquals("buy paper", ("11 06 2015 12:00 PM"), updatedTask.get(++item));
 		item = 0;
 		delete = new DeleteCommand(taskId);
 		delete.execute();

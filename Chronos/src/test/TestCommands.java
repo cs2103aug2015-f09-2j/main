@@ -30,7 +30,7 @@ import application.UpdateCommand;
  * All tests are performed on the same storage file. 
  * If commands change the content of the storage, call undo() to restore the original storage file.
  **/
-public class testCommands {
+public class TestCommands {
 	
 	static Logic logic = Logic.getInstance();
 	static Storage store;
