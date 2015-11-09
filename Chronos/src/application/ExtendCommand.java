@@ -22,7 +22,7 @@ public class ExtendCommand extends UpdateCommand {
 	private static final String FIELD_MIN = "min";
 
 	//Instructions
-	private static final String PATTERN = "extend (task/event id), (yr|mo|day|hr|min):(number) OR (someday)";
+	private static final String PATTERN = "extend (task/event id), (yr OR mo OR day OR hr OR min):(number) OR (someday)";
 	private static final String INSTRUCTION_REQUIRED_TASK = "Type the task or event id of item to extend.";
 	private static final String INSTRUCTION_REQUIRED_DEADLINE = "Type the duration of your extension. Ex: hr:1, min:30 to extend by 1 hour and 30 minutes";
 	private static final String REQUIRED_FIELD_ID = "(task/event id)";
@@ -53,7 +53,7 @@ public class ExtendCommand extends UpdateCommand {
 				_oldEntry = (JSONObject) entry.clone();
 				if(_oldEntry.get(JSON_END_DATE).equals("someday")) {
 					return new Feedback(ERROR_CANT_EXTEND);
-				} else {
+				} else { 
 					_store.storeTemp();
 					Task taskToExtend = extendTask(taskID, extendDetails);
 					_store.entries_.set(_index, _parse.convertToJSON(taskToExtend));
@@ -75,7 +75,7 @@ public class ExtendCommand extends UpdateCommand {
 			for(String extendDetail:extendDetails){
 				String[] details = extendDetail.split(":");
 				int field = determineField(details[0]);
-				int amount = Integer.parseInt(details[1]);
+				int amount = Integer.parseInt(details[1]); //amount should be >0
 				if(field > 0) {
 					endDate.add(field, amount);
 				}

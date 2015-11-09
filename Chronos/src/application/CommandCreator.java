@@ -65,11 +65,13 @@ public class CommandCreator {
 			case ADD :
 			     aCommand = new AddCommand(commandContent);
 			     _pastCommands.add(aCommand);
+			     _undoneCommands.clear();
 			     break;
 		
 			case DELETE :  
 				aCommand = new DeleteCommand(commandContent);
 				_pastCommands.add(aCommand);
+				_undoneCommands.clear();
 				break;
 		
 			case DISPLAY : 
@@ -79,26 +81,29 @@ public class CommandCreator {
 			case DONE :
 				aCommand = new DoneCommand(commandContent);
 				_pastCommands.add(aCommand);
+				_undoneCommands.clear();
 				break;
 				
 			case EXTEND :
 				aCommand = new ExtendCommand(commandContent);
 				_pastCommands.add(aCommand);
+				_undoneCommands.clear();
 				break;
 			
 			case NOTE : 
 				aCommand = new NoteCommand(commandContent);
 				_pastCommands.add(aCommand);
+				_undoneCommands.clear();
 				break;
 
 			case UPDATE :
 				aCommand = new UpdateCommand(commandContent);
 				_pastCommands.add(aCommand);
+				_undoneCommands.clear();
 				break;
 		
 			case SEARCH :
 				aCommand = new SearchCommand(commandContent);
-				//add content to search history (potential enhancement)
 				break;
 		
 			case VIEW :
@@ -116,6 +121,7 @@ public class CommandCreator {
 			case CD :
 				aCommand = new DirectoryCommand(commandContent);
 				_pastCommands.add(aCommand);
+				_undoneCommands.clear();
 				break;
 			
 			case EXIT : 
@@ -125,6 +131,7 @@ public class CommandCreator {
 			case ALARM:
 				aCommand = new AlarmCommand(commandContent);
 				_pastCommands.add(aCommand);
+				_undoneCommands.clear();
 				break;
 				
 			case UNKNOWN : 
@@ -136,7 +143,6 @@ public class CommandCreator {
 		}
 		
 		if (!(aCommand instanceof UnknownCommand)) {
-			//add to typed command stack
 			String commandString = inputs[COMMAND_INDEX_COMMAND] + " " +commandContent;
 			_typedCommandStrings.add(commandString);
 		}
