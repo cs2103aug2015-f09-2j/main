@@ -40,6 +40,7 @@ public class AlarmCommand extends UpdateCommand {
 		_index = findEntry(taskID);
 		if (_index > LIMIT_ID) {
 			performUpdate(alarmDetails);
+			_isSuccessful = true;
 			String feedbackString = String.format(FEEDBACK_MESSAGE, _content);
 			return new Feedback(feedbackString);
 		} else {

@@ -28,6 +28,7 @@ public abstract class Command {
 	protected Storage _store;
 	protected Parser _parse;
 	protected String _content;
+	protected boolean _isSuccessful = false;
 	public static Instruction commandInstruction;
 	
 	protected static Logger log = Logger.getLogger("CommandLog");
@@ -60,6 +61,10 @@ public abstract class Command {
 			}
 			return FIND_INVALID_ID;
 		}
+	}
+	
+	public boolean isSuccessful() {
+		return _isSuccessful;
 	}
 
 }

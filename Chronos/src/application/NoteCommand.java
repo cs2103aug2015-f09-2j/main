@@ -56,6 +56,7 @@ public class NoteCommand extends Command {
 		_store.entries_.set(_index, _parse.convertToJSON(aTask));
 		_store.storeChanges();
 		
+		_isSuccessful = true;
 		String feedbackString = String.format(FEEDBACK_MESSAGE, _content);
 		ArrayList<Task> feedbackData = new ArrayList<Task>();
 		feedbackData.add(aTask);
