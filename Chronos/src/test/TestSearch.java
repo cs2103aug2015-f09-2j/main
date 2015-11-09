@@ -45,4 +45,17 @@ public class TestSearch extends TestCommands{
 		expected.add(new Event("e1", "meeting with boss", "07 Nov 2015 09:00", "07 Nov 2015 10:00", "high", "work","off"));
 		assertEquals(expected.toString(), actual.toString());
 	}
+	
+	@Test 
+	//partition 3
+	public void testSearchField(){
+		searchCmd = new SearchCommand("*, c:work");
+		Feedback searchFeedback = searchCmd.execute();
+		ArrayList<Task> actual = searchFeedback.getData();
+		ArrayList<Task> expected= new ArrayList<Task>();
+		expected.add(new Event("e1", "meeting with boss", "07 Nov 2015 09:00", "07 Nov 2015 10:00", "high", "work","off"));
+		expected.add(new Task("t4","submit report", "10 Nov 2015 12:00","high","work","off"));
+		assertEquals(expected.toString(), actual.toString());
+
+	}
 }
