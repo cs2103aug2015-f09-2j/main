@@ -13,6 +13,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.mdimension.jchronic.Chronic;
+import com.mdimension.jchronic.utils.Span;
+
 import application.Task;
 
 public class testTask {
@@ -32,7 +35,7 @@ public class testTask {
 		String expectedDescription = "buy milk";
 		String expectedEndDate = "someday";
 		String expectedCategory = "none";
-		String expectedPriority = "med";
+		String expectedPriority = "low";
 		assertEquals(expectedDescription, testTask.getDescription());
 		assertEquals(expectedEndDate, testTask.getEndDate());
 		assertEquals(expectedCategory, testTask.getCategory());
@@ -44,11 +47,11 @@ public class testTask {
 		String[] contents = {"buy milk", "today"};
 		Task testTask = new Task(contents);
 		String expectedDescription = "buy milk";
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		Calendar theDate = Calendar.getInstance();
-		String expectedEndDate = dateFormat.format(theDate.getTime());
+		DateFormat dateFormat = new SimpleDateFormat(Task.DATE_FORMAT);
+		Span aSpan = Chronic.parse(contents[1]);
+		String expectedEndDate = dateFormat.format(aSpan.getBeginCalendar().getTime());
 		String expectedCategory = "none";
-		String expectedPriority = "med";
+		String expectedPriority = "low";
 		assertEquals(expectedDescription, testTask.getDescription());
 		assertEquals(expectedEndDate, testTask.getEndDate());
 		assertEquals(expectedCategory, testTask.getCategory());
@@ -60,12 +63,11 @@ public class testTask {
 		String[] contents = {"buy milk", "tomorrow"};
 		Task testTask = new Task(contents);
 		String expectedDescription = "buy milk";
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		Calendar theDate = Calendar.getInstance();
-		theDate.add(Calendar.DATE, 1);
-		String expectedEndDate = dateFormat.format(theDate.getTime());
+		DateFormat dateFormat = new SimpleDateFormat(Task.DATE_FORMAT);
+		Span aSpan = Chronic.parse(contents[1]);
+		String expectedEndDate = dateFormat.format(aSpan.getBeginCalendar().getTime());
 		String expectedCategory = "none";
-		String expectedPriority = "med";
+		String expectedPriority = "low";
 		assertEquals(expectedDescription, testTask.getDescription());
 		assertEquals(expectedEndDate, testTask.getEndDate());
 		assertEquals(expectedCategory, testTask.getCategory());
@@ -77,9 +79,9 @@ public class testTask {
 		String[] contents = {"buy milk", "25/12/2015"};
 		Task testTask = new Task(contents);
 		String expectedDescription = "buy milk";
-		String expectedEndDate = "25/12/2015";
+		String expectedEndDate = "25 Dec 2015 12:00";
 		String expectedCategory = "none";
-		String expectedPriority = "med";
+		String expectedPriority = "low";
 		assertEquals(expectedDescription, testTask.getDescription());
 		assertEquals(expectedEndDate, testTask.getEndDate());
 		assertEquals(expectedCategory, testTask.getCategory());
@@ -91,18 +93,18 @@ public class testTask {
 		String[] contents = {"buy milk", "25/12/2015 5:00 am"};
 		Task testTask = new Task(contents);
 		String expectedDescription = "buy milk";
-		String expectedEndDate = "25/12/15 5:00 AM";
+		String expectedEndDate = "25 Dec 2015 05:00";
 		String expectedCategory = "none";
-		String expectedPriority = "med";
+		String expectedPriority = "low";
 		assertEquals(expectedDescription, testTask.getDescription());
 		assertEquals(expectedEndDate, testTask.getEndDate());
 		assertEquals(expectedCategory, testTask.getCategory());
 		assertEquals(expectedPriority, testTask.getPriority());
 	}
 	
-	@Test (expected = ParseException.class) //Partition: invalid date
+	@Test(expected = ParseException.class) //Partition: invalid date
 	public void testWithInvalidDate() throws ParseException {
-		String[] contents = {"buy milk", "I am an extremely important date"};
+		String[] contents = {"buy milk", "bluh"};
 		Task testTask = new Task(contents);
 	}
 	
