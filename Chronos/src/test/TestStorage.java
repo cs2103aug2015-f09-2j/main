@@ -1,4 +1,3 @@
-//@@author A0131496A
 package test;
 
 import static org.junit.Assert.*;
@@ -14,7 +13,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-
+//@@author A0131496A
 public class TestStorage {
 	
 	Storage store;
