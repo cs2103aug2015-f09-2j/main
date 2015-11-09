@@ -35,8 +35,10 @@ public class DetailedViewController extends BorderPane {
 	private final int HOURS_PER_DAY = 24;
 	private final String HOURS = "%1$s hours";
 	private final String DAYS = "%1$s days ";
+	private final String MINUTES = "%1$s minutes ";
 	private final String OVERDUE = "Since";
 	private final String NOT_OVERDUE = "Until";
+	private final int MINUTES_PER_HOUR = 60;
 
 	// displayed items
 	@FXML
@@ -90,7 +92,7 @@ public class DetailedViewController extends BorderPane {
 
 	// add information about the id, time, priority and category to the list
 	// object
-	private void addInfo(Task taskToView, ObservableList<String> items){
+	private void addInfo(Task taskToView, ObservableList<String> items) {
 		items.add(String.format(ID, taskToView.getId()));
 		if (taskToView instanceof Event) {
 			items.add(String.format(START_DATE, ((Event) taskToView).getStartDate()));
@@ -102,7 +104,7 @@ public class DetailedViewController extends BorderPane {
 		items.add(String.format(NOTES));
 		ArrayList<String> notes = taskToView.getNotes();
 		for (int i = 1; i <= notes.size(); i++) {
-			items.add(String.format(NOTE,i,notes.get(i-1)));
+			items.add(String.format(NOTE, i, notes.get(i - 1)));
 		}
 	}
 
@@ -115,12 +117,12 @@ public class DetailedViewController extends BorderPane {
 			endDate = taskToView.getEndDate();
 		}
 		// timeDiff is negative for overdue event
-		int hourDiff = Math.abs(calculateTimeLeft(endDate)); 
-		String timeDiffFormatted = formatTimeDiff(hourDiff);
+		int minDiff = Math.abs(calculateTimeLeft(endDate));
+		String timeDiffFormatted = formatTimeDiff(minDiff);
 		diffTime.setText(timeDiffFormatted);
 	}
 
-	//display "since" for overdue task and "until" otherwise
+	// display "since" for overdue task and "until" otherwise
 	private void setStatus(Task taskToView) {
 		if (taskToView.isOverdue()) {
 			status.setText(OVERDUE);
@@ -136,7 +138,7 @@ public class DetailedViewController extends BorderPane {
 			Date dueDate;
 			Date currentDate = new Date();
 			dueDate = dateFormat.parse(endDate);
-			long diff = TimeUnit.MILLISECONDS.toHours(dueDate.getTime() - currentDate.getTime());
+			long diff = TimeUnit.MILLISECONDS.toMinutes(dueDate.getTime() - currentDate.getTime());
 			return (int) diff;
 		} catch (ParseException e) {
 			// Case: Someday
@@ -144,15 +146,21 @@ public class DetailedViewController extends BorderPane {
 		}
 	}
 
-	//convert the integer hourDiff into presentable String
-	private String formatTimeDiff(int hourDiff) {
+	// convert the integer hourDiff into presentable String
+	private String formatTimeDiff(int minDiff) {
 		String timeDiffFormatted = "";
-		if (hourDiff >= HOURS_PER_DAY) { //if more than 1 day
-			int dayDiff = hourDiff / HOURS_PER_DAY;
-			hourDiff = hourDiff % HOURS_PER_DAY;
-			timeDiffFormatted = String.format(DAYS, dayDiff);
+		if (minDiff < MINUTES_PER_HOUR) { // is the task is less than 1 hours
+											// away
+			timeDiffFormatted = String.format(MINUTES, minDiff);
+		} else {
+			int hourDiff = minDiff / MINUTES_PER_HOUR;
+			if (hourDiff >= HOURS_PER_DAY) { // if more than 1 day
+				int dayDiff = hourDiff / HOURS_PER_DAY;
+				hourDiff = hourDiff % HOURS_PER_DAY;
+				timeDiffFormatted = String.format(DAYS, dayDiff);
+			}
+			timeDiffFormatted = timeDiffFormatted + String.format(HOURS, hourDiff);
 		}
-		timeDiffFormatted = timeDiffFormatted + String.format(HOURS, hourDiff);
 		return timeDiffFormatted;
 	}
 

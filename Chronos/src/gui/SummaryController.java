@@ -52,9 +52,9 @@ public class SummaryController extends StackPane {
 	private static final String HIGH_PRIORITY = "high";
 	private static final String MED_PRIORITY = "med";
 	private static final int MAX_ID_LENGTH = 3;
-	private static final int PIXEL_PER_LETTER = 8;
-	private static final int ID_COL_WIDTH = 28;
-	private static final int TITLE_COL_WIDTH = 237;
+	private static final int PIXEL_PER_LETTER = 7;
+	private static final int ID_COL_WIDTH = 35;
+	private static final int TITLE_COL_WIDTH = 276;
 
 	@FXML
 	private TableView<Task> taskTable;
