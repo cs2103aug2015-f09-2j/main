@@ -16,7 +16,7 @@ import com.mdimension.jchronic.utils.Span;
 
 import application.Task;
 
-public class testTask {
+public class TestTask {
 
 	//Variables needed for testing	
 	private final ByteArrayOutputStream _console = new ByteArrayOutputStream();

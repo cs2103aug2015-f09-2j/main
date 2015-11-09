@@ -24,7 +24,7 @@ import application.Event;
 import java.text.ParseException;
 import java.util.ArrayList;
 
-public class testParser {
+public class TestParser {
 	Storage store = Storage.getInstance();
 	Task task;
 	ArrayList<Task> taskArr = new ArrayList<Task>();

@@ -30,7 +30,7 @@ import application.Storage;
  * The commands run consecutively to simulate a user's work flow.
  * A storage file with 20 entries at the start is used for testing
  */
-public class testSystem {
+public class TestSystem {
 	
 	static Storage store;
 	static Logic logic = Logic.getInstance();
