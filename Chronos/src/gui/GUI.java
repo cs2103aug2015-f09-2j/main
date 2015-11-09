@@ -71,6 +71,8 @@ public class GUI extends Application implements NativeKeyListener {
 	private static Logger log = Logger.getLogger("GUILog");
 	private static Logger keyboardLogger;
 	private boolean setUp = false;
+	private boolean isControlPressed = false;
+	private boolean isEnterPressed = false;
 	private TrayIcon trayIcon;
 	private SystemTray tray;
 
@@ -229,13 +231,26 @@ public class GUI extends Application implements NativeKeyListener {
 		Platform.runLater((new Runnable() {
 			@Override
 			public void run() {
+				if (e.getKeyCode() == NativeKeyEvent.VC_CONTROL_R || e.getKeyCode() == NativeKeyEvent.VC_CONTROL_L) {
+					isControlPressed = true;
+					
+				} else if (e.getKeyCode() == NativeKeyEvent.VC_ENTER) {
+					isEnterPressed = true;
+				} else {
+					isControlPressed = false;
+					isEnterPressed = false;
+				}
+				
+				if (isControlPressed && isEnterPressed) {
+					_stage.show();
+					_stage.toFront();
+					isControlPressed = false;
+					isEnterPressed = false;
+				}
+				
 				if (e.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
 		            hide(_stage);
 		        }
-				if(e.getKeyCode() == NativeKeyEvent.VC_CONTROL_L) {
-					_stage.show();
-					_stage.toFront();
-				}
 			}		
 		}));    
 	}
