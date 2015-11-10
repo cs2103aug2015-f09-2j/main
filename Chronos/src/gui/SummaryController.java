@@ -40,6 +40,7 @@ public class SummaryController extends StackPane {
 	private static final int PIXEL_PER_LETTER = 7;
 	private static final int ID_COL_WIDTH = 35;
 	private static final int TITLE_COL_WIDTH = 276;
+	private static final String CLASH = "clash";
 
 	@FXML
 	private TableView<Task> taskTable;
@@ -260,6 +261,7 @@ public class SummaryController extends StackPane {
 		tableRow.getStyleClass().remove(ALARM_NOTES);
 		tableRow.getStyleClass().remove(ALARM_OVERDUE);
 		tableRow.getStyleClass().remove(ALARM_OVERDUE_NOTES);
+		tableRow.getStyleClass().remove(CLASH);
 	}
 
 	//add information to Task table
