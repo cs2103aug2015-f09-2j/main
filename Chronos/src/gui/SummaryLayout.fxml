@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!-- @@author A0115448E -->
 
 <?import javafx.geometry.*?>
@@ -10,9 +11,9 @@
 <fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" type="StackPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 	<SplitPane dividerPositions="0.4" orientation="VERTICAL" BorderPane.alignment="CENTER">
 		<items>
-			<ScrollPane prefHeight="120.0" minHeight="0.0" vbarPolicy="ALWAYS">
+			<ScrollPane minHeight="0.0" prefHeight="120.0" vbarPolicy="ALWAYS">
 				<content>
-					<TableView fx:id="eventTable" prefHeight="645.0" editable="true">
+					<TableView fx:id="eventTable" editable="true" prefHeight="645.0">
 						<columns>
 							<TableColumn fx:id="EventIDCol" prefWidth="35.0" text="ID" />
 							<TableColumn fx:id="EventTimeCol" prefWidth="125.0" text="start time" />
@@ -25,9 +26,9 @@
 				</content>
 			</ScrollPane>
 			
-			<ScrollPane  prefHeight="170.0" minHeight="0.0" vbarPolicy="ALWAYS">
+			<ScrollPane minHeight="0.0" prefHeight="170.0" vbarPolicy="ALWAYS">
 				<content>
-					<TableView fx:id="taskTable" prefHeight="700.0" editable="true" styleClass="table">
+					<TableView fx:id="taskTable" editable="true" prefHeight="1000.0" styleClass="table">
 						<columns>
 							<TableColumn fx:id="TaskIDCol" prefWidth="35.0" text="ID" />
 							<TableColumn fx:id="TaskTimeCol" prefWidth="250.0" text="time" />

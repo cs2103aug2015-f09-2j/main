@@ -97,9 +97,6 @@ public class SummaryController extends StackPane {
 	public void display(ArrayList<Task> eventList) {
 		ObservableList<Task> tasks = FXCollections.observableArrayList();
 		ObservableList<Event> events = FXCollections.observableArrayList();
-
-		eventTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-		taskTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		
 		addTasksInList(eventList, tasks, events);
 		setTaskColumns(tasks);

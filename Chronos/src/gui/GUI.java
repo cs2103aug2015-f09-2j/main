@@ -279,6 +279,7 @@ public class GUI extends Application implements NativeKeyListener {
 			updateFeedback(logic.setSavePath(text));
 			summary.setVisible(true);
 			_isNewUser = false;
+			commandBarController.prompText(PATTERN_ADD);
 		} else {
 			Feedback commandFeedback = logic.executeUserCommand(text);
 			updateFeedback(commandFeedback);
